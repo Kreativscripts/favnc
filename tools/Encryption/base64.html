@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fav_Encode – Base64 Tool</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="/assets/Incognito.png">
+<meta name="description" content="Fav_Encode – Encode or decode Base64 instantly. Clean UI, live preview, API support.">
+<meta name="theme-color" content="#0a0a0f">
+
+<meta property="og:title" content="Fav_Encode – Base64 Tool">
+<meta property="og:description" content="Encode or decode Base64 text with FavNC styling and API support.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://favnc.pages.dev/tools/Encryption/base64.html">
+<meta property="og:site_name" content="Nexus Command">
+<meta property="og:image" content="https://favnc.pages.dev/assets/Incognito.png">
+
+<script src="https://favnc.pages.dev/web_runtime/console.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{height:100vh;width:100vw;overflow:hidden;color:#f5f5ff}
+#bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+
+#panel{position:absolute;top:50%;left:9%;transform:translateY(-50%);width:360px;display:flex;flex-direction:column;gap:8px}
+#title{font-size:1.35rem;text-transform:uppercase;letter-spacing:.08em;text-shadow:0 0 8px #000}
+#tag{font-size:.7rem;padding:3px 8px;border-radius:999px;border:1px solid rgba(200,200,255,.7);background:rgba(5,5,12,.72);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+.label{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#d5d7ff;text-shadow:0 0 6px #000;margin-top:4px}
+textarea{width:100%;height:120px;resize:none;padding:10px;border-radius:9px;border:1px solid rgba(130,135,165,.9);background:rgba(14,16,28,.92);color:#fff;font-size:.86rem;outline:none;backdrop-filter:blur(10px);box-shadow:0 0 12px rgba(0,0,0,.7)}
+textarea:focus{border-color:#8ba2ff;box-shadow:0 0 14px rgba(160,180,255,.85)}
+
+.btn{margin-top:6px;width:100%;padding:9px 10px;border-radius:9px;border:1px solid rgba(150,155,190,.85);background:rgba(12,12,24,.95);color:#f7f7ff;font-size:.82rem;text-transform:uppercase;letter-spacing:.09em;cursor:pointer;box-shadow:0 0 12px rgba(0,0,0,.65)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 0 16px rgba(150,170,255,.95)}
+
+.btn.primary{background:linear-gradient(135deg,#8e9aff,#c592ff);border:none;color:#050515;box-shadow:0 0 16px rgba(120,150,255,.9)}
+
+#output{white-space:pre-wrap;word-break:break-all;font-family:ui-monospace,monospace;background:rgba(8,8,18,.92);padding:10px;border-radius:9px;border:1px solid rgba(130,135,165,.9);min-height:80px}
+
+#source-btn{margin-top:10px}
+
+.overlay{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100%;background:rgba(4,4,12,.95);border-left:1px solid rgba(200,200,240,.3);box-shadow:-12px 0 30px #000;transform:translateX(100%);transition:.18s;color:#fff;padding:16px;overflow-y:auto;z-index:10}
+.overlay.open{transform:translateX(0)}
+.overlay pre{background:#050516;padding:8px;border-radius:8px;font-size:.78rem;white-space:pre-wrap}
+.overlay-close{text-align:right;margin-bottom:6px}
+.overlay-close button{background:none;border:none;color:#aab1ff;font-size:.9rem;cursor:pointer}
+</style>
+</head>
+<body>
+
+<video id="bg" autoplay muted loop playsinline>
+  <source src="https://favnc.pages.dev/assets/smtbg.mp4" type="video/mp4">
+</video>
+
+<div id="panel">
+  <div id="title">Fav_Encode</div>
+  <div id="tag">Base64 Encoder / Decoder</div>
+
+  <div class="label">Input</div>
+  <textarea id="input"></textarea>
+
+  <button class="btn primary" id="encode">Encode</button>
+  <button class="btn" id="decode">Decode</button>
+
+  <div class="label">Output</div>
+  <div id="output"></div>
+
+  <button class="btn" id="source-btn">Source Code / API</button>
+</div>
+
+<div class="overlay" id="source-panel">
+  <div class="overlay-close"><button id="close-src">Close ✕</button></div>
+
+  <h2>FavNC Base64 API</h2>
+  <p>Convert text ↔ Base64 using simple requests:</p>
+
+  <pre>GET https://favnc.pages.dev/api/base64?txt=hello</pre>
+  <pre>GET https://favnc.pages.dev/api/base64?base=aGVsbG8=</pre>
+
+  <h3>JavaScript Example</h3>
+  <pre>fetch("/api/base64?txt=hello")
+.then(r=>r.json())
+.then(d=>console.log(d.base))</pre>
+
+  <h3>Python Example</h3>
+  <pre>import requests
+r=requests.get("https://favnc.pages.dev/api/base64",params={"txt":"hello"})
+print(r.json()["base"])</pre>
+
+  <h3>HTML Usage</h3>
+  <pre>&lt;code&gt;Encoded: aGVsbG8=&lt;/code&gt;</pre>
+</div>
+
+<script>
+const input=document.getElementById("input")
+const output=document.getElementById("output")
+document.getElementById("encode").onclick=()=>{
+  try{output.textContent=btoa(input.value)}catch(e){output.textContent="Invalid input"}}
+document.getElementById("decode").onclick=()=>{
+  try{output.textContent=atob(input.value)}catch(e){output.textContent="Invalid base64"}}
+const src=document.getElementById("source-panel")
+document.getElementById("source-btn").onclick=()=>src.classList.add("open")
+document.getElementById("close-src").onclick=()=>src.classList.remove("open")
+</script>
+
+</body>
+</html>
