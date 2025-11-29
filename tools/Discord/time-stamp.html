@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fav_DTS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0f">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{
+  overflow:hidden;
+  height:100vh;
+  width:100vw;
+  background:#000;
+  color:#fff;
+}
+
+/* BG VIDEO */
+#bg{
+  position:fixed;
+  top:0;left:0;
+  width:100vw;height:100vh;
+  object-fit:cover;
+  z-index:-2;
+  filter:brightness(.32);
+}
+
+/* SAMURAI SIDE IMAGE */
+#samurai{
+  position:fixed;
+  right:0;
+  bottom:0;
+  height:100%;
+  object-fit:cover;
+  opacity:.35;
+  z-index:-1;
+  pointer-events:none;
+}
+
+/* MAIN PANEL */
+#panel{
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:430px;
+  padding:22px;
+  background:rgba(10,10,20,.55);
+  border:1px solid rgba(150,150,150,.18);
+  backdrop-filter:blur(18px);
+  border-radius:16px;
+  box-shadow:0 0 35px rgba(50,120,255,.25);
+  animation:fadeIn .7s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translate(-50%,-45%)}to{opacity:1;transform:translate(-50%,-50%)}}
+
+/* TITLE */
+#title{
+  text-align:center;
+  font-size:1.45rem;
+  margin-bottom:12px;
+  letter-spacing:.07em;
+}
+
+/* INPUTS */
+.label{margin-top:10px;margin-bottom:4px;font-size:.85rem;color:#c7c9ff}
+input,select{
+  width:100%;
+  padding:8px;
+  background:#1b1b28;
+  border:1px solid #444;
+  border-radius:8px;
+  color:#fff;
+  font-size:.9rem;
+  outline:none;
+  transition:.2s;
+}
+input:focus,select:focus{
+  border-color:#7a9bff;
+  box-shadow:0 0 10px rgba(120,155,255,.4);
+}
+
+/* OUTPUT BOX */
+#code{
+  margin-top:8px;
+  font-family:monospace;
+  background:#0f0f18;
+}
+
+/* BUTTONS */
+.btn{
+  margin-top:12px;
+  padding:10px;
+  width:100%;
+  background:#2c2c36;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  font-size:.9rem;
+  cursor:pointer;
+  transition:.18s;
+  border:1px solid rgba(200,200,200,.18);
+}
+.btn:hover{
+  background:#3b3b48;
+  box-shadow:0 0 12px rgba(150,150,255,.4);
+}
+
+/* HELP BUTTON */
+#help{
+  position:absolute;
+  top:12px;right:12px;
+  width:28px;height:28px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  font-weight:700;font-size:1rem;
+  border:1px solid rgba(255,255,255,.25);
+}
+#help:hover{background:rgba(255,255,255,.22)}
+
+/* MODAL */
+#modal-bg{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;justify-content:center;
+  z-index:20;
+}
+#modal{
+  width:330px;
+  background:#10101c;
+  padding:18px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 0 22px rgba(120,120,255,.4);
+}
+#modal h2{font-size:1.1rem;margin-bottom:10px}
+#modal p,#modal li{font-size:.85rem;color:#ddd;margin-bottom:6px}
+#modal-close{
+  margin-top:10px;
+  padding:8px;
+  width:100%;
+  background:#2f2f3a;
+  border:none;
+  border-radius:6px;
+  color:#fff;
+  cursor:pointer;
+}
+#modal-close:hover{background:#444459}
+</style>
+</head>
+
+<body>
+
+<!-- FULLSCREEN BG VIDEO -->
+<video id="bg" autoplay muted loop playsinline>
+  <source src="https://favnc.pages.dev/assets/smtbg.mp4" type="video/mp4">
+</video>
+
+<!-- SAMURAI IMAGE -->
+<img id="samurai" src="samurai.png">
+
+<!-- MAIN PANEL -->
+<div id="panel">
+  <div id="help">?</div>
+  <div id="title">Fav_DTS</div>
+
+  <div class="label">Date</div>
+  <input type="date" id="d">
+
+  <div class="label">Time</div>
+  <input type="time" id="hm">
+
+  <div class="label">Style</div>
+  <select id="t">
+    <option value="t">short time (21:37)</option>
+    <option value="T">long time (21:37:42)</option>
+    <option value="d">short date</option>
+    <option value="D">long date</option>
+    <option value="f">date + time</option>
+    <option value="F">full</option>
+    <option value="R" selected>relative</option>
+  </select>
+
+  <div class="label">Generated</div>
+  <input type="text" readonly id="code">
+
+  <button class="btn" id="copy">Copy</button>
+  <button class="btn" id="current">Current Time</button>
+
+  <div class="label" style="margin-top:15px;">Preview</div>
+  <div id="preview" style="font-size:.92rem;color:#d2d5ff;">—</div>
+</div>
+
+<!-- HELP MODAL -->
+<div id="modal-bg">
+  <div id="modal">
+    <h2>Discord Timestamps</h2>
+    <p>Format: <code>&lt;t:UNIX:STYLE&gt;</code></p>
+    <p>Styles:</p>
+    <ul>
+      <li><code>t</code> short time</li>
+      <li><code>T</code> long time</li>
+      <li><code>d</code> short date</li>
+      <li><code>D</code> long date</li>
+      <li><code>f</code> date + time</li>
+      <li><code>F</code> full</li>
+      <li><code>R</code> relative</li>
+    </ul>
+    <button id="modal-close">Close</button>
+  </div>
+</div>
+
+<script>
+const d=document.getElementById("d"),
+      hm=document.getElementById("hm"),
+      t=document.getElementById("t"),
+      code=document.getElementById("code"),
+      preview=document.getElementById("preview"),
+      copy=document.getElementById("copy"),
+      current=document.getElementById("current"),
+      help=document.getElementById("help"),
+      modalbg=document.getElementById("modal-bg"),
+      modalclose=document.getElementById("modal-close");
+
+function now(){
+  let n=new Date(),
+      y=n.getFullYear(),
+      m=String(n.getMonth()+1).padStart(2,"0"),
+      d2=String(n.getDate()).padStart(2,"0"),
+      h=String(n.getHours()).padStart(2,"0"),
+      mm=String(n.getMinutes()).padStart(2,"0");
+
+  d.value=`${y}-${m}-${d2}`;
+  hm.value=`${h}:${mm}`;
+  calc();
+}
+
+function calc(){
+  let base=d.valueAsNumber+hm.valueAsNumber;
+  let n=new Date(base);
+  let fixed=base+n.getTimezoneOffset()*60000;
+  let final=new Date(fixed);
+  let ts=Math.floor(final.getTime()/1000);
+
+  code.value=`<t:${ts}:${t.value}>`;
+
+  if(t.value==="R"){
+    let diff=Math.floor((final-Date.now())/1000);
+    let abs=Math.abs(diff);
+    let unit="seconds";
+
+    if(abs>3600*24*365){diff=Math.round(diff/(86400*365));unit="years"}
+    else if(abs>3600*24*30){diff=Math.round(diff/(86400*30));unit="months"}
+    else if(abs>3600*24){diff=Math.round(diff/86400);unit="days"}
+    else if(abs>3600){diff=Math.round(diff/3600);unit="hours"}
+    else if(abs>60){diff=Math.round(diff/60);unit="minutes"}
+
+    let fmt=new Intl.RelativeTimeFormat("en",{numeric:"auto",style:"long"});
+    preview.textContent=fmt.format(diff,unit);
+  } else {
+    let fmt=new Intl.DateTimeFormat("en",{dateStyle:"full",timeStyle:"short"});
+    preview.textContent=fmt.format(final);
+  }
+}
+
+d.onchange=calc;hm.onchange=calc;t.onchange=calc;
+
+copy.onclick=()=>{navigator.clipboard.writeText(code.value);copy.textContent="Copied!";setTimeout(()=>copy.textContent="Copy",900)}
+current.onclick=now;
+window.onload=now;
+
+help.onclick=()=>modalbg.style.display="flex";
+modalclose.onclick=()=>modalbg.style.display="none";
+modalbg.onclick=e=>{if(e.target===modalbg)modalbg.style.display="none"};
+</script>
+
+</body>
+</html>

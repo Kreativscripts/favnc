@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://favnc.pages.dev/web_runtime/console.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/intro-saver.js"></script>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Favnc ♱ Nexus Command</title>
+<link rel="icon" href="assets/crown.gif">
+<link rel="canonical" href="https://favnc.com">
+<meta name="description" content="Nexus Command by Fav.">
+<meta name="theme-color" content="#111111">
+<meta property="og:title" content="Favnc ♱ Nexus Command">
+<meta property="og:description" content="Fuck guns.l0l">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://favnc.com">
+<meta property="og:site_name" content="Nexus Command">
+<meta property="og:image" content="https://favnc.pages.dev/assets/tgb.gif">
+<meta property="og:image:secure_url" content="https://favnc.pages.dev/assets/tgb.gif">
+<meta property="og:image:type" content="image/gif">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nexus Command banner for Favnc">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Favnc ♱ Nexus Command"> 
+<meta name="twitter:description" content="Fuck guns.l0l">
+<meta name="twitter:image" content="https://favnc.pages.dev/assets/tgb.gif">
+<meta name="twitter:image:alt" content="Nexus Command banner for Favnc">
+<style>
+:root{--gold:#ffd46a;--bg:#020203}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;height:100%;background:radial-gradient(circle at top,#111 0,#020203 50%,#000 100%);color:#f5f5f5;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center}
+.intro-wrapper{position:relative;width:100%;height:100%;overflow:hidden;background:#000}
+.intro-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.05)}
+.video-overlay{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at top,rgba(255,212,106,.18),transparent 60%);mix-blend-mode:screen;}
+.brand-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 20px;opacity:0;transform:translateY(24px);transition:opacity .7s ease-out,transform .7s ease-out}
+.brand-overlay.show{opacity:1;transform:translateY(0)}
+.brand-title{font-size:clamp(2.6rem,5vw,4.2rem);letter-spacing:.25em;text-transform:uppercase;color:var(--gold);text-shadow:0 0 10px rgba(0,0,0,.9),0 0 16px rgba(255,212,106,.7);margin-bottom:8px}
+.brand-sub{font-size:clamp(1rem,2vw,1.3rem);opacity:.9}
+.status{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);padding:8px 18px;border-radius:999px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.06);box-shadow:0 0 18px rgba(0,0,0,.9);font-size:.95rem;letter-spacing:.03em;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .3s ease}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(255,212,106,.6)}
+.status.show{opacity:1}
+.modal-backdrop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,rgba(7,7,7,.96),rgba(0,0,0,.97));opacity:0;pointer-events:none;transition:opacity .35s ease;z-index:10}
+.modal-backdrop.active{opacity:1;pointer-events:auto}
+.modal{width:min(420px,92vw);background:radial-gradient(circle at top,rgba(255,212,106,.08),transparent 55%),linear-gradient(135deg,rgba(10,10,10,.98),rgba(3,3,3,.98));border-radius:20px;padding:22px 22px 18px;border:1px solid rgba(255,255,255,.08);box-shadow:0 0 0 1px rgba(255,212,106,.28),0 18px 45px rgba(0,0,0,.95);position:relative;overflow:hidden}
+.modal-title{font-size:1.2rem;font-weight:600;margin-bottom:6px}
+.modal-sub{font-size:.9rem;opacity:.85;margin-bottom:16px}
+.modal-sub span{color:var(--gold);font-weight:500}
+.input-row{margin-bottom:10px}
+.name-input{width:100%;padding:10px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(5,5,5,.9);color:#f2f2f2;outline:none;font-size:.95rem;transition:border .2s ease,box-shadow .2s ease,background .2s ease}
+.name-input:focus{border-color:var(--gold);background:#050505;box-shadow:0 0 0 1px rgba(255,212,106,.35),0 0 18px rgba(255,212,106,.22)}
+.char-counter{margin-top:4px;font-size:.74rem;opacity:.7;text-align:right}
+.modal-error{min-height:18px;font-size:.8rem;color:#ff6b6b;margin-bottom:10px}
+.modal-footer{display:flex;justify-content:flex-end}
+.btn{border-radius:999px;padding:7px 16px;font-size:.9rem;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:transform .12s ease,box-shadow .12s ease,background .15s ease}
+.btn-primary{background:radial-gradient(circle at top,#ffe29b,#ffc857);color:#000;font-weight:600;box-shadow:0 0 12px rgba(255,212,106,.4),0 10px 28px rgba(0,0,0,.9)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 0 18px rgba(255,212,106,.55),0 14px 32px rgba(0,0,0,1)}
+.btn-primary:active{transform:translateY(0);box-shadow:0 0 6px rgba(255,212,106,.3),0 8px 18px rgba(0,0,0,.9)}
+@media(max-width:480px){.brand-title{letter-spacing:.18em}.status{bottom:22px;padding:7px 14px}}
+</style>
+</head>
+<body>
+<div class="intro-wrapper">
+<video id="introVideo" class="intro-video" src="https://favnc.pages.dev/assets/favintro.mp4" autoplay muted playsinline preload="auto"></video>
+<div class="video-overlay"></div>
+<div id="brandOverlay" class="brand-overlay">
+<div class="brand-title">Nexus&nbsp;Command</div>
+<div class="brand-sub">Fav_Nonchalant</div>
+</div>
+<div id="status" class="status">
+<div class="status-dot"></div>
+<span id="statusText"></span>
+</div>
+</div>
+<div id="nameModalBackdrop" class="modal-backdrop">
+<div class="modal">
+<div class="modal-title">Welcome! You seem new here.</div>
+<div class="modal-sub">What should I call you? <span>(max 15 characters)</span></div>
+<div class="input-row">
+<input id="nameInput" class="name-input" type="text" autocomplete="off" maxlength="15" placeholder="Enter a name">
+<div id="charCounter" class="char-counter">0 / 15</div>
+</div>
+<div id="modalError" class="modal-error"></div>
+<div class="modal-footer">
+<button id="submitName" class="btn btn-primary" type="button">Continue</button>
+</div>
+</div>
+</div>
+</body>
+</html>

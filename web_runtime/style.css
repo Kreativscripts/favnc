@@ -1,0 +1,57 @@
+body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;font-family:Segoe UI,Arial;color:#fff;background:#000}
+.desktop{position:relative;width:100%;height:100%}
+.wallpaper{position:absolute;inset:0;background:#0a0a0a;background-size:cover;background-position:center;z-index:-1;transition:.4s}
+.icons{position:absolute;top:40px;left:40px;display:flex;flex-direction:column;gap:30px;z-index:5}
+.icon{width:90px;text-align:center;cursor:pointer;user-select:none;transition:.2s}
+.icon img{width:70px;height:70px;border-radius:12px;object-fit:cover;transition:.2s}
+.icon span{display:block;margin-top:6px;font-size:14px}
+.icon:hover img{transform:scale(1.05);filter:drop-shadow(0 0 4px gold)}
+.taskbar{position:absolute;bottom:0;left:0;width:100%;height:55px;background:rgba(20,20,20,.55);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-top:1px solid rgba(255,255,255,.1)}
+.start img{width:32px;height:32px;border-radius:8px;cursor:pointer;background:#111;transition:.2s}
+.start img:hover{transform:scale(1.1)}
+.search img{width:22px;cursor:pointer;opacity:.8}
+.search img:hover{opacity:1}
+.task-buttons{flex:1;display:flex;gap:10px;margin-left:20px}
+.tray{display:flex;gap:15px;align-items:center}
+.tray .audio i{font-size:20px;color:#fff;cursor:pointer}
+.time{font-size:15px;letter-spacing:.5px}
+.audio-start{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:18px 24px;background:rgba(0,0,0,.45);backdrop-filter:blur(10px);border-radius:14px;display:flex;gap:12px;align-items:center;border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:.2s;z-index:99}
+.audio-start img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+.audio-start:hover{background:rgba(255,215,0,.35)}
+.start-menu{position:absolute;bottom:55px;left:15px;width:220px;background:rgba(25,25,25,.75);backdrop-filter:blur(12px);border-radius:12px;display:none;flex-direction:column;overflow:hidden;border:1px solid rgba(255,255,255,.15);z-index:20}
+.start-item{padding:12px 16px;font-size:15px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.07);transition:.15s}
+.start-item:last-child{border-bottom:none}
+.start-item:hover{background:rgba(255,215,0,.25)}
+.icons{position:absolute;top:35px;left:35px;display:flex;flex-direction:column;gap:22px;z-index:5}
+.icon{width:95px;text-align:center;cursor:pointer;transition:.2s}
+.icon img{width:72px;height:72px;border-radius:14px;object-fit:cover;transition:.2s}
+.icon span{font-size:14px;margin-top:6px;display:block}
+
+.taskbar{position:absolute;bottom:0;left:0;width:100%;height:55px;background:rgba(20,20,20,.55);backdrop-filter:blur(12px);display:flex;justify-content:center;align-items:center;padding:0 25px;border-top:1px solid rgba(255,255,255,.1);gap:20px}
+
+.start{position:absolute;left:15px}
+.start img{width:32px;height:32px;border-radius:8px;cursor:pointer;transition:.2s}
+
+.search{position:absolute;left:65px}
+.search img{width:22px;opacity:.8;cursor:pointer}
+
+.tray{position:absolute;right:15px;display:flex;align-items:center;gap:15px}
+.time{font-size:16px;color:#fff;font-weight:600;text-shadow:0 0 6px rgba(255,255,255,.45)}
+
+.tray .audio i{font-size:20px;color:#fff;cursor:pointer}
+.wallpaper{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(255,215,0,.15),transparent 70%),
+    url("data:image/svg+xml,%3Csvg width='200' height='173' viewBox='0 0 200 173' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0l50 29v58l-50 29L0 87V29z' fill='none' stroke='rgba(255,215,0,0.25)' stroke-width='2'/%3E%3C/svg%3E");
+  background-size:cover,80px;
+  animation:wave 14s linear infinite;
+  filter:brightness(0.85) saturate(1.2);
+}
+
+@keyframes wave{
+  0%{background-position:0 0,0 0}
+  100%{background-position:0 0,0 2000px}
+}
+
+.task-buttons{display:flex;gap:10px}

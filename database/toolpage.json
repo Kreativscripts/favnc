@@ -1,0 +1,132 @@
+{
+  "Discord": {
+    "description": "Discord-related utilities, webhook helpers and tools.",
+    "tools": [
+      {
+        "id": "time-stamp",
+        "title": "Timestamp Generator",
+        "subtitle": "Discord dynamic timestamps",
+        "description": "Generate Discord dynamic timestamps with styles (short, long, relative).",
+        "url": "https://favnc.pages.dev/tools/Discord/time-stamp.html"
+      },
+      {
+        "id": "webhook",
+        "title": "Webhook Sender",
+        "subtitle": "Message / embed / attachment sender",
+        "description": "Send messages, embeds and attachments using a Discord webhook URL.",
+        "url": "https://favnc.pages.dev/tools/Discord/webhook.html"
+      },
+      {
+        "id": "del-webhook",
+        "title": "Delete Webhook",
+        "subtitle": "Remove webhook via URL",
+        "description": "Delete a Discord webhook using its webhook URL.",
+        "url": "https://favnc.pages.dev/tools/Discord/del-webhook.html"
+      }
+    ]
+  },
+  "Downloader": {
+    "description": "Download utilities for social platforms and media.",
+    "tools": [
+      {
+        "id": "tiktok",
+        "title": "TikTok Downloader",
+        "subtitle": "Download TikTok videos",
+        "description": "Download TikTok videos via a TikTok link.",
+        "url": "https://favnc.pages.dev/tools/Downloader/tiktok.html"
+      },
+      {
+        "id": "spotify",
+        "title": "Spotify Downloader",
+        "subtitle": "Download Spotify audio",
+        "description": "Download Spotify audio via a Spotify link.",
+        "url": "https://favnc.pages.dev/tools/Downloader/spotify.html"
+      },
+      {
+        "id": "youtube",
+        "title": "YouTube Downloader",
+        "subtitle": "Download YouTube videos",
+        "description": "Download YouTube videos via a YouTube link.",
+        "url": "https://favnc.pages.dev/tools/Downloader/youtube.html"
+      }
+    ]
+  },
+  "Encryption": {
+    "description": "Encoding, decoding, and password-related utilities.",
+    "tools": [
+      {
+        "id": "base64",
+        "title": "Base64 Tool",
+        "subtitle": "Encode / decode Base64",
+        "description": "Convert text to and from Base64 for quick encoding and decoding.",
+        "url": "https://favnc.pages.dev/tools/Encryption/base64.html"
+      },
+      {
+        "id": "password",
+        "title": "Password Generator",
+        "subtitle": "Strong random passwords",
+        "description": "Generate strong random passwords with customizable length and character sets.",
+        "url": "https://favnc.pages.dev/tools/Encryption/password.html"
+      },
+      {
+        "id": "decoder",
+        "title": "Text Decoder",
+        "subtitle": "Decode encoded strings",
+        "description": "Decode common encodings like URL, HTML entities and other escaped strings.",
+        "url": "https://favnc.pages.dev/tools/Encryption/decoder.html"
+      }
+    ]
+  },
+  "TextTools": {
+    "description": "Helpers for formatting, counting, and preparing text.",
+    "tools": [
+      {
+        "id": "case-converter",
+        "title": "Case Converter",
+        "subtitle": "UPPERCASE / lowercase / Title",
+        "description": "Convert text between uppercase, lowercase, title case, and more.",
+        "url": "https://favnc.pages.dev/tools/TextTools/case-converter.html"
+      },
+      {
+        "id": "word-counter",
+        "title": "Word & Character Counter",
+        "subtitle": "Count words, chars, lines",
+        "description": "Count words, characters, lines and spaces in any block of text.",
+        "url": "https://favnc.pages.dev/tools/TextTools/word-counter.html"
+      },
+      {
+        "id": "slugify",
+        "title": "Slug Generator",
+        "subtitle": "URL-safe slugs",
+        "description": "Turn any text into a clean, URL-safe slug for links or file names.",
+        "url": "https://favnc.pages.dev/tools/TextTools/slugify.html"
+      }
+    ]
+  },
+  "Utility": {
+    "description": "General-purpose utilities for links, IDs and time.",
+    "tools": [
+      {
+        "id": "qr-generator",
+        "title": "QR Code Generator",
+        "subtitle": "QR codes from text or links",
+        "description": "Generate QR codes from URLs or plain text for easy sharing.",
+        "url": "https://favnc.pages.dev/tools/Utility/qr-generator.html"
+      },
+      {
+        "id": "uuid",
+        "title": "UUID Generator",
+        "subtitle": "Random unique IDs",
+        "description": "Generate random UUIDs for tokens, testing and development.",
+        "url": "https://favnc.pages.dev/tools/Utility/uuid.html"
+      },
+      {
+        "id": "timestamp",
+        "title": "Timestamp Converter",
+        "subtitle": "Unix ↔ human date",
+        "description": "Convert Unix timestamps to human-readable dates and back.",
+        "url": "https://favnc.pages.dev/tools/Utility/timestamp.html"
+      }
+    ]
+  }
+}

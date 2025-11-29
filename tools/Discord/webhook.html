@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://favnc.pages.dev/web_runtime/console.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Discord Webhook Sender – Nexus Command</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Send custom messages, embeds, and JSON payloads to Discord webhooks easily.">
+    <link rel="icon" href="../../assets/discordlogo.png">
+    <meta property="og:title" content="Discord Webhook Sender">
+    <meta property="og:description" content="Send Discord webhook messages instantly with Nexus Command tools.">
+    <meta property="og:image" content="https://favnc.pages.dev/assets/thumbnail-tools.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Nexus Command">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Discord Webhook Sender">
+    <meta name="twitter:description" content="Create and send Discord webhook messages with ease.">
+    <meta name="twitter:image" content="https://favnc.pages.dev/assets/thumbnail-tools.png">
+    <meta name="theme-color" content="#d4af37"> 
+</head>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Segoe UI,Arial,sans-serif;
+  background:radial-gradient(circle at 0% 0%,#272727 0,#050505 40%,#000 80%);
+  background-size:220% 220%;
+  animation:bgShift 20s ease-in-out infinite;
+  color:#f5f5f5;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+@keyframes bgShift{
+  0%{background-position:0 0}
+  50%{background-position:100% 100%}
+  100%{background-position:0 0}
+}
+.app{
+  width:100%;
+  max-width:980px;
+  background:rgba(8,8,8,.94);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 0 26px rgba(0,0,0,.9);
+  padding:18px 20px 16px;
+  backdrop-filter:blur(18px);
+  display:grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
+  gap:16px;
+}
+@media(max-width:820px){
+  .app{grid-template-columns:1fr}
+}
+.header{
+  grid-column:1/3;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:4px;
+}
+.header-left{display:flex;align-items:center;gap:10px}
+.icon{width:30px;height:30px;border-radius:9px}
+.title{font-size:20px;font-weight:700}
+.tag{
+  font-size:11px;
+  padding:3px 9px;
+  border-radius:999px;
+  border:1px solid rgba(255,215,0,.7);
+  color:#ffd700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.subtitle{
+  grid-column:1/3;
+  font-size:12px;
+  opacity:.8;
+  margin-bottom:8px;
+}
+
+/* Left column: config + tabs */
+.card{
+  background:rgba(0,0,0,.6);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  padding:12px 12px 10px;
+}
+.section-title{
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#ffd700;
+  margin-bottom:6px;
+}
+.row{margin-bottom:8px;display:flex;flex-direction:column}
+.label{font-size:12px;margin-bottom:2px;opacity:.9}
+input[type=text],textarea{
+  width:100%;
+  padding:7px 9px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,.22);
+  background:#050505;
+  color:#f5f5f5;
+  font-size:12px;
+  resize:vertical;
+}
+textarea{min-height:60px}
+input[type=text]:focus,textarea:focus{
+  outline:none;
+  border-color:#ffd700;
+  box-shadow:0 0 8px rgba(255,215,0,.4);
+}
+.small{font-size:11px;opacity:.7}
+
+/* tabs */
+.tabs{
+  margin-top:10px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.12);
+  overflow:hidden;
+}
+.tab-header{
+  display:flex;
+  background:rgba(255,255,255,.03);
+}
+.tab-btn{
+  flex:1;
+  padding:7px 6px;
+  font-size:12px;
+  text-align:center;
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  color:#ddd;
+}
+.tab-btn.active{
+  background:rgba(255,215,0,.12);
+  color:#ffd700;
+}
+.tab-body{
+  padding:9px;
+  background:rgba(0,0,0,.7);
+}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* embed layout */
+.embed-grid{
+  display:grid;
+  grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+  gap:8px;
+}
+@media(max-width:700px){
+  .embed-grid{grid-template-columns:1fr}
+}
+.color-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+input[type=color]{
+  width:36px;
+  height:26px;
+  padding:0;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,.3);
+  background:#000;
+}
+
+/* attachments + send */
+.attach-row{
+  margin-top:8px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+input[type=file]{
+  font-size:11px;
+}
+.send-row{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+button.send{
+  padding:8px 16px;
+  border-radius:999px;
+  border:none;
+  background:linear-gradient(135deg,#ffd700,#ffb347);
+  color:#000;
+  font-weight:600;
+  font-size:13px;
+  cursor:pointer;
+  box-shadow:0 0 16px rgba(255,215,0,.5);
+}
+button.send:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+.status{
+  font-size:11px;
+  min-height:14px;
+}
+.status.ok{color:#7cffd1}
+.status.err{color:#ff6b6b}
+
+/* Right column: preview + log */
+.preview-card{
+  background:rgba(0,0,0,.6);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  padding:10px 10px 8px;
+  margin-bottom:8px;
+}
+.preview-title{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#ffd700;
+  margin-bottom:4px;
+}
+.preview-box{
+  background:#2b2d31;
+  border-radius:8px;
+  padding:10px;
+  font-size:12px;
+}
+.preview-name{
+  font-weight:600;
+  margin-bottom:4px;
+}
+.preview-content{white-space:pre-wrap;font-size:12px}
+.preview-embed{
+  margin-top:8px;
+  border-left:3px solid #5865f2;
+  padding-left:8px;
+}
+.preview-embed-title{font-weight:600;margin-bottom:2px}
+.preview-embed-desc{font-size:12px;opacity:.9;white-space:pre-wrap}
+.preview-footer{font-size:11px;opacity:.65;margin-top:4px}
+
+.log-card{
+  background:rgba(0,0,0,.6);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  padding:9px;
+}
+.log-title{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#ffd700;
+  margin-bottom:4px;
+}
+.log-box{
+  background:#050505;
+  border-radius:8px;
+  font-size:11px;
+  padding:7px;
+  max-height:180px;
+  overflow:auto;
+  white-space:pre-wrap;
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="header-left">
+      <img src="../../assets/discordlogo.png" class="icon" alt="">
+      <div class="title">Discord Webhook Sender</div>
+    </div>
+    <div class="tag">Advanced</div>
+  </div>
+  <div class="subtitle">
+    Send text, embeds, JSON payloads and file attachments to any Discord webhook. Color your embed with a live color picker.
+  </div>
+
+  <!-- LEFT: CONFIG + TABS -->
+  <div class="card">
+    <div class="section-title">Webhook & overrides</div>
+    <div class="row">
+      <label class="label" for="wh-url">Webhook URL</label>
+      <input type="text" id="wh-url" placeholder="https://discord.com/api/webhooks/…">
+    </div>
+    <div class="row">
+      <label class="label" for="wh-username">Override username (optional)</label>
+      <input type="text" id="wh-username" placeholder="Bot name override">
+    </div>
+    <div class="row">
+      <label class="label" for="wh-avatar">Override avatar URL (optional)</label>
+      <input type="text" id="wh-avatar" placeholder="https://example.com/avatar.png">
+    </div>
+    <div class="small">Webhook URL is required. Overrides are optional.</div>
+
+    <div class="tabs">
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="msg">Message</button>
+        <button class="tab-btn" data-tab="embed">Embed builder</button>
+        <button class="tab-btn" data-tab="json">Raw JSON</button>
+      </div>
+      <div class="tab-body">
+        <!-- Message tab -->
+        <div class="tab-panel active" id="tab-msg">
+          <div class="row">
+            <label class="label" for="msg-content">Message content</label>
+            <textarea id="msg-content" placeholder="Text message to send via webhook"></textarea>
+          </div>
+          <div class="small">This will be used as <code>content</code> in the webhook payload.</div>
+        </div>
+
+        <!-- Embed tab -->
+        <div class="tab-panel" id="tab-embed">
+          <div class="embed-grid">
+            <div>
+              <div class="row">
+                <label class="label" for="embed-title">Embed title</label>
+                <input type="text" id="embed-title" placeholder="Title of the embed">
+              </div>
+              <div class="row">
+                <label class="label" for="embed-url">Embed URL (optional)</label>
+                <input type="text" id="embed-url" placeholder="https://…">
+              </div>
+              <div class="row">
+                <label class="label" for="embed-footer">Footer text</label>
+                <input type="text" id="embed-footer" placeholder="Footer text at the bottom">
+              </div>
+            </div>
+            <div>
+              <div class="row">
+                <label class="label" for="embed-desc">Embed description</label>
+                <textarea id="embed-desc" placeholder="Embed body text (supports new lines)"></textarea>
+              </div>
+              <div class="row color-row">
+                <div>
+                  <div class="label">Embed color</div>
+                  <div class="small">Pick a color for the embed border.</div>
+                </div>
+                <input type="color" id="embed-color" value="#5865f2">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Raw JSON tab -->
+        <div class="tab-panel" id="tab-json">
+          <div class="row">
+            <label class="label" for="raw-json">Webhook JSON payload</label>
+            <textarea id="raw-json" placeholder='{"content":"Hello from JSON!","embeds":[{"title":"Example"}]}'></textarea>
+          </div>
+          <div class="small">When this tab is active, the raw JSON payload will be sent as-is. Other fields are ignored.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="attach-row">
+      <div class="label">Attachments (optional)</div>
+      <input type="file" id="files" multiple>
+      <div class="small">Files will be sent along with your payload as attachments.</div>
+    </div>
+
+    <div class="send-row">
+      <button class="send" id="sendBtn">Send webhook</button>
+      <div id="status" class="status"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: PREVIEW & LOG -->
+  <div>
+    <div class="preview-card">
+      <div class="preview-title">Live preview (approx.)</div>
+      <div class="preview-box" id="preview">
+        <div class="preview-name" id="preview-name">Username</div>
+        <div class="preview-content" id="preview-content">Message content will appear here.</div>
+        <div class="preview-embed" id="preview-embed" style="display:none;border-color:#5865f2;">
+          <div class="preview-embed-title" id="preview-embed-title"></div>
+          <div class="preview-embed-desc" id="preview-embed-desc"></div>
+          <div class="preview-footer" id="preview-footer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-card">
+      <div class="log-title">Response log</div>
+      <div class="log-box" id="log">Awaiting request…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const tabs = document.querySelectorAll(".tab-btn");
+const panels = {
+  msg: document.getElementById("tab-msg"),
+  embed: document.getElementById("tab-embed"),
+  json: document.getElementById("tab-json")
+};
+
+tabs.forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    tabs.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    const id = btn.dataset.tab;
+    Object.keys(panels).forEach(k=>panels[k].classList.remove("active"));
+    panels[id].classList.add("active");
+  });
+});
+
+// Elements
+const whUrl = document.getElementById("wh-url");
+const whUser = document.getElementById("wh-username");
+const whAvatar = document.getElementById("wh-avatar");
+const msgContent = document.getElementById("msg-content");
+const eTitle = document.getElementById("embed-title");
+const eDesc = document.getElementById("embed-desc");
+const eFooter = document.getElementById("embed-footer");
+const eUrl = document.getElementById("embed-url");
+const eColor = document.getElementById("embed-color");
+const rawJson = document.getElementById("raw-json");
+const filesInput = document.getElementById("files");
+
+const previewName = document.getElementById("preview-name");
+const previewContent = document.getElementById("preview-content");
+const previewEmbed = document.getElementById("preview-embed");
+const previewEmbedTitle = document.getElementById("preview-embed-title");
+const previewEmbedDesc = document.getElementById("preview-embed-desc");
+const previewFooter = document.getElementById("preview-footer");
+
+const statusEl = document.getElementById("status");
+const logBox = document.getElementById("log");
+const sendBtn = document.getElementById("sendBtn");
+
+function hexToInt(hex){
+  if(!hex) return null;
+  hex = hex.replace("#","");
+  if(hex.length !== 6) return null;
+  return parseInt(hex,16);
+}
+
+function activeTab(){
+  const btn = document.querySelector(".tab-btn.active");
+  return btn ? btn.dataset.tab : "msg";
+}
+
+function buildPayload(){
+  const tab = activeTab();
+  if(tab === "json"){
+    let obj;
+    try{
+      obj = JSON.parse(rawJson.value || "{}");
+    }catch(e){
+      throw new Error("Raw JSON is invalid: " + e.message);
+    }
+    return obj;
+  }
+
+  const payload = {};
+  const content = msgContent.value;
+  if(content.trim()) payload.content = content;
+
+  if(whUser.value.trim()) payload.username = whUser.value.trim();
+  if(whAvatar.value.trim()) payload.avatar_url = whAvatar.value.trim();
+
+  if(tab === "embed"){
+    const embed = {};
+    if(eTitle.value.trim()) embed.title = eTitle.value.trim();
+    if(eDesc.value.trim()) embed.description = eDesc.value;
+    if(eUrl.value.trim()) embed.url = eUrl.value.trim();
+    if(eFooter.value.trim()) embed.footer = {text: eFooter.value.trim()};
+    const col = hexToInt(eColor.value);
+    if(col !== null) embed.color = col;
+
+    if(Object.keys(embed).length){
+      payload.embeds = [embed];
+    }
+  }
+
+  return payload;
+}
+
+function updatePreview(){
+  const tab = activeTab();
+  const name = whUser.value.trim() || "Webhook";
+  previewName.textContent = name;
+
+  if(tab === "json"){
+    previewContent.textContent = "[Raw JSON mode]";
+    previewEmbed.style.display = "none";
+    return;
+  }
+
+  const content = msgContent.value;
+  previewContent.textContent = content || "(no message content)";
+
+  if(tab === "embed"){
+    const hasEmbed = eTitle.value.trim() || eDesc.value.trim() || eFooter.value.trim();
+    if(hasEmbed){
+      previewEmbed.style.display = "block";
+      previewEmbedTitle.textContent = eTitle.value.trim() || "(no title)";
+      previewEmbedDesc.textContent = eDesc.value || "";
+      previewFooter.textContent = eFooter.value.trim() || "";
+      previewEmbed.style.borderColor = eColor.value || "#5865f2";
+    }else{
+      previewEmbed.style.display = "none";
+    }
+  }else{
+    previewEmbed.style.display = "none";
+  }
+}
+
+// bind preview updates
+[whUser,msgContent,eTitle,eDesc,eFooter,eColor].forEach(el=>{
+  el.addEventListener("input", updatePreview);
+});
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click", updatePreview);
+});
+updatePreview();
+
+function log(message){
+  const ts = new Date().toLocaleTimeString();
+  if(logBox.textContent === "Awaiting request…") logBox.textContent = "";
+  logBox.textContent += `[${ts}] ${message}\n`;
+  logBox.scrollTop = logBox.scrollHeight;
+}
+
+async function sendWebhook(){
+  const url = whUrl.value.trim();
+  statusEl.textContent = "";
+  statusEl.className = "status";
+  if(!url){
+    statusEl.textContent = "Webhook URL is required.";
+    statusEl.classList.add("err");
+    return;
+  }
+
+  let payload;
+  try{
+    payload = buildPayload();
+  }catch(e){
+    statusEl.textContent = e.message;
+    statusEl.classList.add("err");
+    return;
+  }
+
+  const files = filesInput.files;
+  const hasFiles = files && files.length > 0;
+
+  sendBtn.disabled = true;
+  statusEl.textContent = "Sending…";
+  statusEl.classList.remove("ok","err");
+  log("Sending request…");
+
+  try{
+    let res;
+    if(hasFiles){
+      const form = new FormData();
+      form.append("payload_json", JSON.stringify(payload));
+      Array.from(files).forEach((file,i)=>{
+        form.append(`files[${i}]`, file);
+      });
+      res = await fetch(url, {method:"POST", body:form});
+    }else{
+      res = await fetch(url, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      });
+    }
+
+    const text = await res.text().catch(()=> "");
+    if(res.ok){
+      statusEl.textContent = "Webhook sent successfully.";
+      statusEl.classList.add("ok");
+      log("OK " + res.status + (text ? " – " + text : ""));
+    }else{
+      statusEl.textContent = "Failed: HTTP " + res.status;
+      statusEl.classList.add("err");
+      log("ERROR " + res.status + (text ? " – " + text : ""));
+    }
+  }catch(e){
+    statusEl.textContent = "Request error – check console / CORS.";
+    statusEl.classList.add("err");
+    log("Exception: " + e.message);
+  }finally{
+    sendBtn.disabled = false;
+  }
+}
+
+sendBtn.addEventListener("click", sendWebhook);
+</script>
+</body>
+</html>

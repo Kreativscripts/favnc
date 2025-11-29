@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://favnc.pages.dev/web_runtime/console.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js"></script>
+<head>
+<meta charset="UTF-8">
+<title>Fav_Nonchalant Discord Servers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="assets/discordlogo.png">
+
+<meta name="description" content="Fav_Nonchalant Discord servers, partners, and connections.">
+<meta name="theme-color" content="#ffffff">
+
+<meta property="og:title" content="Fav_Nonchalant Discord Servers">
+<meta property="og:description" content="Owned servers, partners, and free advertisements.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://favnc.pages.dev/discord.html">
+<meta property="og:site_name" content="Nexus Command">
+<meta property="og:image" content="https://favnc.pages.dev/assets/dc-embed.gif">
+<meta property="og:image:secure_url" content="https://favnc.pages.dev/assets/dc-embed.gif">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/gif">
+<meta property="og:image:alt" content="Fav_Nonchalant Discord Connections">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fav_Nonchalant Discord Servers">
+<meta name="twitter:description" content="Owned servers, partners, and free advertisements.">
+<meta name="twitter:image" content="https://favnc.pages.dev/assets/dc-embed.gif">
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Segoe UI,Arial,sans-serif;
+  color:#f7f7f7;
+  background:radial-gradient(circle at 0% 0%,#272727 0,#050505 40%,#000 70%);
+  background-size:200% 200%;
+  animation:bgShift 16s ease-in-out infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+@keyframes bgShift{
+  0%{background-position:0% 0%}
+  50%{background-position:100% 100%}
+  100%{background-position:0% 0%}
+}
+.card{
+  width:100%;
+  max-width:720px;
+  background:rgba(10,10,10,.9);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;
+  padding:22px 22px 18px;
+  box-shadow:0 0 25px rgba(0,0,0,.75);
+  backdrop-filter:blur(16px);
+  animation:fadeInCard .7s ease-out;
+}
+@keyframes fadeInCard{
+  from{opacity:0;transform:translateY(10px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.title-icon{
+  width:28px;
+  height:28px;
+  border-radius:8px;
+}
+.title{
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:.03em;
+}
+.badge{
+  font-size:11px;
+  padding:4px 9px;
+  border-radius:999px;
+  border:1px solid rgba(255,215,0,.6);
+  color:#ffd700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.subtitle{
+  font-size:13px;
+  opacity:.75;
+  margin-bottom:12px;
+}
+.section{
+  margin-top:18px;
+}
+.section-label{
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#ffd700;
+  display:inline-flex;
+  align-items:center;
+}
+.section-label::after{
+  content:"";
+  height:1px;
+  flex:1;
+  margin-left:8px;
+  background:linear-gradient(90deg,#ffd700,transparent);
+  opacity:.55;
+}
+.row{
+  display:flex;
+  align-items:center;
+  font-size:13px;
+  margin-top:9px;
+  padding:7px 9px;
+  border-radius:9px;
+  background:rgba(255,255,255,.02);
+  border:1px solid transparent;
+  position:relative;
+  overflow:hidden;
+  animation:fadeInRow .4s ease-out forwards;
+  transform:translateY(4px);
+  opacity:0;
+}
+.row:nth-of-type(2){animation-delay:.05s}
+.row:nth-of-type(3){animation-delay:.1s}
+.row:nth-of-type(4){animation-delay:.15s}
+.row:nth-of-type(5){animation-delay:.2s}
+.row:nth-of-type(6){animation-delay:.25s}
+.row:nth-of-type(7){animation-delay:.3s}
+.row:nth-of-type(8){animation-delay:.35s}
+@keyframes fadeInRow{
+  to{opacity:1;transform:translateY(0)}
+}
+.row::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,rgba(255,215,0,.12),transparent);
+  transition:width .25s ease-out;
+  pointer-events:none;
+  z-index:0;
+}
+.row:hover::before{
+  width:100%;
+}
+.row:hover{
+  border-color:rgba(255,215,0,.45);
+  box-shadow:0 0 12px rgba(255,215,0,.18);
+}
+.label,
+.pipe,
+a{
+  position:relative;
+  z-index:1;
+}
+.label{
+  white-space:nowrap;
+  font-weight:500;
+}
+.pipe{
+  flex:1;
+  height:1px;
+  margin:0 8px;
+  background:linear-gradient(90deg,rgba(255,255,255,.1),rgba(255,215,0,.7));
+  position:relative;
+  overflow:hidden;
+}
+.pipe::after{
+  content:"";
+  position:absolute;
+  left:-20%;
+  top:-1px;
+  width:30%;
+  height:3px;
+  background:radial-gradient(circle,#fff,transparent);
+  opacity:.8;
+  animation:flow 2.4s linear infinite;
+  pointer-events:none;
+}
+@keyframes flow{
+  0%{left:-25%}
+  100%{left:110%}
+}
+a{
+  color:#ffd700;
+  text-decoration:none;
+  font-weight:500;
+  padding:3px 8px;
+  border-radius:999px;
+  background:rgba(255,215,0,.08);
+}
+a:hover{
+  text-decoration:underline;
+  background:rgba(255,215,0,.18);
+}
+.small{
+  font-size:11px;
+  opacity:.7;
+  margin-top:5px;
+}
+.tag-sale{
+  color:#ff6b6b;
+  font-weight:600;
+}
+.tag-free{
+  color:#7cffd1;
+  font-weight:600;
+}
+.tag-role{
+  opacity:.8;
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <div class="header-left">
+      <img src="https://favnc.pages.dev/assets/discordlogo.png" alt="Discord logo" class="title-icon">
+      <div class="title">Fav_Nonchalant Discord servers</div>
+    </div>
+    <div class="badge">Nexus Command</div>
+  </div>
+  <div class="subtitle">Owned hubs, partner communities, and free advertisement spots directly connected to Fav_Nonchalant.</div>
+
+  <div class="section">
+    <div class="section-label">Own</div>
+    <div class="row">
+      <div class="label"><span class="tag-sale">FOR SALE</span> · Best Buy ($70 USD) · DM lightafk223</div>
+      <div class="pipe"></div>
+      <a href="https://discord.gg/yhPuwb4qsX" target="_blank">Main Server</a>
+    </div>
+        <div class="row">
+      <div class="label">Lab | Where work gets done. Join to request service</div>
+      <div class="pipe"></div>
+      <a href="https://discord.gg/hm5A66EQsc" target="_blank">Lab Server</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><span class="tag-free">Partners · FREE ADVERTISEMENT</span></div>
+    <div class="row">
+      <div class="label">Jailbreak Community Server · <span class="tag-role">Role: Operator</span></div>
+      <div class="pipe"></div>
+      <a href="https://discord.gg/ZNfwxBYR2R" target="_blank">Join</a>
+    </div>
+    <div class="row">
+      <div class="label">Jailbreak Republic · <span class="tag-role">Developer, Staff</span></div>
+      <div class="pipe"></div>
+      <a href="https://discord.gg/jailbreak-republic-1290658773693632612" target="_blank">Join</a>
+    </div>
+    <div class="row">
+      <div class="label">SoundBoard Community · <span class="tag-role">Contributor</span></div>
+      <div class="pipe"></div>
+      <a href="https://discord.gg/P3JvWD3G" target="_blank">Join</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><span class="tag-free">Other servers · FREE ADVERTISEMENT</span></div>
+    <div class="row">
+      <div class="label">#0TX Hood Modded Crew · <span class="tag-role">Respected, Staff, Swat Team</span></div>
+      <div class="pipe"></div>
+      <a href="https://discord.gg/BgRehXepzn" target="_blank">Join</a>
+    </div>
+    <div class="row">
+      <div class="label">Var Chill Spot · <span class="tag-role">Scripter, Staff, Support</span></div>
+      <div class="pipe"></div>
+      <a href="https://discord.gg/Sq3ytV6m" target="_blank">Join</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>POA Flashcard Deck</title><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at top,#252542 0,#050510 50%,#000 100%);color:#f5f5f5}
+.app{width:100%;max-width:480px;padding:14px}
+.card{background:rgba(15,15,25,.96);border-radius:18px;padding:14px 14px 10px;box-shadow:0 18px 40px rgba(0,0,0,.65),0 0 0 1px rgba(120,120,255,.2);backdrop-filter:blur(16px);transform-origin:center;animation:cardIn .45s ease-out}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.header-row{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px}
+.pill{font-size:10px;text-transform:uppercase;letter-spacing:.12em;padding:3px 8px;border-radius:999px;background:linear-gradient(135deg,#2a2a4f,#18182a);border:1px solid rgba(120,120,255,.6);color:#d5ddff;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:#4cff95;box-shadow:0 0 8px #4cff95}
+.right-head{display:flex;align-items:center;gap:6px}
+.progress{font-size:11px;color:#a3a3c7;white-space:nowrap}
+.clock{font-size:11px;color:#e4e4ff;opacity:.9;white-space:nowrap}
+.install-btn{border:none;border-radius:999px;padding:4px 9px;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;background:linear-gradient(135deg,#4e6bff,#9a60ff);color:#fff;display:inline-flex;align-items:center;gap:4px;box-shadow:0 6px 14px rgba(0,0,0,.6);transition:transform .15s ease,box-shadow .18s ease,opacity .18s ease}
+.install-btn:active{transform:translateY(1px);box-shadow:0 3px 8px rgba(0,0,0,.6)}
+.question{font-size:16px;font-weight:600;line-height:1.35;margin:6px 0 12px;color:#f9f9ff}
+.options{display:grid;gap:6px;margin-bottom:6px}
+.option-btn{width:100%;text-align:left;border:1px solid rgba(130,130,180,.4);background:rgba(25,25,40,.95);border-radius:10px;padding:8px 10px;color:#e4e4ff;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .18s ease,border-color .18s ease,transform .15s ease,box-shadow .18s ease}
+.option-label{font-size:10px;width:20px;text-align:center;border-radius:999px;padding:2px 0;background:rgba(80,80,140,.5);color:#d0d0ff}
+.option-text{flex:1;word-wrap:break-word}
+.option-btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.6);border-color:rgba(160,160,255,.9);background:rgba(32,32,60,.95)}
+.option-btn:active{transform:translateY(0);box-shadow:none}
+.option-btn.correct{border-color:#4cff95;background:radial-gradient(circle at left,rgba(76,255,149,.08),rgba(20,35,35,.9));box-shadow:0 0 16px rgba(76,255,149,.5)}
+.option-btn.wrong{border-color:#ff4b6b;background:radial-gradient(circle at left,rgba(255,75,107,.12),rgba(40,20,32,.96));animation:shake .25s linear}
+.option-btn.correct-reveal{border-color:#4cff95;background:radial-gradient(circle at left,rgba(76,255,149,.1),rgba(12,30,30,.95));box-shadow:0 0 10px rgba(76,255,149,.45)}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+.footer-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:4px}
+.hint-toggle{font-size:11px;color:#8ea6ff;background:transparent;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.hint-toggle:active{transform:scale(.98)}
+.status{font-size:11px;color:#b4ffc9;min-height:16px;text-align:center;flex:1}
+.status.error{color:#ff9fb0}
+.next-btn{border:none;border-radius:999px;padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;background:linear-gradient(135deg,#4e6bff,#9a60ff);color:#fff;display:inline-flex;align-items:center;gap:4px;box-shadow:0 8px 20px rgba(0,0,0,.6);transition:transform .15s ease,box-shadow .18s ease,opacity .18s ease}
+.next-btn:active{transform:translateY(1px);box-shadow:0 4px 12px rgba(0,0,0,.6)}
+.next-btn[disabled]{opacity:.45;cursor:default;box-shadow:none}
+.hint{margin-top:5px;font-size:12px;color:#c5d0ff;background:rgba(25,25,60,.85);border-radius:10px;padding:6px 8px;border:1px dashed rgba(130,130,200,.7);display:none;animation:fadeHint .25s ease-out}
+@keyframes fadeHint{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.score-row{margin-top:6px;font-size:10px;text-align:right;color:#8e8ea8}
+.score-row span{color:#c0c0ff}
+@media(max-width:480px){.card{padding:12px 10px 8px}.question{font-size:15px}.install-btn{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="card">
+<div class="header-row">
+<div class="pill"><span class="pill-dot"></span>POA Flashcards</div>
+<div class="right-head">
+<div class="clock" id="clockBox">--:--:--</div>
+<div class="progress" id="progress"></div>
+<button class="install-btn" id="installBtn">Install ⬇</button>
+</div>
+</div>
+<div class="question" id="questionText"></div>
+<div class="options" id="optionsList"></div>
+<div class="footer-row">
+<button class="hint-toggle" id="hintToggle">Show hint</button>
+<div class="status" id="statusText"></div>
+<button class="next-btn" id="nextBtn" disabled><span>Next</span>➜</button>
+</div>
+<div class="hint" id="hintBox"></div>
+<div class="score-row">Score: <span id="scoreText">0 / 0</span></div>
+</div>
+</div>
+<script>
+const questions = [
+ {question:"The main purpose of accounting is to:",options:["Record all business transactions","Provide financial information for decision-making","Calculate tax only","Show how many customers there are"],correctIndex:1,hint:"Think about how owners and other users rely on accounting."},
+ {question:"Book-keeping is best described as:",options:["Analysing sales trends","Recording financial transactions systematically","Setting selling prices","Calculating employees’ bonuses"],correctIndex:1,hint:"It’s the recording stage, not deep analysis."},
+ {question:"Which of the following is an internal user of accounting information?",options:["Bank manager","Supplier","Owner/manager","Government"],correctIndex:2,hint:"They work inside the business."},
+ {question:"Which of the following is an external user of accounting information?",options:["Cashier","Manager","Employee","Lender"],correctIndex:3,hint:"They are outside the day-to-day operations."},
+ {question:"Which item is an asset?",options:["Bank overdraft","Inventory","Bank loan","Rent expense"],correctIndex:1,hint:"It is something owned by the business."},
+ {question:"Which item is a liability?",options:["Motor vehicle","Trade receivables","Trade payables","Drawings"],correctIndex:2,hint:"It is an amount owed by the business."},
+ {question:"Capital is best defined as:",options:["Cash in hand","Owner’s investment in the business","Total profit earned","Total expenses paid"],correctIndex:1,hint:"It is the owner’s claim on the business."},
+ {question:"Drawings are:",options:["Goods bought for resale","Goods or cash taken by the owner for personal use","Dividends paid to shareholders","Bank charges"],correctIndex:1,hint:"They reduce the owner’s capital."},
+ {question:"The basic accounting equation is:",options:["Assets + Liabilities = Capital","Assets = Liabilities - Capital","Assets = Capital + Liabilities","Capital = Assets + Liabilities"],correctIndex:2,hint:"Resources are financed by owners and outsiders."},
+ {question:"Double-entry means that each transaction:",options:["Is recorded once in the journal","Has equal debit and credit entries","Always affects three accounts","Always increases assets"],correctIndex:1,hint:"For every debit there is an equal credit."},
+ {question:"Which side of an asset account records increases?",options:["Debit","Credit","Both sides","Neither side"],correctIndex:0,hint:"Assets receive value."},
+ {question:"Which side of a liability account records increases?",options:["Debit","Credit","Both sides","Neither side"],correctIndex:1,hint:"Liabilities give value from the business’s viewpoint."},
+ {question:"Which of the following is an expense?",options:["Capital","Bank loan","Wages","Trade receivables"],correctIndex:2,hint:"It reduces profit in the income statement."},
+ {question:"Which of the following is income?",options:["Sales revenue","Discount allowed","Electricity","Inventory"],correctIndex:0,hint:"It increases profit; it is earned by the business."},
+ {question:"Which financial statement shows profit or loss for a period?",options:["Statement of financial position","Trial balance","Statement of profit or loss","Cash book"],correctIndex:2,hint:"It lists income and expenses."},
+ {question:"Which financial statement shows assets, liabilities and capital?",options:["Statement of profit or loss","Statement of financial position","Bank reconciliation","Purchases journal"],correctIndex:1,hint:"It is prepared at the end of the period and lists balances."},
+ {question:"Which of the following is a current asset?",options:["Buildings","Motor vehicle","Trade receivables","10-year bank loan"],correctIndex:2,hint:"It is expected to be converted to cash within one year."},
+ {question:"Which of the following is a non-current asset?",options:["Inventory","Cash at bank","Office equipment","Prepaid insurance"],correctIndex:2,hint:"It is used in the business for more than one year."},
+ {question:"Which of the following is a current liability?",options:["Trade payables","Capital","Bank loan repayable in 10 years","Motor vehicle"],correctIndex:0,hint:"It is due to be paid within one year."},
+ {question:"Which book of original entry records credit sales of goods?",options:["Purchases journal","Sales journal","Cash receipts journal","General journal"],correctIndex:1,hint:"It records goods sold on credit to customers."},
+ {question:"Which book of original entry records credit purchases of goods?",options:["Sales journal","Purchases journal","Sales returns journal","Cash book"],correctIndex:1,hint:"It records credit purchases from suppliers."},
+ {question:"Which document is usually used for a credit sale?",options:["Cheque counterfoil","Invoice","Receipt","Bank statement"],correctIndex:1,hint:"It gives details of goods sold and amount owed."},
+ {question:"Which book mainly records cash and bank transactions?",options:["Cash book","Sales journal","Purchases journal","Petty cash book"],correctIndex:0,hint:"It combines cash and bank accounts."},
+ {question:"The main purpose of a trial balance is to:",options:["Calculate net profit","Check the arithmetical accuracy of ledger postings","Show only assets and liabilities","Record all daily transactions"],correctIndex:1,hint:"It tests whether debits equal credits."},
+ {question:"Which of the following errors will NOT be revealed by a trial balance?",options:["Omitting one side of an entry","Transposing figures in one account only","Error of principle","Posting debit and credit to the wrong sides"],correctIndex:2,hint:"Debits and credits are equal, but to the wrong type of account."},
+ {question:"An error of omission occurs when:",options:["An entry is made in the wrong account","A transaction is left out completely","A wrong amount is recorded in both accounts","Two errors cancel each other"],correctIndex:1,hint:"The transaction is not recorded at all."},
+ {question:"An error of commission occurs when:",options:["Wrong amount in correct accounts","Posting to correct account type but wrong name","Using the wrong side of account","Leaving out one side of entry"],correctIndex:1,hint:"Correct class of account, wrong person or name."},
+ {question:"A compensating error occurs when:",options:["Two errors cancel each other","A transaction is not recorded","The wrong account is used","Only the debit side is posted"],correctIndex:0,hint:"The net effect on the trial balance is zero."},
+ {question:"Which of these is a real account?",options:["Rent expense","Capital","Trade payables","Motor vehicles"],correctIndex:3,hint:"It represents a tangible asset."},
+ {question:"Which of these is a nominal account?",options:["Inventory","Discount allowed","Capital","Bank"],correctIndex:1,hint:"It records income or expenses."},
+ {question:"Which concept states that the business is separate from its owner?",options:["Going concern","Business entity","Money measurement","Consistency"],correctIndex:1,hint:"It keeps personal and business affairs apart."},
+ {question:"Which concept assumes the business will continue in operation?",options:["Prudence","Accruals","Going concern","Materiality"],correctIndex:2,hint:"No intention to close in the near future."},
+ {question:"Which concept requires using the same methods each year?",options:["Consistency","Prudence","Matching","Realisation"],correctIndex:0,hint:"It helps users compare results over time."},
+ {question:"Which concept requires expenses to be matched with the revenue they help to earn?",options:["Business entity","Matching (accruals)","Going concern","Cost"],correctIndex:1,hint:"It links income and related expenses in the same period."},
+ {question:"Which concept states that only transactions that can be expressed in money are recorded?",options:["Money measurement","Prudence","Materiality","Realisation"],correctIndex:0,hint:"Qualitative factors like staff morale are not recorded."},
+ {question:"Professional ethics in accounting mainly help to:",options:["Reduce staff wages","Maintain public trust and integrity","Avoid all tax payments","Increase selling price"],correctIndex:1,hint:"They protect the reputation of the profession."},
+ {question:"Confidentiality in accounting means:",options:["Never talking to anyone","Not disclosing information without proper authority","Refusing to give information to tax authorities","Ignoring owners’ requests"],correctIndex:1,hint:"Information is shared only when allowed by law or client."},
+ {question:"Integrity in accounting requires an accountant to:",options:["Obey all management instructions","Be honest and straightforward","Always follow the majority","Ignore minor errors"],correctIndex:1,hint:"It is about honesty and strong moral principles."},
+ {question:"Objectivity means the accountant should:",options:["Be influenced by personal gain","Base decisions on verifiable evidence","Always agree with the owner","Ignore source documents"],correctIndex:1,hint:"Use evidence and not personal bias."},
+ {question:"Which of the following best shows stewardship?",options:["Keeping personal accounts","Employing more staff","Management using resources carefully for the owner","Increasing selling price"],correctIndex:2,hint:"Management is accountable for the owner’s resources."},
+ {question:"Trade receivables are:",options:["Amounts owed to suppliers","Amounts owed by credit customers","Amounts owed to the bank","Prepaid expenses"],correctIndex:1,hint:"They represent customers who bought on credit."},
+ {question:"Trade payables are:",options:["Amounts owed by customers","Amounts owed to credit suppliers","Amounts owed by employees","Amounts owed to the owner"],correctIndex:1,hint:"They arise from credit purchases."},
+ {question:"Which of the following is a source document for a cash payment?",options:["Cheque counterfoil","Invoice","Credit note","Statement of account"],correctIndex:0,hint:"It shows details of a cheque that was issued."},
+ {question:"Which document is issued when goods are returned to a supplier?",options:["Debit note","Credit note","Invoice","Receipt"],correctIndex:1,hint:"It notifies the buyer of a reduction in the amount owed."},
+ {question:"The petty cash book is used to record:",options:["All cash and bank payments","Small, regular payments","Only wages","Only credit transactions"],correctIndex:1,hint:"It deals with minor expenses like bus fares and postage."},
+ {question:"Imprest system of petty cash means:",options:["Petty cashier decides the float","Fixed amount is given each month and restored to that level","All petty cash is locked away","Only one type of expense can be paid"],correctIndex:1,hint:"The float is brought back to its original amount."},
+ {question:"Which item is MOST likely to be found in the petty cash book?",options:["Purchase of motor vehicle","Payment of annual rent","Taxi fare","Credit sale"],correctIndex:2,hint:"It is a small, frequent payment."},
+ {question:"The bank statement is a record kept by:",options:["The business only","The customer and supplier","The bank for the customer’s account","The tax department"],correctIndex:2,hint:"It shows the customer’s account as seen by the bank."},
+ {question:"The purpose of a bank reconciliation statement is to:",options:["Calculate profit","Explain differences between cash book and bank statement balances","Record petty cash","Record credit sales"],correctIndex:1,hint:"It reconciles the two bank balances."},
+ {question:"Which of the following items causes the bank statement balance to be higher than the cash book balance?",options:["Unpresented cheques","Deposits not yet credited","Bank charges","Dishonoured cheques"],correctIndex:0,hint:"Cheques issued but not yet presented reduce only the cash book balance."},
+ {question:"Which of the following items causes the bank statement balance to be lower than the cash book balance?",options:["Outstanding lodgements","Unpresented cheques","Bank charges","Errors in petty cash book"],correctIndex:2,hint:"They are entered by the bank but not yet in the cash book."},
+ {question:"Depreciation of a non-current asset is:",options:["A cash expense","The allocation of its cost over its useful life","The same as repairs","Always based on resale value"],correctIndex:1,hint:"It spreads the cost as the asset is used."},
+ {question:"Which method calculates depreciation on a fixed percentage of cost each year?",options:["Straight-line method","Reducing balance method","Revaluation method","Units of production method"],correctIndex:0,hint:"Same annual charge."},
+ {question:"Which method calculates depreciation on a fixed percentage of the carrying amount?",options:["Straight-line method","Reducing balance method","Revaluation method","Sum-of-years-digits"],correctIndex:1,hint:"The amount falls as the asset’s value falls."},
+ {question:"The residual (scrap) value of an asset is:",options:["Its original cost","Its carrying amount","Estimated value at the end of its useful life","The amount of depreciation each year"],correctIndex:2,hint:"What the business expects to get when disposing of it."},
+ {question:"Inventory is valued at:",options:["Higher of cost and net realisable value","Lower of cost and net realisable value","Selling price only","Any amount chosen by the owner"],correctIndex:1,hint:"This follows the prudence concept."},
+ {question:"Net realisable value is:",options:["Cost + profit","Selling price less costs to complete and sell","Original cost of goods","Selling price plus carriage"],correctIndex:1,hint:"It is the amount expected to be realised in cash."},
+ {question:"Carriage inwards is:",options:["Cost of bringing goods to customers","Cost of bringing goods into the business","Delivery expense to customers","Advertising expense"],correctIndex:1,hint:"It is added to purchases to get cost of goods bought."},
+ {question:"Carriage outwards is:",options:["Part of cost of purchases","A selling and distribution expense","A financial expense","An asset"],correctIndex:1,hint:"It relates to delivering goods to customers."},
+ {question:"Gross profit is:",options:["Sales minus expenses","Sales minus cost of sales","Sales minus liabilities","Capital minus drawings"],correctIndex:1,hint:"It is calculated before deducting expenses."},
+ {question:"Net profit is:",options:["Gross profit minus expenses","Gross profit plus expenses","Sales minus assets","Capital minus liabilities"],correctIndex:0,hint:"All expenses are deducted from gross profit."},
+ {question:"If sales are $10 000 and cost of sales is $7 000, gross profit is:",options:["$3 000","$7 000","$10 000","$17 000"],correctIndex:0,hint:"Sales - cost of sales."},
+ {question:"If gross profit is $4 000 and expenses are $1 500, net profit is:",options:["$2 500","$4 000","$5 500","$1 500"],correctIndex:0,hint:"Gross profit minus expenses."},
+ {question:"Which of the following will increase gross profit?",options:["Increase in wages expense","Increase in selling price per unit","Increase in rent expense","Increase in bank charges"],correctIndex:1,hint:"It affects the difference between sales and cost of sales."},
+ {question:"Which of the following is a capital expenditure?",options:["Repairing a machine","Buying a new delivery van","Paying electricity bill","Buying stationery"],correctIndex:1,hint:"It provides a benefit for more than one year."},
+ {question:"Which of the following is a revenue expenditure?",options:["Adding a new extension to a building","Major upgrade of a machine to increase capacity","Routine servicing of a motor vehicle","Buying land"],correctIndex:2,hint:"It maintains the asset in working order."},
+ {question:"Which pair shows one capital and one revenue item?",options:["Wages and salaries; rent","Purchase of computer; annual insurance","Purchase of inventory; sales","Electricity; telephone"],correctIndex:1,hint:"One is long-term asset, the other is recurring expense."},
+ {question:"Control accounts are mainly used to:",options:["Calculate tax","Summarise and check the accuracy of ledger accounts","Prepare bank reconciliations","Record petty cash"],correctIndex:1,hint:"They are total accounts for receivables and payables."},
+ {question:"The receivables control account collects totals from:",options:["Sales and purchases journals","Sales journal and cash book","Cash book and petty cash book","General journal only"],correctIndex:1,hint:"It receives totals for credit sales and cash received."},
+ {question:"Which of the following will NOT appear in the payables control account?",options:["Credit purchases of goods","Cash paid to suppliers","Discount received","Sales returns"],correctIndex:3,hint:"Returns to suppliers appear; sales returns do not."},
+ {question:"Which balance would normally appear on a receivables control account?",options:["Credit balance","Debit balance","Zero balance only","No balance is carried down"],correctIndex:1,hint:"Customers owe the business."},
+ {question:"Which balance would normally appear on a payables control account?",options:["Debit balance","Credit balance","Zero balance only","No balance is carried down"],correctIndex:1,hint:"The business owes its suppliers."},
+ {question:"A suspense account is opened when:",options:["The trial balance agrees","The trial balance does not agree","There are no errors","Only petty cash errors occur"],correctIndex:1,hint:"It holds the difference while errors are located."},
+ {question:"Which of the following is a limitation of accounting information?",options:["It is based on historical cost","It is always 100% accurate","It cannot be audited","It is illegal"],correctIndex:0,hint:"Figures may not reflect current values."},
+ {question:"Which of the following is the BEST example of the prudence concept?",options:["Recording revenue when cash is received","Providing for doubtful debts","Using same depreciation method each year","Valuing inventory at selling price"],correctIndex:1,hint:"It anticipates losses but not gains."},
+ {question:"Which concept deals with ignoring very small items?",options:["Materiality","Consistency","Going concern","Business entity"],correctIndex:0,hint:"If an item is insignificant, it may be treated in a simpler way."},
+ {question:"Which principle requires revenue to be recognised when it is earned, not when cash is received?",options:["Going concern","Accruals (matching)","Prudence","Cost"],correctIndex:1,hint:"It focuses on when the service or goods are provided."},
+ {question:"Which of the following is MOST likely to be an accounting policy?",options:["Choice of depreciation method","Choice of bank","Number of staff employed","Colour of invoices"],correctIndex:0,hint:"It is a method that should be applied consistently."},
+ {question:"Which ethical threat occurs when an accountant has a close relationship with a client?",options:["Self-interest threat","Familiarity threat","Intimidation threat","Advocacy threat"],correctIndex:1,hint:"They may be too sympathetic to the client’s interests."},
+ {question:"Which ethical threat occurs when an accountant has a financial benefit tied to the client?",options:["Self-interest threat","Familiarity threat","Self-review threat","Intimidation threat"],correctIndex:0,hint:"They might benefit personally from certain decisions."},
+ {question:"Which action best supports professional competence?",options:["Ignoring new standards","Continuing professional development","Accepting all clients without question","Delegating all work to untrained staff"],correctIndex:1,hint:"Skills must be kept up to date."},
+ {question:"Which of these is generally regarded as confidential information?",options:["Publicly advertised prices","Published financial statements","Client’s internal profit forecasts","Tax laws"],correctIndex:2,hint:"It is not in the public domain and is sensitive."},
+ {question:"Which of the following MOST clearly demonstrates stewardship by management?",options:["Using business assets for personal use","Ensuring accurate records and safeguarding assets","Hiding losses from owners","Ignoring internal controls"],correctIndex:1,hint:"They must manage resources responsibly for the owners."}
+];
+
+const questionText=document.getElementById("questionText"),optionsList=document.getElementById("optionsList"),progressText=document.getElementById("progress"),hintToggle=document.getElementById("hintToggle"),hintBox=document.getElementById("hintBox"),statusText=document.getElementById("statusText"),nextBtn=document.getElementById("nextBtn"),scoreText=document.getElementById("scoreText"),clockBox=document.getElementById("clockBox"),installBtn=document.getElementById("installBtn");
+let order=[],orderPos=0,selected=false,autoNextTimeout=null,correctCount=0,attempts=0,totalShown=0;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function getNextIndex(){if(orderPos>=order.length){order=shuffle([...Array(questions.length).keys()]);orderPos=0}const idx=order[orderPos];orderPos++;totalShown++;return idx}
+let currentIndex=getNextIndex();
+function renderQuestion(){if(autoNextTimeout){clearTimeout(autoNextTimeout);autoNextTimeout=null}const q=questions[currentIndex];questionText.textContent=q.question;const cardNo=((totalShown-1)%questions.length)+1;progressText.textContent=`Card ${cardNo}/${questions.length}`;optionsList.innerHTML="";const letters=["A","B","C","D"];q.options.forEach((opt,idx)=>{const btn=document.createElement("button");btn.className="option-btn";btn.dataset.index=idx;const label=document.createElement("div");label.className="option-label";label.textContent=letters[idx];const span=document.createElement("div");span.className="option-text";span.textContent=opt;btn.appendChild(label);btn.appendChild(span);btn.addEventListener("click",()=>handleAnswer(idx,btn));optionsList.appendChild(btn)});hintBox.textContent=q.hint;hintBox.style.display="none";hintToggle.textContent="Show hint";statusText.textContent="";statusText.classList.remove("error");nextBtn.disabled=true;selected=false;scoreText.textContent=`${correctCount} / ${attempts}`}
+function handleAnswer(idx,btn){if(selected)return;selected=true;const q=questions[currentIndex],correctIndex=q.correctIndex,optionButtons=[...document.querySelectorAll(".option-btn")];optionButtons.forEach(b=>b.disabled=true);attempts++;if(idx===correctIndex){btn.classList.add("correct");statusText.textContent="Correct! ✓";statusText.classList.remove("error");correctCount++;scoreText.textContent=`${correctCount} / ${attempts}`;nextBtn.disabled=false;if(questions.length>1){autoNextTimeout=setTimeout(()=>{goNext()},800)}else{statusText.textContent="Deck complete."}}else{btn.classList.add("wrong");statusText.textContent="Not quite. The correct answer is highlighted.";statusText.classList.add("error");nextBtn.disabled=false;optionButtons.forEach(b=>{const i=Number(b.dataset.index);if(i===correctIndex){b.classList.add("correct-reveal")}});scoreText.textContent=`${correctCount} / ${attempts}`}}
+function goNext(){currentIndex=getNextIndex();renderQuestion()}
+hintToggle.addEventListener("click",()=>{if(hintBox.style.display==="none"){hintBox.style.display="block";hintToggle.textContent="Hide hint"}else{hintBox.style.display="none";hintToggle.textContent="Show hint"}});
+nextBtn.addEventListener("click",()=>{goNext()});
+function updateClock(){const d=new Date();const h=String(d.getHours()).padStart(2,"0"),m=String(d.getMinutes()).padStart(2,"0"),s=String(d.getSeconds()).padStart(2,"0");clockBox.textContent=`${h}:${m}:${s}`}
+setInterval(updateClock,1000);updateClock();
+installBtn.addEventListener("click",()=>{try{const html=document.documentElement.outerHTML;const blob=new Blob([html],{type:"text/html"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="poa-flashcards.html";document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url)},800)}catch(e){alert("Unable to prepare download in this browser.")}});
+renderQuestion();
+</script>
+<script src="https://favnc.pages.dev/web_runtime/console.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/intro-saver.js"></script>
+</body></html>
