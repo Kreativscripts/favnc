@@ -2,168 +2,280 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Fav_DTS</title>
+<title>Fav_DTS – Discord Timestamp Generator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Discord / social embed -->
+<link rel="icon" href="../../assets/discordlogo.png">
+<meta name="description" content="Fav_DTS – generate Discord dynamic timestamps (relative, date, time) with one click.">
 <meta name="theme-color" content="#0a0a0f">
 
+<meta property="og:title" content="Fav_DTS – Discord Timestamp Generator">
+<meta property="og:description" content="Generate Discord-ready timestamps in any style: short, long, full, relative and more.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://favnc.pages.dev/tools/Discord/time-stamp.html">
+<meta property="og:site_name" content="Nexus Command">
+<meta property="og:image" content="https://favnc.pages.dev/assets/tool-embed.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fav_DTS – Discord Timestamp Generator">
+<meta name="twitter:description" content="Generate dynamic Discord timestamps that auto-convert to each viewer's local time.">
+<meta name="twitter:image" content="https://favnc.pages.dev/assets/tool-embed.png">
+
+<script src="https://favnc.pages.dev/web_runtime/console.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js"></script>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 body{
-  overflow:hidden;
   height:100vh;
   width:100vw;
-  background:#000;
-  color:#fff;
+  overflow:hidden;
+  color:#f5f5ff;
 }
 
+/* VIDEO BG – no dark overlay */
 #bg{
   position:fixed;
-  top:0;left:0;
-  width:100vw;height:100vh;
-  object-fit:cover;
-  z-index:-2;
-  filter:brightness(.32);
-}
-
-#samurai{
-  position:fixed;
-  right:0;
-  bottom:0;
+  inset:0;
+  width:100%;
   height:100%;
   object-fit:cover;
-  opacity:.35;
   z-index:-1;
-  pointer-events:none;
 }
 
-/* MAIN PANEL */
+/* LEFT-SIDE GUI */
 #panel{
   position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:430px;
-  padding:22px;
-  background:rgba(10,10,20,.55);
-  border:1px solid rgba(150,150,150,.18);
-  backdrop-filter:blur(18px);
-  border-radius:16px;
-  box-shadow:0 0 35px rgba(50,120,255,.25);
-  animation:fadeIn .7s ease;
-}
-@keyframes fadeIn{from{opacity:0;transform:translate(-50%,-45%)}to{opacity:1;transform:translate(-50%,-50%)}}
-
-/* TITLE */
-#title{
-  text-align:center;
-  font-size:1.45rem;
-  margin-bottom:12px;
-  letter-spacing:.07em;
-}
-
-/* INPUTS */
-.label{margin-top:10px;margin-bottom:4px;font-size:.85rem;color:#c7c9ff}
-input,select{
+  top:50%;
+  left:9%;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-width:360px;
   width:100%;
-  padding:8px;
-  background:#1b1b28;
-  border:1px solid #444;
-  border-radius:8px;
-  color:#fff;
-  font-size:.9rem;
+  color:#f5f5ff;
+}
+
+/* TITLE + SMALL BAR */
+#panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+#title{
+  font-size:1.35rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-shadow:0 0 8px rgba(0,0,0,.8);
+}
+#tag{
+  font-size:.7rem;
+  padding:3px 8px;
+  border-radius:999px;
+  border:1px solid rgba(180,180,220,.7);
+  background:rgba(5,5,12,.72);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+/* BUTTON STRIP */
+#btn-row{
+  display:flex;
+  gap:6px;
+  margin-top:4px;
+}
+.icon-btn, .mini-btn{
+  border-radius:999px;
+  border:1px solid rgba(190,190,220,.6);
+  background:rgba(12,12,22,.9);
+  color:#f7f7ff;
+  font-size:.78rem;
+  padding:4px 10px;
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.icon-btn{
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+}
+.icon-btn:hover,.mini-btn:hover{
+  background:rgba(20,20,40,.98);
+  box-shadow:0 0 11px rgba(145,170,255,.8);
+}
+
+/* LABELS + INPUTS */
+.label{
+  font-size:.78rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#d5d7ff;
+  text-shadow:0 0 6px rgba(0,0,0,.7);
+  margin-top:4px;
+}
+input[type="date"],
+input[type="time"],
+select{
+  width:100%;
+  padding:7px 10px;
+  border-radius:9px;
+  border:1px solid rgba(130,135,165,.9);
+  background:rgba(14,16,28,.92);
+  color:#f7f7ff;
+  font-size:.88rem;
   outline:none;
-  transition:.2s;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 12px rgba(0,0,0,.7);
+  transition:border-color .15s, box-shadow .15s, background .15s;
 }
 input:focus,select:focus{
-  border-color:#7a9bff;
-  box-shadow:0 0 10px rgba(120,155,255,.4);
+  border-color:#8ba2ff;
+  box-shadow:0 0 14px rgba(140,165,255,.9);
+  background:rgba(18,20,36,.98);
 }
 
-/* OUTPUT BOX */
+/* GENERATED */
 #code{
-  margin-top:8px;
-  font-family:monospace;
-  background:#0f0f18;
+  font-family:ui-monospace,Menlo,Consolas,monospace;
+  background:rgba(8,8,18,.98);
 }
 
-/* BUTTONS */
+/* MAIN BUTTONS */
 .btn{
-  margin-top:12px;
-  padding:10px;
+  margin-top:6px;
   width:100%;
-  background:#2c2c36;
-  color:#fff;
-  border:none;
-  border-radius:8px;
-  font-size:.9rem;
+  padding:9px 10px;
+  border-radius:9px;
+  border:1px solid rgba(140,145,180,.85);
+  background:rgba(12,12,24,.95);
+  color:#f7f7ff;
+  font-size:.82rem;
+  text-transform:uppercase;
+  letter-spacing:.09em;
   cursor:pointer;
-  transition:.18s;
-  border:1px solid rgba(200,200,200,.18);
+  box-shadow:0 0 10px rgba(0,0,0,.65);
+  transition:background .15s, box-shadow .15s, transform .07s;
+}
+.btn.primary{
+  background:linear-gradient(135deg,#8e9aff,#c592ff);
+  border:none;
+  color:#050515;
+  box-shadow:0 0 16px rgba(120,150,255,.9);
 }
 .btn:hover{
-  background:#3b3b48;
-  box-shadow:0 0 12px rgba(150,150,255,.4);
+  transform:translateY(-1px);
+  box-shadow:0 0 16px rgba(150,170,255,.95);
 }
 
-/* HELP BUTTON */
-#help{
-  position:absolute;
-  top:12px;right:12px;
-  width:28px;height:28px;
-  border-radius:50%;
-  background:rgba(255,255,255,.12);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  font-weight:700;font-size:1rem;
-  border:1px solid rgba(255,255,255,.25);
+/* PREVIEW TEXT */
+#preview-label{
+  margin-top:6px;
+  font-size:.78rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#c0c3ff;
+  text-shadow:0 0 6px rgba(0,0,0,.7);
 }
-#help:hover{background:rgba(255,255,255,.22)}
+#preview{
+  font-size:.9rem;
+  text-shadow:0 0 7px rgba(0,0,0,.85);
+}
 
-/* MODAL */
-#modal-bg{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.7);
-  display:none;
-  align-items:center;justify-content:center;
-  z-index:20;
+/* SIDE OVERLAY PANEL */
+.overlay{
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  width:420px;
+  max-width:100%;
+  background:rgba(4,4,12,.95);
+  border-left:1px solid rgba(190,190,230,.3);
+  box-shadow:-12px 0 30px rgba(0,0,0,.9);
+  transform:translateX(100%);
+  transition:transform .18s ease-out;
+  color:#f1f1ff;
+  padding:16px 15px;
+  overflow-y:auto;
+  z-index:10;
 }
-#modal{
-  width:330px;
-  background:#10101c;
-  padding:18px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.2);
-  box-shadow:0 0 22px rgba(120,120,255,.4);
+.overlay.open{
+  transform:translateX(0);
 }
-#modal h2{font-size:1.1rem;margin-bottom:10px}
-#modal p,#modal li{font-size:.85rem;color:#ddd;margin-bottom:6px}
-#modal-close{
-  margin-top:10px;
+.overlay h2{
+  font-size:1.02rem;
+  margin-bottom:4px;
+}
+.overlay h3{
+  font-size:.95rem;
+  margin:8px 0 2px;
+}
+.overlay p{
+  font-size:.83rem;
+  margin:3px 0;
+  color:#d0d3ff;
+}
+.overlay pre{
+  background:#050516;
+  border-radius:8px;
   padding:8px;
-  width:100%;
-  background:#2f2f3a;
-  border:none;
-  border-radius:6px;
-  color:#fff;
-  cursor:pointer;
+  font-size:.74rem;
+  white-space:pre-wrap;
+  word-break:break-all;
+  margin:5px 0 10px;
 }
-#modal-close:hover{background:#444459}
+.overlay-close{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:4px;
+}
+.overlay-close button{
+  border:none;
+  background:transparent;
+  color:#9fa4ff;
+  cursor:pointer;
+  font-size:.85rem;
+}
+
+/* MOBILE TWEAK */
+@media (max-width:900px){
+  #panel{
+    left:50%;
+    transform:translate(-50%,-50%);
+    padding:10px;
+  }
+}
 </style>
 </head>
-
 <body>
 
-<!-- FULLSCREEN BG VIDEO -->
+<!-- PURE VIDEO BACKGROUND -->
 <video id="bg" autoplay muted loop playsinline>
   <source src="https://favnc.pages.dev/assets/smtbg.mp4" type="video/mp4">
 </video>
 
-<!-- SAMURAI IMAGE -->
-<img id="samurai" src="samurai.png">
-
-<!-- MAIN PANEL -->
+<!-- LEFT-SIDE GUI -->
 <div id="panel">
-  <div id="help">?</div>
-  <div id="title">Fav_DTS</div>
+  <div id="panel-header">
+    <div>
+      <div id="title">Fav_DTS</div>
+      <div id="tag">Discord timestamp tool</div>
+    </div>
+    <button class="icon-btn" id="help-btn">?</button>
+  </div>
+
+  <div id="btn-row">
+    <button class="mini-btn" id="source-btn">Source Code</button>
+  </div>
 
   <div class="label">Date</div>
   <input type="date" id="d">
@@ -185,30 +297,81 @@ input:focus,select:focus{
   <div class="label">Generated</div>
   <input type="text" readonly id="code">
 
-  <button class="btn" id="copy">Copy</button>
+  <button class="btn primary" id="copy">Copy</button>
   <button class="btn" id="current">Current Time</button>
 
-  <div class="label" style="margin-top:15px;">Preview</div>
-  <div id="preview" style="font-size:.92rem;color:#d2d5ff;">—</div>
+  <div id="preview-label">Preview</div>
+  <div id="preview">—</div>
 </div>
 
-<!-- HELP MOD  AL -->
-<div id="modal-bg">
-  <div id="modal">
-    <h2>Discord Timestamps</h2>
-    <p>Format: <code>&lt;t:UNIX:STYLE&gt;</code></p>
-    <p>Styles:</p>
-    <ul>
-      <li><code>t</code> short time</li>
-      <li><code>T</code> long time</li>
-      <li><code>d</code> short date</li>
-      <li><code>D</code> long date</li>
-      <li><code>f</code> date + time</li>
-      <li><code>F</code> full</li>
-      <li><code>R</code> relative</li>
-    </ul>
-    <button id="modal-close">Close</button>
-  </div>
+<!-- HELP OVERLAY -->
+<div class="overlay" id="help-panel">
+  <div class="overlay-close"><button id="help-close">Close ✕</button></div>
+  <h2>Discord timestamp basics</h2>
+  <p>Syntax in Discord:</p>
+  <pre><code>&lt;t:UNIX:STYLE&gt;</code></pre>
+  <p>Styles:</p>
+  <pre><code>t  → short time          21:37
+T  → long time           21:37:42
+d  → short date          11/29/2025
+D  → long date           November 29, 2025
+f  → date + time         November 29, 2025 21:37
+F  → full                Saturday, November 29, 2025 21:37
+R  → relative            in 5 minutes / 2 hours ago</code></pre>
+  <p>Paste the generated code directly into messages, embeds or bot responses.</p>
+</div>
+
+<!-- SOURCE CODE / API OVERLAY -->
+<div class="overlay" id="source-panel">
+  <div class="overlay-close"><button id="source-close">Close ✕</button></div>
+  <h2>Source Code & API idea</h2>
+  <p>Fav_DTS builds the code in the browser. A simple API could look like:</p>
+  <pre><code>GET https://favnc.pages.dev/api/time-stamp?date=2025-11-29&amp;time=21:37&amp;style=R</code></pre>
+  <p>Example JSON response:</p>
+  <pre><code>{
+  "code": "&lt;t:1764442620:R&gt;",
+  "unix": 1764442620,
+  "style": "R"
+}</code></pre>
+
+  <h3>JS core (front-end)</h3>
+  <pre><code>function buildTimestamp(dateStr,timeStr,style){
+  const d=new Date(dateStr+"T"+timeStr);
+  const ts=Math.floor(d.getTime()/1000);
+  return "&lt;t:"+ts+":"+(style||"R")+"&gt;";
+}</code></pre>
+
+  <h3>Python example</h3>
+  <pre><code>from datetime import datetime, timezone
+
+def fav_dts(date_str, time_str, style="R"):
+    dt = datetime.fromisoformat(date_str + "T" + time_str)
+    ts = int(dt.replace(tzinfo=timezone.utc).timestamp())
+    return f"&lt;t:{ts}:{style}&gt;"</code></pre>
+
+  <h3>HTML usage</h3>
+  <pre><code>&lt;code&gt;&lt;t:1764442620:F&gt;&lt;/code&gt;</code></pre>
+
+  <h3>Cloudflare Worker sketch for /api/time-stamp</h3>
+  <pre><code>export default {
+  async fetch(req) {
+    const url = new URL(req.url);
+    const date = url.searchParams.get("date");
+    const time = url.searchParams.get("time");
+    const style = url.searchParams.get("style") || "R";
+    if (!date || !time) {
+      return new Response(JSON.stringify({error:"date and time required"}), {
+        status:400,
+        headers: {"content-type":"application/json"}
+      });
+    }
+    const ts = Math.floor(new Date(date+"T"+time).getTime()/1000);
+    const code = `&lt;t:${ts}:${style}&gt;`;
+    return new Response(JSON.stringify({code, unix:ts, style}), {
+      headers: {"content-type":"application/json"}
+    });
+  }
+};</code></pre>
 </div>
 
 <script>
@@ -219,60 +382,64 @@ const d=document.getElementById("d"),
       preview=document.getElementById("preview"),
       copy=document.getElementById("copy"),
       current=document.getElementById("current"),
-      help=document.getElementById("help"),
-      modalbg=document.getElementById("modal-bg"),
-      modalclose=document.getElementById("modal-close");
+      helpBtn=document.getElementById("help-btn"),
+      helpPanel=document.getElementById("help-panel"),
+      helpClose=document.getElementById("help-close"),
+      sourceBtn=document.getElementById("source-btn"),
+      sourcePanel=document.getElementById("source-panel"),
+      sourceClose=document.getElementById("source-close");
 
 function now(){
-  let n=new Date(),
-      y=n.getFullYear(),
-      m=String(n.getMonth()+1).padStart(2,"0"),
-      d2=String(n.getDate()).padStart(2,"0"),
-      h=String(n.getHours()).padStart(2,"0"),
-      mm=String(n.getMinutes()).padStart(2,"0");
-
+  const n=new Date(),
+        y=n.getFullYear(),
+        m=String(n.getMonth()+1).padStart(2,"0"),
+        d2=String(n.getDate()).padStart(2,"0"),
+        h=String(n.getHours()).padStart(2,"0"),
+        mm=String(n.getMinutes()).padStart(2,"0");
   d.value=`${y}-${m}-${d2}`;
   hm.value=`${h}:${mm}`;
   calc();
 }
 
 function calc(){
-  let base=d.valueAsNumber+hm.valueAsNumber;
-  let n=new Date(base);
-  let fixed=base+n.getTimezoneOffset()*60000;
-  let final=new Date(fixed);
-  let ts=Math.floor(final.getTime()/1000);
-
+  const base=d.valueAsNumber+hm.valueAsNumber;
+  const n=new Date(base);
+  const fixed=base+n.getTimezoneOffset()*60000;
+  const finalDate=new Date(fixed);
+  const ts=Math.floor(finalDate.getTime()/1000);
   code.value=`<t:${ts}:${t.value}>`;
-
   if(t.value==="R"){
-    let diff=Math.floor((final-Date.now())/1000);
-    let abs=Math.abs(diff);
+    let diff=Math.floor((finalDate-Date.now())/1000);
+    const abs=Math.abs(diff);
     let unit="seconds";
-
-    if(abs>3600*24*365){diff=Math.round(diff/(86400*365));unit="years"}
-    else if(abs>3600*24*30){diff=Math.round(diff/(86400*30));unit="months"}
-    else if(abs>3600*24){diff=Math.round(diff/86400);unit="days"}
-    else if(abs>3600){diff=Math.round(diff/3600);unit="hours"}
-    else if(abs>60){diff=Math.round(diff/60);unit="minutes"}
-
-    let fmt=new Intl.RelativeTimeFormat("en",{numeric:"auto",style:"long"});
+    if(abs>3600*24*365){diff=Math.round(diff/(86400*365));unit="years";}
+    else if(abs>3600*24*30){diff=Math.round(diff/(86400*30));unit="months";}
+    else if(abs>3600*24){diff=Math.round(diff/86400);unit="days";}
+    else if(abs>3600){diff=Math.round(diff/3600);unit="hours";}
+    else if(abs>60){diff=Math.round(diff/60);unit="minutes";}
+    const fmt=new Intl.RelativeTimeFormat("en",{numeric:"auto",style:"long"});
     preview.textContent=fmt.format(diff,unit);
-  } else {
-    let fmt=new Intl.DateTimeFormat("en",{dateStyle:"full",timeStyle:"short"});
-    preview.textContent=fmt.format(final);
+  }else{
+    const fmt=new Intl.DateTimeFormat("en",{dateStyle:"full",timeStyle:"short"});
+    preview.textContent=fmt.format(finalDate);
   }
 }
 
-d.onchange=calc;hm.onchange=calc;t.onchange=calc;
+d.onchange=calc;
+hm.onchange=calc;
+t.onchange=calc;
 
-copy.onclick=()=>{navigator.clipboard.writeText(code.value);copy.textContent="Copied!";setTimeout(()=>copy.textContent="Copy",900)}
+copy.onclick=()=>{
+  navigator.clipboard.writeText(code.value)
+    .then(()=>{copy.textContent="Copied";setTimeout(()=>copy.textContent="Copy",900);});
+};
 current.onclick=now;
 window.onload=now;
 
-help.onclick=()=>modalbg.style.display="flex";
-modalclose.onclick=()=>modalbg.style.display="none";
-modalbg.onclick=e=>{if(e.target===modalbg)modalbg.style.display="none"};
+helpBtn.onclick=()=>helpPanel.classList.add("open");
+helpClose.onclick=()=>helpPanel.classList.remove("open");
+sourceBtn.onclick=()=>sourcePanel.classList.add("open");
+sourceClose.onclick=()=>sourcePanel.classList.remove("open");
 </script>
 
 </body>
