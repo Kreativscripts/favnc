@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fav_Decode – Text Decoder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/assets/Incognito.png">
+<meta name="description" content="Fav_Decode – Decode URL-encoded, HTML entities, escaped and Base64 strings.">
+<meta name="theme-color" content="#0a0a0f">
+<meta property="og:title" content="Fav_Decode – Text Decoder">
+<meta property="og:description" content="Decode encoded strings like URL, HTML entities and escaped text with FavNC styling.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://favnc.pages.dev/tools/Encryption/decoder.html">
+<meta property="og:site_name" content="Nexus Command">
+<meta property="og:image" content="https://favnc.pages.dev/assets/Incognito.png">
+<script src="https://favnc.pages.dev/web_runtime/console.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js"></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{height:100vh;width:100vw;overflow:hidden;color:#f5f5ff}
+#bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+#panel{position:absolute;top:50%;left:9%;transform:translateY(-50%);width:360px;display:flex;flex-direction:column;gap:8px;color:#f5f5ff}
+#title{font-size:1.35rem;text-transform:uppercase;letter-spacing:.08em;text-shadow:0 0 8px #000}
+#tag{font-size:.7rem;padding:3px 8px;border-radius:999px;border:1px solid rgba(200,200,255,.7);background:rgba(5,5,12,.72);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.label{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#d5d7ff;text-shadow:0 0 6px #000;margin-top:4px}
+textarea{width:100%;height:120px;resize:none;padding:10px;border-radius:9px;border:1px solid rgba(130,135,165,.9);background:rgba(14,16,28,.92);color:#fff;font-size:.86rem;outline:none;backdrop-filter:blur(10px);box-shadow:0 0 12px rgba(0,0,0,.7)}
+textarea:focus{border-color:#8ba2ff;box-shadow:0 0 14px rgba(160,180,255,.85)}
+select{width:100%;padding:7px 10px;border-radius:9px;border:1px solid rgba(130,135,165,.9);background:rgba(14,16,28,.92);color:#f5f5ff;font-size:.86rem;outline:none;backdrop-filter:blur(10px);box-shadow:0 0 12px rgba(0,0,0,.7)}
+select:focus{border-color:#8ba2ff;box-shadow:0 0 14px rgba(160,180,255,.85)}
+#output{white-space:pre-wrap;word-break:break-all;font-family:ui-monospace,Menlo,Consolas,monospace;background:rgba(8,8,18,.92);padding:10px;border-radius:9px;border:1px solid rgba(130,135,165,.9);min-height:80px;box-shadow:0 0 12px rgba(0,0,0,.7)}
+.btn{margin-top:6px;width:100%;padding:9px 10px;border-radius:9px;border:1px solid rgba(160,160,175,.55);background:rgba(40,40,48,.88);color:#f1f1f5;font-size:.82rem;text-transform:uppercase;letter-spacing:.09em;cursor:pointer;box-shadow:0 0 10px rgba(0,0,0,.65);transition:background .15s,box-shadow .15s,transform .07s}
+.btn:hover{transform:translateY(-1px);background:rgba(55,55,65,.95);box-shadow:0 0 14px rgba(190,190,220,.45)}
+.btn.primary{background:rgba(65,65,75,.95);border:1px solid rgba(200,200,220,.65);color:#fafafa;box-shadow:0 0 14px rgba(200,200,220,.55)}
+.btn.primary:hover{background:rgba(80,80,90,.98);box-shadow:0 0 18px rgba(200,200,220,.7)}
+@media (max-width:900px){#panel{left:50%;transform:translate(-50%,-50%);padding:10px}}</style>
+</head>
+<body>
+<video id="bg" autoplay muted loop playsinline>
+  <source src="https://favnc.pages.dev/assets/smtbg.mp4" type="video/mp4">
+</video>
+<div id="panel">
+  <div id="title">Fav_Decode</div>
+  <div id="tag">Text Decoder</div>
+  <div class="label">Input</div>
+  <textarea id="input"></textarea>
+  <div class="label">Mode</div>
+  <select id="mode">
+    <option value="auto">Auto</option>
+    <option value="url">URL Decode</option>
+    <option value="html">HTML Entities</option>
+    <option value="js">JS / JSON Escapes</option>
+    <option value="b64">Base64</option>
+  </select>
+  <button class="btn primary" id="decode">Decode</button>
+  <button class="btn" id="clear">Clear</button>
+  <button class="btn" id="copy">Copy Output</button>
+  <div class="label">Output</div>
+  <div id="output"></div>
+</div>
+<script>
+const i=document.getElementById("input"),o=document.getElementById("output"),m=document.getElementById("mode")
+function h(s){const t=document.createElement("textarea");t.innerHTML=s;return t.value}
+function d_url(v){try{return decodeURIComponent(v.replace(/\+/g," "))}catch(e){return null}}
+function d_html(v){try{return h(v)}catch(e){return null}}
+function d_js(v){try{return JSON.parse('"'+v.replace(/\\/g,"\\\\").replace(/"/g,'\\"')+'"')}catch(e){return null}}
+function d_b64(v){try{return atob(v)}catch(e){return null}}
+function decodeValue(mode,val){
+  if(!val.trim())return ""
+  if(mode==="url")return d_url(val)||"Invalid URL encoding"
+  if(mode==="html")return d_html(val)||"Invalid HTML entities"
+  if(mode==="js")return d_js(val)||"Invalid JS/JSON escape string"
+  if(mode==="b64")return d_b64(val)||"Invalid Base64"
+  const chain=[d_url,d_html,d_js,d_b64]
+  for(const f of chain){const r=f(val);if(r&&r!==val)return r}
+  return val
+}
+document.getElementById("decode").onclick=()=>{o.textContent=decodeValue(m.value,i.value)}
+document.getElementById("clear").onclick=()=>{i.value="";o.textContent=""}
+document.getElementById("copy").onclick=()=>{
+  if(!o.textContent)return;
+  navigator.clipboard.writeText(o.textContent).then(()=>{document.getElementById("copy").textContent="Copied";setTimeout(()=>document.getElementById("copy").textContent="Copy Output",900)})
+}
+</script>
+</body>
+</html>
