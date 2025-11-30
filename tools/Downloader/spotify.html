@@ -1,220 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fav_Spot – Spotify Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/assets/discordlogo.png">
+<meta name="description" content="Fav_Spot – front-end control panel for queuing Spotify download jobs to your own backend.">
+<meta name="theme-color" content="#0a0a0f">
+<meta property="og:title" content="Fav_Spot – Spotify Panel">
+<meta property="og:description" content="Queue Spotify track / album / playlist jobs to your own backend.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://favnc.pages.dev/tools/Downloader/spotify.html">
+<meta property="og:site_name" content="Nexus Command">
+<meta property="og:image" content="https://favnc.pages.dev/assets/discordlogo.png">
 <script src="https://favnc.pages.dev/web_runtime/console.js"></script>
 <script src="https://favnc.pages.dev/web_runtime/localstorage.js"></script>
 <script src="https://favnc.pages.dev/web_runtime/rhtml.js"></script>
-<head>
-<meta charset="UTF-8">
-<title>Spotify Downloader – Nexus Command</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="../../assets/discordlogo.png">
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;min-height:100vh;font-family:Segoe UI,Arial,sans-serif;color:#f7f7f7;
-  background:radial-gradient(circle at 10% 0%,#272727 0,#050505 40%,#000 80%);
-  background-size:220% 220%;animation:bgShift 20s ease-in-out infinite;
-  display:flex;justify-content:center;align-items:center;padding:20px;
-}
-@keyframes bgShift{0%{background-position:0 0}50%{background-position:100% 100%}100%{background-position:0 0}}
-.wrap{
-  width:100%;max-width:720px;background:rgba(8,8,8,.94);border-radius:16px;
-  border:1px solid rgba(255,255,255,.14);box-shadow:0 0 26px rgba(0,0,0,.9);
-  padding:18px 18px 14px;backdrop-filter:blur(16px);
-}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.header-left{display:flex;align-items:center;gap:10px}
-.icon{width:30px;height:30px;border-radius:9px}
-.title{font-size:20px;font-weight:700}
-.tag{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid rgba(255,215,0,.7);
-  color:#ffd700;text-transform:uppercase;letter-spacing:.08em}
-.subtitle{font-size:12px;opacity:.8;margin-bottom:10px}
-.grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px}
-@media(max-width:760px){.grid{grid-template-columns:1fr}}
-.card{
-  background:rgba(0,0,0,.7);border-radius:14px;border:1px solid rgba(255,255,255,.12);
-  padding:10px 11px 9px;
-}
-.label{font-size:12px;margin-bottom:2px;opacity:.9}
-input[type=text],select{
-  width:100%;padding:8px 9px;border-radius:8px;border:1px solid rgba(255,255,255,.22);
-  background:#050505;color:#f5f5f5;font-size:12px;
-}
-input[type=text]:focus,select:focus{
-  outline:none;border-color:#ffd700;box-shadow:0 0 8px rgba(255,215,0,.4);
-}
-.row{margin-bottom:9px;display:flex;flex-direction:column}
-.two-col{display:flex;gap:10px;flex-wrap:wrap}
-.small{font-size:11px;opacity:.7}
-button{
-  padding:8px 16px;border-radius:999px;border:none;
-  background:linear-gradient(135deg,#1db954,#ffd700);color:#000;
-  font-weight:600;font-size:13px;cursor:pointer;
-  box-shadow:0 0 14px rgba(0,255,160,.45);
-}
-button:disabled{opacity:.6;cursor:not-allowed;box-shadow:none}
-.btn-row{margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.status{font-size:11px;min-height:14px}
-.status.ok{color:#7cffd1}
-.status.err{color:#ff6b6b}
-.log-title{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#ffd700;margin-bottom:4px}
-.log-box{
-  background:#050505;border-radius:8px;border:1px solid rgba(255,255,255,.15);
-  font-size:11px;padding:7px;max-height:190px;overflow:auto;white-space:pre-wrap;
-}
-</style>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{height:100vh;width:100vw;overflow:hidden;color:#f5f5ff}
+#bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+#panel{position:absolute;top:50%;left:9%;transform:translateY(-50%);width:380px;display:flex;flex-direction:column;gap:8px;color:#f5f5ff}
+#title{font-size:1.35rem;text-transform:uppercase;letter-spacing:.08em;text-shadow:0 0 8px #000}
+#tag{font-size:.7rem;padding:3px 8px;border-radius:999px;border:1px solid rgba(200,200,255,.7);background:rgba(5,5,12,.72);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+#subtitle{font-size:.78rem;color:#d5d7ff;opacity:.85;text-shadow:0 0 6px #000;margin-top:4px}
+.label{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#d5d7ff;text-shadow:0 0 6px #000;margin-top:6px}
+input[type=text],select{width:100%;padding:8px 10px;border-radius:9px;border:1px solid rgba(130,135,165,.9);background:rgba(14,16,28,.92);color:#fff;font-size:.86rem;outline:none;backdrop-filter:blur(10px);box-shadow:0 0 12px rgba(0,0,0,.7)}
+input[type=text]:focus,select:focus{border-color:#8ba2ff;box-shadow:0 0 14px rgba(160,180,255,.85);background:rgba(18,20,36,.98)}
+.row-two{display:flex;gap:8px;margin-top:4px}
+.row-two>div{flex:1}
+.btn{margin-top:6px;width:100%;padding:9px 10px;border-radius:9px;border:1px solid rgba(160,160,175,.55);background:rgba(40,40,48,.88);color:#f1f1f5;font-size:.82rem;text-transform:uppercase;letter-spacing:.09em;cursor:pointer;box-shadow:0 0 10px rgba(0,0,0,.65);transition:background .15s,box-shadow .15s,transform .07s}
+.btn:hover{transform:translateY(-1px);background:rgba(55,55,65,.95);box-shadow:0 0 14px rgba(190,190,220,.45)}
+.btn.primary{background:rgba(65,65,75,.95);border:1px solid rgba(200,200,220,.65);color:#fafafa;box-shadow:0 0 14px rgba(200,200,220,.55)}
+.btn.primary:hover{background:rgba(80,80,90,.98);box-shadow:0 0 18px rgba(200,200,220,.7)}
+#status{font-size:.76rem;margin-top:2px;min-height:14px}
+#status.ok{color:#7cffd1}
+#status.err{color:#ff6b6b}
+#api-url{margin-top:6px;font-size:.8rem;font-family:ui-monospace,Menlo,Consolas,monospace;color:#d5d7ff;text-shadow:0 0 6px #000;word-break:break-all}
+#log-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#d5d7ff;text-shadow:0 0 6px #000;margin-top:8px}
+#log{margin-top:2px;padding:8px;border-radius:9px;border:1px solid rgba(130,135,165,.8);background:rgba(8,8,18,.9);font-size:.78rem;max-height:150px;overflow:auto;white-space:pre-wrap;box-shadow:0 0 12px rgba(0,0,0,.7)}
+@media(max-width:900px){#panel{left:50%;transform:translate(-50%,-50%);padding:10px}}</style>
 </head>
 <body>
-<div class="wrap">
-  <div class="header">
-    <div class="header-left">
-      <img src="../../assets/discordlogo.png" class="icon" alt="">
-      <div class="title">Spotify Downloader</div>
+<video id="bg" autoplay muted loop playsinline>
+  <source src="https://favnc.pages.dev/assets/smtbg.mp4" type="video/mp4">
+</video>
+
+<div id="panel">
+  <div id="title">Fav_Spot</div>
+  <div id="tag">Spotify Panel</div>
+  <div id="subtitle">Front-end only. Queue Spotify URLs to your own backend API that handles the actual processing.</div>
+
+  <div class="label">Spotify URL</div>
+  <input type="text" id="url" placeholder="https://open.spotify.com/track/...">
+
+  <div class="row-two">
+    <div>
+      <div class="label">Mode</div>
+      <select id="mode">
+        <option value="track">Track</option>
+        <option value="album">Album</option>
+        <option value="playlist">Playlist</option>
+      </select>
     </div>
-    <div class="tag">Downloader</div>
-  </div>
-  <div class="subtitle">Queue Spotify tracks, albums or playlists for audio extraction. This is a front-end control panel – wire it to your own backend to make it live.</div>
-
-  <div class="grid">
-    <div class="card">
-      <div class="row">
-        <div class="label">Spotify URL</div>
-        <input type="text" id="url" placeholder="https://open.spotify.com/track/…">
-      </div>
-
-      <div class="two-col">
-        <div style="flex:1 1 120px">
-          <div class="label">Output format</div>
-          <select id="format">
-            <option value="mp3">MP3</option>
-            <option value="ogg">OGG</option>
-            <option value="wav">WAV</option>
-            <option value="flac">FLAC</option>
-          </select>
-        </div>
-        <div style="flex:1 1 120px">
-          <div class="label">Bitrate</div>
-          <select id="bitrate">
-            <option value="auto">Auto</option>
-            <option value="128k">128 kbps</option>
-            <option value="192k">192 kbps</option>
-            <option value="256k">256 kbps</option>
-            <option value="320k">320 kbps</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="label">Mode</div>
-        <select id="mode">
-          <option value="track">Single track</option>
-          <option value="album">Album</option>
-          <option value="playlist">Playlist</option>
-        </select>
-      </div>
-
-      <div class="small">Demo mode: configure <code>API_URL</code> in the script if you connect this to your backend.</div>
-
-      <div class="btn-row">
-        <button id="downloadBtn">Queue audio job</button>
-        <div id="status" class="status"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="log-title">Job log</div>
-      <div id="log" class="log-box">Awaiting first job…</div>
+    <div>
+      <div class="label">Format (label only)</div>
+      <select id="format">
+        <option value="mp3">MP3</option>
+        <option value="ogg">OGG</option>
+        <option value="wav">WAV</option>
+        <option value="flac">FLAC</option>
+      </select>
     </div>
   </div>
+
+  <button class="btn primary" id="queue">Queue Job</button>
+  <button class="btn" id="copy-api">Copy API URL</button>
+  <div id="status"></div>
+
+  <div class="label">API preview</div>
+  <div id="api-url"></div>
+
+  <div id="log-label">Log</div>
+  <div id="log">Awaiting first job…</div>
 </div>
 
 <script>
-const API_URL = ""; // your backend endpoint if you add one
-
-const urlInput = document.getElementById("url");
-const formatSel = document.getElementById("format");
-const bitrateSel = document.getElementById("bitrate");
-const modeSel = document.getElementById("mode");
-const btn = document.getElementById("downloadBtn");
-const statusEl = document.getElementById("status");
-const logBox = document.getElementById("log");
+const API_ENDPOINT="/api/spotify-job"
+const urlEl=document.getElementById("url")
+const modeEl=document.getElementById("mode")
+const formatEl=document.getElementById("format")
+const statusEl=document.getElementById("status")
+const apiBox=document.getElementById("api-url")
+const logBox=document.getElementById("log")
+const queueBtn=document.getElementById("queue")
+const copyBtn=document.getElementById("copy-api")
 
 function log(msg){
-  const ts = new Date().toLocaleTimeString();
-  if(logBox.textContent === "Awaiting first job…") logBox.textContent = "";
-  logBox.textContent += `[${ts}] ${msg}\n`;
-  logBox.scrollTop = logBox.scrollHeight;
+  const ts=new Date().toLocaleTimeString()
+  if(logBox.textContent==="Awaiting first job…")logBox.textContent=""
+  logBox.textContent+=`[${ts}] ${msg}\n`
+  logBox.scrollTop=logBox.scrollHeight
 }
 
-function isSpotifyLink(u){
-  return /spotify\.com/i.test(u);
+function buildApiUrl(){
+  const u=urlEl.value.trim()
+  const m=modeEl.value
+  const f=formatEl.value
+  if(!u)return ""
+  const qs=new URLSearchParams({url:u,mode:m,format:f})
+  return `${API_ENDPOINT}?${qs.toString()}`
 }
 
-async function queueDownload(){
-  const url = urlInput.value.trim();
-  statusEl.textContent = "";
-  statusEl.className = "status";
+function isSpotifyLink(v){return /spotify\.com/i.test(v)}
 
-  if(!url){
-    statusEl.textContent = "Enter a Spotify URL.";
-    statusEl.classList.add("err");
-    return;
-  }
-  if(!isSpotifyLink(url)){
-    statusEl.textContent = "That does not look like a Spotify link.";
-    statusEl.classList.add("err");
-    return;
-  }
-
-  const job = {
-    platform:"spotify",
-    url,
-    format:formatSel.value,
-    bitrate:bitrateSel.value,
-    mode:modeSel.value
-  };
-
-  btn.disabled = true;
-  statusEl.textContent = "Queuing job…";
-  log("New job queued (demo mode): " + JSON.stringify(job));
-
-  if(!API_URL){
-    setTimeout(()=>{
-      statusEl.textContent = "Job completed (simulated).";
-      statusEl.classList.add("ok");
-      log("Job finished (demo) – connect API_URL for real processing.");
-      btn.disabled = false;
-    }, 900);
-    return;
-  }
-
-  try{
-    const res = await fetch(API_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(job)
-    });
-    const text = await res.text().catch(()=> "");
-    if(res.ok){
-      statusEl.textContent = "Job sent to backend.";
-      statusEl.classList.add("ok");
-      log("Backend OK " + res.status + (text ? " – " + text : ""));
-    }else{
-      statusEl.textContent = "Backend error " + res.status;
-      statusEl.classList.add("err");
-      log("Backend ERROR " + res.status + (text ? " – " + text : ""));
-    }
-  }catch(e){
-    statusEl.textContent = "Request error. Check API_URL.";
-    statusEl.classList.add("err");
-    log("Request exception: " + e.message);
-  }finally{
-    btn.disabled = false;
-  }
+queueBtn.onclick=async()=>{
+  const u=urlEl.value.trim()
+  statusEl.textContent=""
+  statusEl.className=""
+  if(!u){statusEl.textContent="Enter a Spotify URL.";statusEl.classList.add("err");return}
+  if(!isSpotifyLink(u)){statusEl.textContent="That does not look like a Spotify link.";statusEl.classList.add("err");return}
+  const preview=buildApiUrl()
+  apiBox.textContent=preview||""
+  const job={url:u,mode:modeEl.value,format:formatEl.value}
+  log("Job prepared (front-end only): "+JSON.stringify(job))
+  statusEl.textContent="Job prepared. Send this to your backend API."
+  statusEl.classList.add("ok")
 }
 
-btn.addEventListener("click", queueDownload);
-urlInput.addEventListener("keydown", e=>{if(e.key==="Enter")queueDownload();});
+copyBtn.onclick=()=>{
+  const p=buildApiUrl()
+  if(!p){statusEl.textContent="Nothing to copy – enter a Spotify URL first.";statusEl.className="err";return}
+  navigator.clipboard.writeText(p).then(()=>{
+    statusEl.textContent="API URL copied.";statusEl.className="ok"
+  })
+}
+
+urlEl.addEventListener("input",()=>{apiBox.textContent=buildApiUrl()})
+modeEl.addEventListener("change",()=>{apiBox.textContent=buildApiUrl()})
+formatEl.addEventListener("change",()=>{apiBox.textContent=buildApiUrl()})
 </script>
 </body>
 </html>
