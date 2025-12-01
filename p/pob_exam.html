@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>POB Paper 2 – Exam Practice</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at top,#1b2838 0,#02040a 55%,#000 100%);
+  color:#f5f5f5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.exam-wrapper{
+  position:relative;
+  width:100%;
+  max-width:900px;
+}
+.card{
+  background:rgba(8,10,20,.96);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:0 18px 45px rgba(0,0,0,.75);
+  padding:22px 22px 26px;
+  backdrop-filter:blur(16px);
+}
+.header{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:14px;
+}
+.header-main{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.header-main h1{
+  font-size:1.35rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.header-main span{
+  font-size:.8rem;
+  opacity:.7;
+}
+.tag{
+  align-self:flex-start;
+  font-size:.7rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(130deg,rgba(76,201,240,.18),rgba(129,140,248,.06));
+}
+.stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:6px;
+}
+.stat-chip{
+  font-size:.75rem;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+}
+.progress-bar{
+  width:100%;
+  height:6px;
+  border-radius:999px;
+  overflow:hidden;
+  background:rgba(255,255,255,.04);
+  margin:8px 0 12px;
+}
+.progress-fill{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#22c55e,#3b82f6,#a855f7);
+  transition:width .25s ease-out;
+}
+.section-label{
+  font-size:.78rem;
+  opacity:.75;
+  margin-bottom:6px;
+}
+.question-text{
+  font-size:1rem;
+  line-height:1.5;
+  margin-bottom:14px;
+}
+.options{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:12px;
+}
+.option{
+  position:relative;
+}
+.option input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+.option-label{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:9px 11px;
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,.4);
+  background:rgba(15,23,42,.7);
+  cursor:pointer;
+  transition:all .18s ease-out;
+  font-size:.9rem;
+}
+.option-label span.key{
+  font-weight:600;
+  font-size:.8rem;
+  padding:2px 7px;
+  border-radius:999px;
+  background:rgba(15,23,42,.9);
+}
+.option-label span.txt{
+  flex:1;
+}
+.option input:focus-visible + .option-label{
+  outline:2px solid #38bdf8;
+  outline-offset:2px;
+}
+.option.correct .option-label{
+  border-color:#22c55e;
+  background:rgba(22,163,74,.14);
+}
+.option.incorrect .option-label{
+  border-color:#ef4444;
+  background:rgba(248,113,113,.14);
+  opacity:.9;
+}
+.option.selected:not(.correct):not(.incorrect) .option-label{
+  border-color:#3b82f6;
+  background:rgba(37,99,235,.15);
+}
+.feedback{
+  min-height:20px;
+  font-size:.86rem;
+  margin-bottom:10px;
+}
+.feedback.correct{color:#22c55e;}
+.feedback.incorrect{color:#f97373;}
+.controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:4px;
+}
+.btn{
+  border:none;
+  border-radius:999px;
+  padding:8px 16px;
+  font-size:.86rem;
+  font-weight:500;
+  cursor:pointer;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:transform .15s ease-out,box-shadow .15s ease-out,background .15s ease-out,opacity .15s;
+}
+.btn-primary{
+  background:linear-gradient(135deg,#4f46e5,#ec4899);
+  color:#fff;
+  box-shadow:0 8px 20px rgba(15,23,42,.8);
+}
+.btn-primary:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+.btn-ghost{
+  background:transparent;
+  border:1px solid rgba(148,163,184,.45);
+  color:#e5e7eb;
+}
+.btn:hover:not(:disabled){
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px rgba(0,0,0,.8);
+}
+.btn:active:not(:disabled){
+  transform:translateY(0);
+  box-shadow:0 4px 10px rgba(0,0,0,.7);
+}
+.summary{
+  margin-top:10px;
+  border-top:1px dashed rgba(148,163,184,.4);
+  padding-top:10px;
+  font-size:.9rem;
+  display:none;
+}
+.summary strong{color:#e5e7eb;}
+.overlay-text{
+  pointer-events:none;
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:0;
+  mix-blend-mode:screen;
+  opacity:.06;
+  font-size:clamp(3.2rem,8vw,5rem);
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  font-weight:800;
+  text-align:center;
+  background:radial-gradient(circle at center,rgba(250,250,250,.28),transparent 60%);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.footer-note{
+  margin-top:10px;
+  font-size:.75rem;
+  opacity:.6;
+}
+@media (max-width:600px){
+  .card{padding:16px 14px 20px;}
+  .header-main h1{font-size:1.1rem;}
+}
+</style>
+</head>
+<body>
+<div class="overlay-text">Fav_Nonchalant</div>
+
+<div class="exam-wrapper">
+  <div class="card">
+    <div class="header">
+      <div class="header-main">
+        <h1>POB Form 5 – Paper 2 Style Exam</h1>
+        <span>Interactive practice based on Q1–Q5 (P2) topics</span>
+        <div class="stats">
+          <div class="stat-chip"><span id="stat-question">Question 0 / 0</span></div>
+          <div class="stat-chip"><span id="stat-score">Score: 0</span></div>
+          <div class="stat-chip"><span id="stat-speed">Avg speed: 0.0 s/q</span></div>
+        </div>
+      </div>
+      <div class="tag">Practice • Fav_Nonchalant</div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <div class="section-label" id="section-label">Press “Start Exam” to begin.</div>
+    <div class="question-text" id="question-text">
+      This exam has a large pool of multiple-choice questions from: Money & Business Forms, Conflict,
+      Entrepreneurship, Contracts, and Production & Linkages.
+    </div>
+
+    <ul class="options" id="options-list"></ul>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="controls">
+      <button class="btn btn-ghost" id="restart-btn" style="display:none;">Restart</button>
+      <button class="btn btn-primary" id="action-btn">Start Exam</button>
+    </div>
+
+    <div class="summary" id="summary">
+      <p><strong>Exam complete!</strong></p>
+      <p>Final score: <span id="summary-score"></span></p>
+      <p>Average answer speed: <span id="summary-speed"></span> seconds per question.</p>
+    </div>
+
+    <div class="footer-note">
+      Tip: Read each stem carefully – most items test definitions and applications from your POB Paper 2 topics.
+    </div>
+  </div>
+</div>
+
+<script>
+const questions=[
+/* Q1 – Instruments of exchange, money, business forms & systems */
+{section:"Q1 – Instruments of Exchange",q:"Which of the following best describes an 'instrument of exchange'?",options:["Anything used mainly as a store of value","Any method used by government to collect taxes","Any item widely accepted in payment for goods and services","Any asset that earns interest in a bank"],correct:2},
+{section:"Q1 – Money Economy",q:"Compared to a barter system, a money economy primarily removes the problem of:",options:["Inflation","Double coincidence of wants","Scarcity of resources","Government regulation"],correct:1},
+{section:"Q1 – Money Functions",q:"When money is used to pay a worker at the end of the month, it is performing the function of:",options:["Medium of exchange","Unit of account","Standard of deferred payment","Store of value"],correct:2},
+{section:"Q1 – Money Characteristics",q:"Which of the following is NOT a desirable characteristic of money?",options:["Durability","Portability","Divisibility","Infinite supply"],correct:3},
+{section:"Q1 – Cheques",q:"A cheque used to pay for goods is an example of:",options:["A bill of exchange","An instrument of exchange","Legal tender only","A form of collateral"],correct:1},
+{section:"Q1 – Sole Traders",q:"Which of the following is TRUE of a sole trader?",options:["Has limited liability","Owned and controlled by one person","Can sell shares on the stock exchange","Must publish annual accounts to the public"],correct:1},
+{section:"Q1 – Sole Trader Disadvantage",q:"A major disadvantage of the sole trader form of business is:",options:["Limited liability for debts","Unlimited access to capital","Unlimited liability for business debts","Separate legal identity from owner"],correct:2},
+{section:"Q1 – Public Limited Companies",q:"A main advantage of a public limited company over a sole trader is that it:",options:["Enjoys complete privacy from shareholders","Can raise large amounts of capital by selling shares to the public","Has no legal separation from its owners","Faces unlimited liability"],correct:1},
+{section:"Q1 – PLC Shareholders",q:"Shareholders of a public limited company are best described as:",options:["Creditors of the business","Owners of the business","Employees of the business","Managers of the business"],correct:1},
+{section:"Q1 – Cooperatives",q:"The MAIN objective of a cooperative is to:",options:["Maximize profit for outside investors","Provide services and benefits to its members","Reduce the role of government in business","Eliminate all forms of competition"],correct:1},
+{section:"Q1 – Co-op Voting",q:"In a cooperative, each member usually has:",options:["One vote per share held","No voting rights","One vote only, regardless of shares held","Votes depending on years of membership"],correct:2},
+{section:"Q1 – Economic Systems",q:"In a free market economy, the questions of 'what, how and for whom to produce' are answered mainly by:",options:["Government planners","Tradition and customs","Religious leaders","Consumers and private firms through demand and supply"],correct:3},
+{section:"Q1 – Planned vs Mixed",q:"Which statement best describes a mixed economy?",options:["All resources are owned by the state only","Private and public sectors both play important roles","Only subsistence production is allowed","Prices are fixed by custom and tradition alone"],correct:1},
+
+/* Q2 – Conflict */
+{section:"Q2 – Conflict",q:"In a business context, conflict is BEST defined as:",options:["Any form of criminal behaviour","A disagreement arising from differences in goals, interests or values","A friendly discussion between staff","A decline in company profits"],correct:1},
+{section:"Q2 – Sources of Conflict",q:"Which situation is MOST likely to create conflict?",options:["Clear job descriptions","Adequate resources for all departments","Perceived unfair distribution of workload","Regular staff meetings"],correct:2},
+{section:"Q2 – Source of Conflict",q:"Conflict may arise in an organization when:",options:["Employees feel respected and rewarded","Communication between management and staff is poor","Rules and procedures are clearly explained","There is teamwork and cooperation"],correct:1},
+{section:"Q2 – Employee Strategies",q:"Workers deliberately slowing down their pace of work to pressure management is known as:",options:["Go-slow","Lockout","Arbitration","Promotion"],correct:0},
+{section:"Q2 – Employee Strategies",q:"When employees follow every rule exactly and refuse to go beyond their basic duties, this is:",options:["Strike action","Work-to-rule","Overtime","Conciliation"],correct:1},
+{section:"Q2 – Industrial Action",q:"Which of the following is NOT an industrial action by employees?",options:["Strike","Lockout","Go-slow","Sit-in"],correct:1},
+{section:"Q2 – Mediation",q:"Mediation is best described as a process where:",options:["A neutral person imposes a binding decision","The parties negotiate without any third party","A neutral person helps the parties reach their own agreement","A judge decides the outcome in court"],correct:2},
+{section:"Q2 – Conflict Resolution",q:"In which method of conflict resolution does a neutral third party listen to both sides and make a BINDING decision?",options:["Mediation","Conciliation","Arbitration","Grievance interview"],correct:2},
+{section:"Q2 – Grievance Procedure",q:"A grievance procedure is BEST described as:",options:["An informal chat between friends at work","A formal step-by-step process for handling employee complaints","A method used only in trade unions","A government court for workers"],correct:1},
+{section:"Q2 – Collective Bargaining",q:"Collective bargaining is:",options:["Negotiation between a single worker and another worker","Negotiation between union representatives and management","Discussion only among managers","A method used only by government"],correct:1},
+{section:"Q2 – Building Good Relations",q:"Which strategy BEST helps to build good management–staff relationships?",options:["Keeping all company information secret","Practising fair and consistent leadership","Ignoring staff suggestions","Using threats to improve performance"],correct:1},
+{section:"Q2 – Early Conflict Handling",q:"One informal method managers can use to reduce conflict at an early stage is to:",options:["Avoid meeting staff","Maintain an open-door policy for complaints","Refuse to listen to grievances","Punish workers immediately"],correct:1},
+
+/* Q3 – Entrepreneurship */
+{section:"Q3 – Entrepreneurship",q:"An entrepreneur is BEST described as a person who:",options:["Supervises workers only","Organizes, manages and bears the risk of a business","Lends money to firms","Works only in government departments"],correct:1},
+{section:"Q3 – Entrepreneur Traits",q:"Which of the following is a common characteristic of successful entrepreneurs?",options:["Fear of all risk-taking","Lack of creativity","Initiative and willingness to take calculated risks","Dependence on others for decisions"],correct:2},
+{section:"Q3 – Collateral",q:"Collateral is:",options:["The rate of interest on a loan","A grant given by government","An asset pledged to a lender as security for a loan","The profit left after tax"],correct:2},
+{section:"Q3 – Collateral Importance",q:"Access to collateral is important for an entrepreneur because it:",options:["Reduces the need for any planning","Ensures instant profits","Increases the chance of obtaining a loan","Removes all business risk"],correct:2},
+{section:"Q3 – Govt Regulations",q:"Which of the following is USUALLY required when starting a formal business?",options:["Obtaining necessary licences and registering the business name","Ignoring health regulations to reduce cost","Avoiding payment of tax in early years","Employing only family members"],correct:0},
+{section:"Q3 – Govt & Consumers",q:"One way government can protect consumers when new businesses start is by:",options:["Removing all safety rules","Requiring proper labelling and quality standards","Stopping all foreign competition","Allowing firms to hide information"],correct:1},
+{section:"Q3 – Business Plan",q:"A business plan is BEST described as:",options:["A simple list of employee names","A formal document outlining the business' objectives and strategies","A yearly tax bill","A type of insurance contract"],correct:1},
+{section:"Q3 – Micro-Enterprise",q:"A micro-enterprise is usually:",options:["A very large company","A very small business with few employees","A public corporation","A government ministry"],correct:1},
+{section:"Q3 – Entrepreneurship & Development",q:"Entrepreneurship contributes to economic development mainly by:",options:["Reducing competition","Discouraging innovation","Creating employment and new goods/services","Lowering productivity"],correct:2},
+{section:"Q3 – Role of Govt",q:"Which government action BEST encourages entrepreneurship?",options:["Increasing import duties on all inputs","Providing training and small business loans","Banning private ownership of property","Restricting access to local markets"],correct:1},
+
+/* Q4 – Contracts */
+{section:"Q4 – Contracts",q:"A simple contract is one that:",options:["Must always be under seal","Can only be oral","Does not require a seal and may be written, oral or implied","Is not legally binding"],correct:2},
+{section:"Q4 – Specialty Contracts",q:"Which feature is NOT normally associated with a specialty contract?",options:["It is signed","It is sealed","It is delivered","It never has legal effect"],correct:3},
+{section:"Q4 – Consideration",q:"The term 'consideration' in a contract refers to:",options:["Advice given by a lawyer","Something of value given by each party","The location where the contract is signed","The time agreed for delivery"],correct:1},
+{section:"Q4 – Offer",q:"Which statement is a VALID offer?",options:["\"I might sell you my car one day.\"","\"I will sell you my car for $30,000.\"","\"Cars are usually expensive.\"","\"I like your car.\""],correct:1},
+{section:"Q4 – Invitation to Treat",q:"Which of the following is usually an invitation to treat and NOT an offer?",options:["A statement: \"I will sell you this TV for $2,000.\"","Goods displayed with prices on a supermarket shelf","A person saying: \"I will pay you $100 to paint my house.\"","A signed written quotation accepted immediately"],correct:1},
+{section:"Q4 – Counter-Offer",q:"An offeree responds to an offer by changing the price and payment terms. This is:",options:["Acceptance","Consideration","Counter-offer","Mistake"],correct:2},
+{section:"Q4 – Minors",q:"When a minor enters into an ordinary contract for non-necessaries, the contract is generally:",options:["Always enforceable against the minor","Voidable at the option of the minor","Enforceable only by the adult","A specialty contract"],correct:1},
+{section:"Q4 – Termination",q:"Which of the following is a method of terminating a contract?",options:["Performance of all obligations","Writing the word 'cancel' on a napkin with no agreement","Shaking hands with a friend","Making a new simple offer"],correct:0},
+{section:"Q4 – Frustration",q:"Termination of a contract by frustration occurs when:",options:["One party simply changes his mind","Both parties agree to end the contract","An unforeseen event makes performance impossible","The price changes slightly"],correct:2},
+{section:"Q4 – Mistakes",q:"Both parties believe that the goods being sold still exist, but in fact they had already been destroyed. This is an example of:",options:["Unilateral mistake","Mutual mistake","Common mistake","No mistake"],correct:2},
+{section:"Q4 – Specific Performance",q:"Specific performance is a remedy which:",options:["Awards money damages only","Cancels the contract completely","Orders a party to carry out his contractual promise","Sends the parties to mediation"],correct:2},
+
+/* Q5 – Production & Linkages */
+{section:"Q5 – Cottage Industries",q:"Which characteristic is MOST typical of a cottage industry?",options:["Large-scale use of machinery in factories","Home-based, small-scale production using family labour","High capital investment and automation","Production of only heavy industrial goods"],correct:1},
+{section:"Q5 – Cottage Benefits",q:"A benefit of cottage industries to the economy is that they:",options:["Eliminate all imports","Provide rural employment and preserve traditional skills","Only operate in cities","Require huge start-up capital"],correct:1},
+{section:"Q5 – Primary Production",q:"Which of the following is an example of primary production?",options:["Manufacturing clothing in a factory","Farming sugar cane","Selling mobile phones in a shop","Providing internet services"],correct:1},
+{section:"Q5 – Types of Production",q:"Turning raw cocoa beans into chocolate bars is an example of:",options:["Primary production","Secondary production","Tertiary production","Quaternary production"],correct:1},
+{section:"Q5 – Tertiary Production",q:"Providing insurance services to manufacturers is an example of:",options:["Primary production","Secondary production","Tertiary production","Quaternary production"],correct:2},
+{section:"Q5 – Capital & Growth",q:"Increased capital in a business MOST likely leads to:",options:["Lower output and profit","Reduced efficiency","Ability to buy better equipment and expand production","Immediate closure of the business"],correct:2},
+{section:"Q5 – Linkage Industries",q:"Linkage industries mainly assist economic development by:",options:["Discouraging new firms","Creating connections between sectors and generating more jobs and income","Reducing value added in the economy","Increasing dependence on imports"],correct:1},
+{section:"Q5 – Backward Linkages",q:"Backward linkage occurs when a firm:",options:["Sells its output to local industries","Obtains its inputs from local suppliers","Exports all of its output","Imports all its raw materials"],correct:1},
+{section:"Q5 – Forward Linkages",q:"Forward linkage occurs when a firm:",options:["Buys machinery from foreign countries","Supplies its output to other local industries as raw material","Obtains credit from banks","Imports all of its inputs"],correct:1}
+];
+
+let currentIndex=-1;
+let score=0;
+let startTime=null;
+let lastQuestionTime=null;
+let times=[];
+let examStarted=false;
+let answeredCurrent=false;
+
+const sectionLabel=document.getElementById("section-label");
+const questionText=document.getElementById("question-text");
+const optionsList=document.getElementById("options-list");
+const feedbackEl=document.getElementById("feedback");
+const actionBtn=document.getElementById("action-btn");
+const restartBtn=document.getElementById("restart-btn");
+const statQuestion=document.getElementById("stat-question");
+const statScore=document.getElementById("stat-score");
+const statSpeed=document.getElementById("stat-speed");
+const progressFill=document.getElementById("progress-fill");
+const summary=document.getElementById("summary");
+const summaryScore=document.getElementById("summary-score");
+const summarySpeed=document.getElementById("summary-speed");
+
+function formatTime(t){return (Math.round(t*10)/10).toFixed(1);}
+
+function updateStats(){
+  statQuestion.textContent=`Question ${currentIndex+1} / ${questions.length}`;
+  statScore.textContent=`Score: ${score}`;
+  const avg=times.length?times.reduce((a,b)=>a+b,0)/times.length:0;
+  statSpeed.textContent=`Avg speed: ${formatTime(avg)} s/q`;
+  const pct=((currentIndex+1)/questions.length)*100;
+  progressFill.style.width=pct+"%";
+}
+
+function renderQuestion(){
+  const q=questions[currentIndex];
+  sectionLabel.textContent=q.section;
+  questionText.textContent=q.q;
+  optionsList.innerHTML="";
+  ["A","B","C","D"].forEach((letter,i)=>{
+    const li=document.createElement("li");
+    li.className="option";
+    const id=`opt-${currentIndex}-${i}`;
+    li.innerHTML=`<input type="radio" name="q${currentIndex}" id="${id}" value="${i}">
+      <label class="option-label" for="${id}">
+        <span class="key">${letter}</span>
+        <span class="txt">${q.options[i]}</span>
+      </label>`;
+    optionsList.appendChild(li);
+  });
+  feedbackEl.textContent="";
+  feedbackEl.className="feedback";
+  actionBtn.textContent="Submit";
+  actionBtn.disabled=false;
+  answeredCurrent=false;
+}
+
+function startExam(){
+  examStarted=true;
+  currentIndex=0;
+  score=0;
+  times=[];
+  startTime=Date.now();
+  lastQuestionTime=startTime;
+  summary.style.display="none";
+  restartBtn.style.display="none";
+  renderQuestion();
+  updateStats();
+}
+
+function showSummary(){
+  const total=questions.length;
+  const percent=((score/total)*100).toFixed(1);
+  const avg=times.length?times.reduce((a,b)=>a+b,0)/times.length:0;
+  summaryScore.textContent=`${score} / ${total} (${percent}%)`;
+  summarySpeed.textContent=formatTime(avg);
+  summary.style.display="block";
+  actionBtn.textContent="Review Finished";
+  actionBtn.disabled=true;
+  restartBtn.style.display="inline-flex";
+}
+
+function markAnswer(){
+  if(answeredCurrent) return;
+  const q=questions[currentIndex];
+  const radios=optionsList.querySelectorAll("input[type=radio]");
+  let selectedIndex=-1;
+  radios.forEach((r,i)=>{if(r.checked)selectedIndex=i;});
+  if(selectedIndex===-1){
+    feedbackEl.textContent="Choose an option before submitting.";
+    feedbackEl.className="feedback incorrect";
+    return;
+  }
+  const now=Date.now();
+  const elapsed=(now-lastQuestionTime)/1000;
+  times.push(elapsed);
+  lastQuestionTime=now;
+
+  optionsList.querySelectorAll(".option").forEach((li,i)=>{
+    li.classList.remove("correct","incorrect","selected");
+    if(i===selectedIndex) li.classList.add("selected");
+    if(i===q.correct) li.classList.add("correct");
+    else if(i===selectedIndex && i!==q.correct) li.classList.add("incorrect");
+  });
+
+  if(selectedIndex===q.correct){
+    score++;
+    feedbackEl.textContent="Correct ✔";
+    feedbackEl.className="feedback correct";
+  }else{
+    feedbackEl.textContent=`Incorrect ✖  Correct answer: ${String.fromCharCode(65+q.correct)}.`;
+    feedbackEl.className="feedback incorrect";
+  }
+  answeredCurrent=true;
+  actionBtn.textContent=currentIndex===questions.length-1?"Finish":"Next";
+  updateStats();
+}
+
+function nextQuestion(){
+  if(currentIndex<questions.length-1){
+    currentIndex++;
+    renderQuestion();
+    updateStats();
+  }else{
+    const examEnd=Date.now();
+    if(times.length<questions.length){
+      const elapsed=(examEnd-lastQuestionTime)/1000;
+      times.push(elapsed);
+    }
+    updateStats();
+    showSummary();
+  }
+}
+
+actionBtn.addEventListener("click",()=>{
+  if(!examStarted){
+    startExam();
+    return;
+  }
+  if(!answeredCurrent){
+    markAnswer();
+  }else{
+    nextQuestion();
+  }
+});
+
+restartBtn.addEventListener("click",startExam);
+</script>
+</body>
+</html>
