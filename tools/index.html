@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="icon" href="https://favnc.pages.dev/assets/toolss.png">
+<link rel="stylesheet" href="https://favnc.pages.dev/css/t.css">
 
 <meta name="description" content="Utility tools by Fav_Nonchalant – Nexus Command.">
 <meta name="theme-color" content="#f5c542">
@@ -34,224 +35,92 @@
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;min-height:100vh;font-family:Segoe UI,Arial,sans-serif;color:#f7f7f7;
-  background:radial-gradient(circle at 0% 0%,#272727 0,#050505 40%,#000 70%);
-  background-size:200% 200%;animation:bgShift 16s ease-in-out infinite;
-  display:flex;justify-content:center;align-items:center;padding:20px;
-}
-@keyframes bgShift{0%{background-position:0 0}50%{background-position:100% 100%}100%{background-position:0 0}}
-.wrap{width:100%;max-width:800px}
-.card{
-  width:100%;background:rgba(10,10,10,.9);border:1px solid rgba(255,255,255,.12);
-  border-radius:16px;padding:22px 22px 18px;box-shadow:0 0 25px rgba(0,0,0,.75);
-  backdrop-filter:blur(16px);animation:fadeInCard .7s ease-out;
-}
-@keyframes fadeInCard{
-  from{opacity:0;transform:translateY(10px) scale(.98)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.header-left{display:flex;align-items:center;gap:10px}
-.title-icon{width:28px;height:28px;border-radius:8px}
-.title{font-size:22px;font-weight:700;letter-spacing:.03em}
-.badge{
-  font-size:11px;padding:4px 9px;border-radius:999px;
-  border:1px solid rgba(255,215,0,.6);color:#ffd700;
-  text-transform:uppercase;letter-spacing:.08em;
-}
-.subtitle{font-size:13px;opacity:.75;margin-bottom:12px}
-#categories{margin-top:6px}
-
-/* category block FAV NONCHALANT CODE BY THE WAY  */ 
-.cat{
-  margin-top:16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.02);overflow:hidden;
-}
-.cat-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 12px;cursor:pointer;user-select:none;position:relative;
-}
-.cat-header:hover{background:rgba(255,255,255,.04)}
-.cat-name{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
-.cat-pill{
-  font-size:11px;padding:2px 7px;border-radius:999px;
-  background:rgba(255,215,0,.16);color:#ffd700;text-transform:uppercase;
-}
-.cat-arrow{font-size:14px;transition:transform .2s ease-out;opacity:.8}
+#categories{margin-top:10px;display:flex;flex-direction:column;gap:10px}
+.cat{border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(8,8,18,.86);overflow:hidden;box-shadow:0 0 14px rgba(0,0,0,.8)}
+.cat-header{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;cursor:pointer;user-select:none;position:relative}
+.cat-header:hover{background:rgba(255,255,255,.03)}
+.cat-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
+.cat-pill{font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(245,197,66,.15);color:#f5c542;text-transform:uppercase;letter-spacing:.08em}
+.cat-arrow{font-size:13px;transition:transform .18s ease-out;opacity:.8}
 .cat.open .cat-arrow{transform:rotate(90deg)}
-.cat-glow{
-  position:absolute;left:0;right:0;bottom:0;height:1px;
-  background:linear-gradient(90deg,transparent,#ffd700,transparent);opacity:.6;
-}
-.cat-meta{
-  font-size:11px;opacity:.65;margin:0 12px 8px;
-}
-
-/* tool rows */
+.cat-glow{position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#f5c542,transparent);opacity:.7}
+.cat-meta{font-size:11px;opacity:.65;margin:0 11px 6px}
 .tools{max-height:0;overflow:hidden;transition:max-height .25s ease-out}
-.cat.open .tools{max-height:600px}
-.tool-row{
-  display:flex;align-items:center;font-size:13px;margin:0 10px 8px;
-  padding:7px 9px;border-radius:9px;background:rgba(0,0,0,.35);
-  border:1px solid transparent;position:relative;overflow:hidden;
-}
+.cat.open .tools{max-height:650px}
+.tool-row{display:flex;align-items:center;font-size:12px;margin:0 9px 6px;padding:7px 8px;border-radius:9px;background:rgba(0,0,0,.45);border:1px solid transparent;position:relative;overflow:hidden}
 .tool-row:first-child{margin-top:6px}
-.tool-row::before{
-  content:"";position:absolute;left:0;top:0;width:0;height:100%;
-  background:linear-gradient(90deg,rgba(255,215,0,.12),transparent);
-  transition:width .25s ease-out;pointer-events:none;z-index:0;
-}
+.tool-row::before{content:"";position:absolute;left:0;top:0;width:0;height:100%;background:linear-gradient(90deg,rgba(245,197,66,.18),transparent);transition:width .23s ease-out;pointer-events:none;z-index:0}
 .tool-row:hover::before{width:100%}
-.tool-row:hover{
-  border-color:rgba(255,215,0,.4);box-shadow:0 0 10px rgba(255,215,0,.18);
-}
-.tool-main,.pipe,a{position:relative;z-index:1}
+.tool-row:hover{border-color:rgba(245,197,66,.6);box-shadow:0 0 10px rgba(245,197,66,.35)}
+.tool-main,.pipe,.tool-link{position:relative;z-index:1}
 .tool-main{display:flex;flex-direction:column;min-width:0}
 .tool-title{white-space:nowrap;font-weight:500}
-.tool-sub{font-size:11px;opacity:.7;white-space:nowrap}
-.pipe{
-  flex:1;height:1px;margin:0 8px;
-  background:linear-gradient(90deg,rgba(255,255,255,.1),rgba(255,215,0,.7));
-  position:relative;overflow:hidden;
-}
-.pipe::after{
-  content:"";position:absolute;left:-20%;top:-1px;width:30%;height:3px;
-  background:radial-gradient(circle,#fff,transparent);opacity:.8;
-  animation:flow 2.4s linear infinite;pointer-events:none;
-}
+.tool-sub{font-size:10px;opacity:.7;white-space:nowrap}
+.pipe{flex:1;height:1px;margin:0 7px;background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(245,197,66,.9));position:relative;overflow:hidden}
+.pipe::after{content:"";position:absolute;left:-20%;top:-1px;width:28%;height:3px;background:radial-gradient(circle,#fff,transparent);opacity:.9;animation:flow 2.2s linear infinite}
+.tool-link{color:#f5c542;text-decoration:none;font-weight:500;padding:3px 8px;border-radius:999px;background:rgba(245,197,66,.08);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.tool-link:hover{text-decoration:underline;background:rgba(245,197,66,.18)}
+.empty-msg{font-size:11px;opacity:.6;margin:8px 11px 6px}
 @keyframes flow{0%{left:-25%}100%{left:110%}}
-a{
-  color:#ffd700;text-decoration:none;font-weight:500;
-  padding:3px 8px;border-radius:999px;background:rgba(255,215,0,.08);
-}
-a:hover{text-decoration:underline;background:rgba(255,215,0,.18)}
-.empty-msg{
-  font-size:12px;opacity:.6;margin:10px 12px 8px;
-}
+@media(max-width:900px){#panel{left:50%;transform:translate(-50%,-50%);padding:10px;max-width:92vw}}
 </style>
 </head>
 
 <body>
-<div class="wrap">
-  <div class="card">
+<video id="bg" autoplay muted loop playsinline>
+  <source src="https://favnc.pages.dev/assets/smtbg.mp4" type="video/mp4">
+</video>
 
-    <div class="header">
-      <div class="header-left">
-        <img src="../assets/discordlogo.png" alt="Tools" class="title-icon">
-        <div class="title">Nexus Command – Tools</div>
-      </div>
-      <div class="badge">Fav_Nonchalant</div>
-    </div>
-
-    <div class="subtitle">
-      Central hub for Discord utilities, downloaders, encryption tools and more.
-    </div>
-
-    <div id="categories"></div>
-
-  </div>
+<div id="panel">
+  <div id="title">Nexus Command – Tools</div>
+  <div id="tag">Fav_Nonchalant • Hub</div>
+  <div class="label">Categories</div>
+  <div id="categories"></div>
 </div>
 
 <script>
-const JSON_URL = "https://favnc.pages.dev/database/toolpage.json";
-
-function createCategory(name, data){
-  const cat = document.createElement("div");
-  cat.className = "cat";
-
-  const header = document.createElement("div");
-  header.className = "cat-header";
-
-  const nameEl = document.createElement("div");
-  nameEl.className = "cat-name";
-  const count = (data.tools && data.tools.length) || 0;
-  nameEl.innerHTML =
-    `<span>${name}</span><span class="cat-pill">${count} tool${count===1?"":"s"}</span>`;
-
-  const arrow = document.createElement("div");
-  arrow.className = "cat-arrow";
-  arrow.textContent = "▶";
-
-  const glow = document.createElement("div");
-  glow.className = "cat-glow";
-
-  header.appendChild(nameEl);
-  header.appendChild(arrow);
-  header.appendChild(glow);
-
-  const toolsWrap = document.createElement("div");
-  toolsWrap.className = "tools";
-
-  if (data.description){
-    const meta = document.createElement("div");
-    meta.className = "cat-meta";
-    meta.textContent = data.description;
-    toolsWrap.appendChild(meta);
+const JSON_URL="https://favnc.pages.dev/database/toolpage.json";
+function createCategory(name,data){
+  const cat=document.createElement("div");cat.className="cat";
+  const header=document.createElement("div");header.className="cat-header";
+  const nameEl=document.createElement("div");nameEl.className="cat-name";
+  const count=(data.tools&&data.tools.length)||0;
+  nameEl.innerHTML=`<span>${name}</span><span class="cat-pill">${count} tool${count===1?"":"s"}</span>`;
+  const arrow=document.createElement("div");arrow.className="cat-arrow";arrow.textContent="▶";
+  const glow=document.createElement("div");glow.className="cat-glow";
+  header.appendChild(nameEl);header.appendChild(arrow);header.appendChild(glow);
+  const toolsWrap=document.createElement("div");toolsWrap.className="tools";
+  if(data.description){
+    const meta=document.createElement("div");meta.className="cat-meta";meta.textContent=data.description;toolsWrap.appendChild(meta);
   }
-
-  if (data.tools && data.tools.length){
+  if(data.tools&&data.tools.length){
     data.tools.forEach(tool=>{
-      const row = document.createElement("div");
-      row.className = "tool-row";
-
-      const main = document.createElement("div");
-      main.className = "tool-main";
-
-      const title = document.createElement("div");
-      title.className = "tool-title";
-      title.textContent = tool.title || tool.id || "Tool";
-
+      const row=document.createElement("div");row.className="tool-row";
+      const main=document.createElement("div");main.className="tool-main";
+      const title=document.createElement("div");title.className="tool-title";title.textContent=tool.title||tool.id||"Tool";
       main.appendChild(title);
-
-      if (tool.subtitle){
-        const sub = document.createElement("div");
-        sub.className = "tool-sub";
-        sub.textContent = tool.subtitle;
-        main.appendChild(sub);
+      if(tool.subtitle){
+        const sub=document.createElement("div");sub.className="tool-sub";sub.textContent=tool.subtitle;main.appendChild(sub);
       }
-
-      const pipe = document.createElement("div");
-      pipe.className = "pipe";
-
-      const link = document.createElement("a");
-      link.href = tool.url;
-      link.textContent = "Open";
-
-      row.appendChild(main);
-      row.appendChild(pipe);
-      row.appendChild(link);
-      toolsWrap.appendChild(row);
+      const pipe=document.createElement("div");pipe.className="pipe";
+      const link=document.createElement("a");link.className="tool-link";link.href=tool.url;link.textContent="Open";
+      row.appendChild(main);row.appendChild(pipe);row.appendChild(link);toolsWrap.appendChild(row);
     });
-  } else {
-    const empty = document.createElement("div");
-    empty.className = "empty-msg";
-    empty.textContent = "No tools registered in this category yet.";
-    toolsWrap.appendChild(empty);
+  }else{
+    const empty=document.createElement("div");empty.className="empty-msg";empty.textContent="No tools registered in this category yet.";toolsWrap.appendChild(empty);
   }
-
   header.addEventListener("click",()=>cat.classList.toggle("open"));
-
-  cat.appendChild(header);
-  cat.appendChild(toolsWrap);
+  cat.appendChild(header);cat.appendChild(toolsWrap);
   return cat;
 }
-
-fetch(JSON_URL)
-  .then(r => r.json())
-  .then(data => {
-    const container = document.getElementById("categories");
-    Object.entries(data).forEach(([name, catData])=>{
-      container.appendChild(createCategory(name, catData));
-    });
-  })
-  .catch(err=>{
-    const container = document.getElementById("categories");
-    container.innerHTML =
-      '<div class="empty-msg">Failed to load tools list. Check toolpage.json.</div>';
-    console.error(err);
-  });
+fetch(JSON_URL).then(r=>r.json()).then(data=>{
+  const container=document.getElementById("categories");
+  Object.entries(data).forEach(([name,catData])=>container.appendChild(createCategory(name,catData)));
+}).catch(err=>{
+  const container=document.getElementById("categories");
+  container.innerHTML='<div class="empty-msg">Failed to load tools list. Check toolpage.json.</div>';
+  console.error(err);
+});
 </script>
-
 </body>
 </html>
