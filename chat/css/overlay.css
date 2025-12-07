@@ -1,5 +1,42 @@
-#username-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:20}
-#username-box{width:280px;max-width:90vw;border-radius:14px;border:1px solid rgba(200,200,255,.4);background:rgba(5,5,18,.96);padding:14px;box-shadow:0 0 24px rgba(0,0,0,.9);display:flex;flex-direction:column;gap:8px}
-#username-title{font-size:.95rem;text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px}
-#username-input{width:100%;padding:7px 9px;border-radius:9px;border:1px solid rgba(130,135,165,.9);background:rgba(14,16,28,.92);color:#f7f7ff;font-size:.86rem;outline:none}
-#username-input:focus{border-color:#8ba2ff;box-shadow:0 0 14px rgba(160,180,255,.9);background:rgba(18,20,36,.98)}
+#username-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(10px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+}
+#username-box{
+  width:280px;
+  max-width:90vw;
+  border-radius:18px;
+  border:1px solid rgba(210,210,255,.55);
+  background:radial-gradient(circle at top,rgba(24,28,60,.96),rgba(5,6,18,.98));
+  padding:14px 16px;
+  box-shadow:0 0 26px rgba(0,0,0,.95),0 0 34px rgba(90,120,255,.65);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+#username-title{
+  font-size:.92rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  margin-bottom:4px;
+}
+#username-input{
+  width:100%;
+  padding:7px 9px;
+  border-radius:10px;
+  border:1px solid rgba(130,135,165,.9);
+  background:radial-gradient(circle at top,rgba(40,48,80,.45),rgba(7,8,18,.96));
+  color:#f7f7ff;
+  font-size:.86rem;
+  outline:none;
+}
+#username-input:focus{
+  border-color:#8ba2ff;
+  box-shadow:0 0 18px rgba(140,165,255,.95);
+}
