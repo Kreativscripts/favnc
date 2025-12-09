@@ -97,4 +97,4 @@ async def favhost(
 
     await interaction.followup.send(msg)
 
-# bot.run("YOUR_BOT_TOKEN")
+bot.run("")
