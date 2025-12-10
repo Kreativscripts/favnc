@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latex-cord (K.O runs you)</title>
+    <link rel="stylesheet" href="crt.css"> 
+    <style>
+        /* Define the RGB cycling animation */
+        :root {
+            --rgb-color: #00FF00; 
+        }
+
+        @keyframes colorCycle {
+            0% { --rgb-color: rgb(150, 29, 5); }
+            14% { --rgb-color: rgb(150, 121, 5); }
+            28% { --rgb-color: rgb(16, 150, 55); }
+            42% { --rgb-color: rgb(150, 109, 5); }
+            56% { --rgb-color: rgb(16, 150, 5); }
+            70% { --rgb-color: rgb(63, 150, 87); }
+            84% { --rgb-color: rgb(5, 150, 150); }
+            100% { --rgb-color: rgb(5, 136, 150); }
+        }
+
+        body {
+            /* ALLOW SCROLLING */
+            /* *** UPDATED BACKGROUND GRADIENT: Black (0,0,0) left, Gray (128,128,128) right *** */
+            background: linear-gradient(to right, rgb(0, 0, 0) 50%, rgb(128, 128, 128) 50%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align content to the top */
+            min-height: 100vh; 
+            color: var(--rgb-color); 
+            font-family: 'VCR_OSD_MONO', monospace;
+            margin: 0;
+            padding: 20px; /* Add padding for scroll room */
+            animation: colorCycle 10s infinite alternate; 
+        }
+
+        @font-face {
+            font-family: 'VCR_OSD_MONO';
+            src: url('VCR_OSD_MONO_1.001.ttf') format('truetype');
+        } 
+
+        .container {
+            text-align: left;
+            background-color: black; 
+            padding: 20px;
+            border: 1px solid var(--rgb-color); 
+            width: 90%; 
+            max-width: 1400px; 
+            box-shadow: none;
+            z-index: 10;
+        }
+
+        h1, h2, h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: var(--rgb-color); 
+            text-align: center;
+        }
+        
+        .main-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        /* Adjusted widths for 4 columns */
+        .input-container, .list-container, .ab-container, .chat-panel {
+            width: 23%; 
+            min-width: 300px; 
+            margin: 10px;
+            box-sizing: border-box;
+        }
+
+        .chat-panel {
+            min-width: 350px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input, button, textarea {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid var(--rgb-color); 
+            font-size: 1em;
+            background-color: black;
+            color: var(--rgb-color);
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: rgba(0, 77, 0, 0.5); 
+        }
+        
+        /* List Styles */
+        .list-output {
+            border: 1px solid var(--rgb-color);
+            max-height: 300px; 
+            padding: 5px; 
+            overflow-y: auto;
+        }
+
+        .list-output li {
+            border-bottom: 1px dashed rgba(0, 77, 0, 0.5);
+            padding: 2px 0;
+            font-size: 0.9em; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            word-break: break-all; 
+        }
+
+        .list-output li:hover {
+            background-color: rgba(0, 77, 0, 0.5);
+        }
+        
+        .channel-id {
+            font-weight: bold;
+            color: #ff00ff; 
+        }
+
+        /* Live Chat Styles */
+        .chat-container {
+            width: 100%;
+            height: 350px; 
+            overflow-y: auto;
+            border: 1px solid var(--rgb-color);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        
+        .message {
+            margin: 3px 0; 
+            padding: 3px 5px; 
+            border: 1px solid var(--rgb-color);
+            background-color: black;
+            font-size: 0.9em; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+        }
+
+        .message .sender {
+            font-weight: bold;
+            color: #00FFCC; 
+        }
+
+        .message-input {
+            display: flex;
+            align-items: stretch;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .message-input textarea {
+            flex-grow: 1;
+            margin-right: 5px;
+            height: 60px;
+            resize: none;
+        }
+
+        .message-input button {
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container" id="tokenContainer">
+        <h1>Enter Token</h1>
+        <form id="tokenForm" onsubmit="enterToken(); return false;" class="form-container">
+            <input type="password" id="discordToken" placeholder="Enter your Discord token" required>
+            <button type="button" onclick="enterToken()">Log In</button>
+        </form>
+    </div>
+
+    <crt id="crt">   
+    </crt>
+
+    <div class="container hidden" id="mainContainer">
+        <h1>Latex cord</h1>
+        <div class="main-content">
+            
+            <div class="input-container">
+                <h2>Bulk Sender</h2>
+                <form id="BulkSenderForm" onsubmit="sendMessage(); return false;" class="form-container">
+                    <input type="text" id="channelId" placeholder="Channel ID (Required)" required>
+                    <textarea id="message" placeholder="Messages (one per line)" rows="5" required></textarea>
+                    <input type="text" id="userIdInput" placeholder="User ID to mention (Optional)">
+                    <input type="text" id="emoji" placeholder="Emoji (e.g., ✨)">
+                    <div class="slider-container">
+                        <label for="delaySlider">Delay: <span id="delayValue">0.1</span> seconds</label>
+                        <input type="range" id="delaySlider" class="slider" min="0.1" max="10" step="0.1" value="0.1" oninput="document.getElementById('delayValue').innerText = this.value">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; max-width: 500px;">
+                        <label for="hashtagCheckbox">Prepend '#' to message:</label>
+                        <input type="checkbox" id="hashtagCheckbox" style="width: auto; margin-left: 10px;">
+                    </div>
+                    <button type="button" onclick="sendMessage()">Send Bulk Messages</button>
+                </form>
+            </div>
+            
+            <div class="list-container">
+                <h2>Channels & Servers (Click to copy ID)</h2>
+                <h3 style="text-align: left; font-size: 1em;">Direct Messages & GCs</h3>
+                <ul id="dmList" class="list-output">
+                    <li>Loading DMs...</li>
+                </ul>
+                <h3 style="text-align: left; font-size: 1em;">Servers (All Guilds)</h3>
+                <ul id="guildList" class="list-output">
+                    <li>Loading Servers...</li>
+                </ul>
+            </div>
+
+            <div class="ab-container">
+                <h2>Auto Beefer (AB)</h2>
+                <div id="autoBeeferSection" class="form-container">
+                    <input type="text" id="autoBeefChannelId" placeholder="Channel ID (GC, DM, or Server)" required><br />
+                    <textarea id="autoBeefMessage" placeholder="Beef words (one per line - Wordlist)" rows="5" required></textarea><br />
+                    <input type="text" id="autoBeefUserId" placeholder="User ID to Ping (optional)" /><br />
+                    
+                    <label style="margin-top: 10px;">
+                        <input type="checkbox" id="autoBeefPing" style="width: auto;">
+                        Ping user with each message
+                    </label>
+                    
+                    <div class="radio-group" style="margin: 10px 0;">
+                        <label>
+                            <input type="radio" name="autoBeefPingPosition" value="front" checked style="width: auto;">
+                            Ping Front (@user message)
+                        </label>
+                        <label>
+                            <input type="radio" name="autoBeefPingPosition" value="back" style="width: auto;">
+                            Ping Back (message @user)
+                        </label>
+                    </div>
+
+                    <label style="margin-top: 5px;">
+                        <input type="checkbox" id="autoBeefBold" style="width: auto;">
+                        Make Beef Bold (# prefix)
+                    </label>
+                    
+                    <div style="margin: 10px 0; width: 100%;">
+                        <label for="autoBeefDelaySlider">Delay: <span id="autoBeefDelayValue">0.1</span> seconds</label>
+                        <input type="range" id="autoBeefDelaySlider" min="0.1" max="10" step="0.1" value="0.1" oninput="document.getElementById('autoBeefDelayValue').innerText = this.value">
+                    </div>
+                    
+                    <label style="margin-top: 5px;">
+                        <input type="checkbox" id="autoBeefRepeat" style="width: auto;">
+                        Repeat Messages (Loop Wordlist)
+                    </label>
+
+                    <button onclick="startAutoBeef()" style="margin-top: 15px;">Start AB</button>
+                    <button onclick="stopAutoBeef()">Stop AB</button>
+                </div>
+            </div>
+
+            <div class="chat-panel">
+                <h2>Live Chat</h2>
+                <button type="button" onclick="fetchMessages()" style="margin-bottom: 5px;">Refresh Chat</button>
+                <div class="chat-container" id="chatContainer">
+                    <div style="padding: 10px; color: #ff00ff;">Enter Channel ID (from list) into Bulk Sender input and Refresh Chat.</div>
+                </div>
+                
+                <h3 style="margin-top: 15px;">Send Message</h3>
+                <div class="message-input">
+                    <textarea id="chatMessage" placeholder="Type your message here (Enter to send)" rows="2"></textarea>
+                    <button type="button" onclick="sendChatMessage()">Send</button>
+                </div>
+            </div>
+
+            <div style="width: 100%; display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+                <button class="switch-token-btn" onclick="switchToken()">Switch Token</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="welcomeScreen" class="welcome-screen hidden">
+        <h1>Welcome, <span id="usernameDisplay">User</span>!</h1>
+        <p>Loading your Latex cord dashboard...</p>
+    </div>
+
+    <script>
+        let discordToken = '';
+        let userId = '';
+        let autoBeefInterval;
+        let autoBeefCurrentTokenIndex = 0;
+        let autoBeefMessageCount = 0;
+        
+        // --- Core Token Functions ---
+
+        function enterToken() {
+            discordToken = document.getElementById('discordToken').value.trim();
+            if (discordToken) {
+                document.getElementById('tokenContainer').classList.add('hidden');
+                fetchUserProfile(); 
+            } else {
+                console.error('Login Error: Please enter a valid Discord token.'); 
+            }
+        }
+
+        function switchToken() {
+            discordToken = '';
+            document.getElementById('discordToken').value = '';
+            document.getElementById('mainContainer').classList.add('hidden');
+            document.getElementById('tokenContainer').classList.remove('hidden');
+            stopAutoBeef(); 
+            console.log('Token switched. Please log in again.');
+        }
+
+        function fetchUserProfile() {
+            fetch('https://discord.com/api/v9/users/@me', {
+                headers: { 'Authorization': discordToken }
+            })
+            .then(response => {
+                // IMPORTANT FIX: Ensure the response is checked for 'ok' status before trying to parse JSON.
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    // Log the error and throw to hit the catch block
+                    console.error('Login failed: Invalid token or Discord API error.');
+                    throw new Error('Invalid token or API error.');
+                }
+            })
+            .then(data => {
+                document.getElementById('usernameDisplay').innerText = data.username;
+                userId = data.id;
+                showWelcomeScreen();
+                console.log(`Logged in successfully as: ${data.username} (${data.id})`);
+            })
+            .catch(error => {
+                // If the promise fails (e.g., fetch fails, or the Error is thrown above)
+                console.error('Login attempt failed:', error.message); 
+                // ONLY call switchToken if the error is due to bad credentials/API issues, to reset the UI
+                if (error.message.includes('Invalid token') || error.message.includes('API error')) {
+                    switchToken();
+                }
+            });
+        }
+        
+        function showWelcomeScreen() {
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            document.getElementById('mainContainer').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('welcomeScreen').classList.add('fade-out');
+                setTimeout(() => {
+                    document.getElementById('welcomeScreen').classList.add('hidden');
+                    document.getElementById('mainContainer').classList.remove('hidden');
+                    fetchGuildsAndDMs(); 
+                }, 1000); 
+            }, 1000); 
+        }
+
+        // --- Guilds and DMs List Functions ---
+
+        function fetchGuildsAndDMs() {
+            // 1. Fetch ALL Servers (Guilds) 
+            fetch('https://discord.com/api/v9/users/@me/guilds', {
+                headers: { 'Authorization': discordToken }
+            })
+            .then(response => response.json())
+            .then(guilds => {
+                const guildList = document.getElementById('guildList');
+                guildList.innerHTML = '';
+                guilds.forEach(guild => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `**${guild.name}** <br> ID: <span class="channel-id">${guild.id}</span>`;
+                    li.onclick = () => {
+                        document.getElementById('channelId').value = guild.id;
+                        document.getElementById('autoBeefChannelId').value = guild.id; 
+                        console.log(`Server ID ${guild.id} copied to Bulk Sender & AB input.`);
+                    }; 
+                    guildList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching guilds:', error));
+
+            // 2. Fetch Direct Message Channels (includes GCs)
+            fetch('https://discord.com/api/v9/users/@me/channels', {
+                headers: { 'Authorization': discordToken }
+            })
+            .then(response => response.json())
+            .then(channels => {
+                const dmList = document.getElementById('dmList');
+                dmList.innerHTML = '';
+                channels.forEach(channel => {
+                    let name = 'Unknown Channel';
+                    if (channel.type === 1) { // 1-on-1 DM
+                        const recipient = channel.recipients[0];
+                        name = `DM with ${recipient ? recipient.username : 'Unknown User'}`;
+                    } else if (channel.type === 3) { // Group DM
+                        const names = channel.recipients.map(r => r.username).join(', ');
+                        name = channel.name ? `GC: ${channel.name}` : `GC with ${names}`; 
+                    }
+                    
+                    if (channel.type === 1 || channel.type === 3) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `**${name}** <br> Channel ID: <span class="channel-id">${channel.id}</span>`;
+                        li.onclick = () => {
+                            document.getElementById('channelId').value = channel.id;
+                            document.getElementById('autoBeefChannelId').value = channel.id; 
+                            console.log(`Channel ID ${channel.id} copied to Bulk Sender & AB input.`);
+                        };
+                        dmList.appendChild(li);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching DMs/GCs:', error));
+        }
+
+        // --- Bulk Messaging Functions ---
+
+        function createMessagePayload(baseMessage) {
+            const emoji = document.getElementById('emoji').value.trim();
+            const userIdInput = document.getElementById('userIdInput').value.trim();
+            const hashtagChecked = document.getElementById('hashtagCheckbox').checked;
+            
+            let finalContent = '';
+
+            if (userIdInput) {
+                const mention = userIdInput.startsWith('<@') ? userIdInput : `<@${userIdInput}>`;
+                finalContent += `${mention} `;
+            }
+
+            if (hashtagChecked) {
+                finalContent += '# ';
+            }
+
+            finalContent += baseMessage;
+
+            if (emoji) {
+                finalContent += ` ${emoji}`;
+            }
+
+            return { content: finalContent };
+        }
+
+        function sendMessage() {
+            const channelId = document.getElementById('channelId').value;
+            const bulkMessageContent = document.getElementById('message').value.trim();
+            const delay = document.getElementById('delaySlider').value * 1000;
+
+            if (!discordToken || !channelId || !bulkMessageContent) {
+                console.error('Bulk Sender Error: Token, Channel ID, and Message content are required.');
+                return;
+            }
+
+            const messages = bulkMessageContent.split('\n').filter(msg => msg.trim() !== '');
+
+            document.getElementById('message').value = ''; 
+
+            messages.forEach((msg, index) => {
+                setTimeout(() => {
+                    const payload = createMessagePayload(msg);
+                    fetch(`https://discord.com/api/v9/channels/${channelId}/messages`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': discordToken,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                console.error(`Bulk Sender Error sending message ${index + 1}:`, response.status);
+                            }
+                        })
+                        .catch(error => console.error('Bulk Sender Error sending message:', error));
+                }, index * delay);
+            });
+            console.log(`Sending ${messages.length} messages with a delay of ${delay / 1000}s...`);
+        }
+
+        // --- Live Chat Functions ---
+
+        function sendChatMessage() {
+            const channelId = document.getElementById('channelId').value;
+            const message = document.getElementById('chatMessage').value.trim();
+
+            if (!discordToken || !channelId || !message) {
+                console.error('Live Chat Sender Error: Token, Channel ID, and Message content are required.');
+                return;
+            }
+
+            document.getElementById('chatMessage').value = '';
+
+            const payload = createMessagePayload(message);
+
+            fetch(`https://discord.com/api/v9/channels/${channelId}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': discordToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        fetchMessages(); 
+                    } else {
+                        console.error('Error sending chat message:', response.status);
+                    }
+                })
+                .catch(error => console.error('Error sending chat message:', error));
+        }
+
+        function fetchMessages() {
+            const channelId = document.getElementById('channelId').value; 
+
+            if (discordToken && channelId) {
+                fetch(`https://discord.com/api/v9/channels/${channelId}/messages?limit=50`, {
+                    headers: { 'Authorization': discordToken }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const chatContainer = document.getElementById('chatContainer');
+                        const isScrolledToBottom = chatContainer.scrollHeight - chatContainer.clientHeight <= chatContainer.scrollTop + 1;
+
+                        chatContainer.innerHTML = '';
+                        data.reverse().forEach(message => {
+                            const msgElement = document.createElement('div');
+                            msgElement.classList.add('message');
+                            const senderName = message.author.username;
+                            msgElement.innerHTML = `<span class="sender">${senderName}:</span> ${message.content}`;
+                            chatContainer.appendChild(msgElement);
+                        });
+                        
+                        if (isScrolledToBottom) {
+                            chatContainer.scrollTop = chatContainer.scrollHeight; 
+                        }
+                        console.log(`Fetched 50 messages for channel ID: ${channelId}`);
+                    })
+                    .catch(error => console.error('Error fetching messages for Live Chat:', error));
+            } else {
+                document.getElementById('chatContainer').innerHTML = '<div style="padding: 10px; color: #ff00ff;">Enter Channel ID (from list) into Bulk Sender input and Refresh Chat.</div>';
+            }
+        }
+        
+        document.getElementById('chatMessage').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && !event.shiftKey) { 
+                event.preventDefault();
+                sendChatMessage();
+            }
+        });
+        
+        // --- AB (Auto Beefer) Functions ---
+        
+        function startAutoBeef() {
+            if (!discordToken) {
+                console.error("AB Error: Please log in with your token first.");
+                return;
+            }
+            
+            const channelId = document.getElementById("autoBeefChannelId").value.trim();
+            const messageText = document.getElementById("autoBeefMessage").value.trim();
+            const userId = document.getElementById("autoBeefUserId").value.trim();
+            const pingEnabled = document.getElementById("autoBeefPing").checked;
+            const repeatMessages = document.getElementById("autoBeefRepeat").checked;
+            const boldEnabled = document.getElementById("autoBeefBold").checked;
+            const autoBeefDelay = parseFloat(document.getElementById("autoBeefDelaySlider").value);
+
+            if (!channelId || !messageText) {
+                console.error("AB Error: Channel ID and Beef words (Wordlist) are required!");
+                return;
+            }
+
+            const words = messageText.split('\n').map(word => word.trim()).filter(word => word);
+            if (words.length === 0) {
+                console.error("AB Error: Enter at least one beef word!");
+                return;
+            }
+
+            if (autoBeefInterval) clearInterval(autoBeefInterval);
+            let index = 0;
+            autoBeefMessageCount = 0;
+            
+            const token = discordToken; 
+
+            autoBeefInterval = setInterval(() => {
+                let currentMessage = words[index];
+                
+                if (pingEnabled && userId) {
+                    const mention = userId.startsWith('<@') ? userId : `<@${userId}>`;
+                    const pingPosition = document.querySelector('input[name="autoBeefPingPosition"]:checked').value;
+                    if (pingPosition === "front") {
+                        currentMessage = `${mention} ` + currentMessage;
+                    } else {
+                        currentMessage = currentMessage + ` ${mention}`;
+                    }
+                }
+                
+                if (boldEnabled) {
+                    currentMessage = `# ${currentMessage}`;
+                }
+                
+                autoBeefMessageCount++;
+                
+                fetch(`https://discord.com/api/v9/channels/${channelId}/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content: currentMessage })
+                })
+                .then(response => {
+                    if (response.status === 204 || response.ok) {
+                        console.log(`[AB] Message Sent (${autoBeefMessageCount}): ${currentMessage}`);
+                    } else if (response.status === 429) {
+                        console.error("[AB] Rate limit hit, stopping AB.");
+                        stopAutoBeef();
+                    } else {
+                        response.json().then(data => {
+                            console.error("[AB] Failed to send message:", response.status, data);
+                            if (response.status === 403) {
+                                console.error(`[AB] Error (403 Forbidden): Check permissions in channel ID: ${channelId}. Stopping.`);
+                                stopAutoBeef();
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.error("AB Error sending message:", error));
+
+                index = (index + 1) % words.length;
+
+                if (!repeatMessages && index === 0) {
+                    clearInterval(autoBeefInterval);
+                    console.log("[AB] Complete (Wordlist sent).");
+                }
+            }, autoBeefDelay * 1000);
+            
+            console.log(`[AB] Auto Beefer started on Channel ID: ${channelId}. Delay: ${autoBeefDelay}s`);
+        }
+        
+        function stopAutoBeef() {
+            if (autoBeefInterval) clearInterval(autoBeefInterval);
+            autoBeefInterval = null;
+            console.log("Auto Beefer stopped");
+        }
+
+    </script>
+</body>
+</html>
