@@ -195,7 +195,7 @@ function buildHtml({username,data,error}){
         `<div id="panel-games" class="panel glass"><div class="info-title">Profile games</div><div id="games-list" class="game-list">${gamesHtml}</div></div>`+
         `<div id="panel-badges" class="panel glass"><div class="info-title">Featured badges</div><div id="badges-list" class="badge-list">${badgesHtml}</div></div>`+
       `</section></main>`+
-      `<footer id="foot"><span>Powered by public Roblox web APIs · All data from Roblox</span></footer>`+
+      `<footer id="foot"><span>Powered by Nexus Command PRIVATE APIS · All data from Roblox</span></footer>`+
       `<div id="loader" class="hidden"><div class="spinner"></div><div class="loader-text">Loading Roblox profile…</div></div>`+
       errorBanner+
     `</div>`+
