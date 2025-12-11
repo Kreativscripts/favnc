@@ -229,7 +229,6 @@ export async function onRequest({request}){
       if(!core){
         error="Failed to load Roblox profile.";
       }else{
-        // thumbs for games/badges
         let gameThumbs={},badgeThumbs={};
         try{
           gameThumbs=await fetchGameThumbs(games.map(g=>g.universeId));
