@@ -1,4 +1,3 @@
-// functions/roblox/user.js
 const USERS_BASE   = "https://users.roproxy.com";
 const THUMB_BASE   = "https://thumbnails.roproxy.com";
 const FRIENDS_BASE = "https://friends.roproxy.com";
