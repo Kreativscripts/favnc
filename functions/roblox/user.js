@@ -26,10 +26,7 @@ async function safeJson(url, init) {
 }
 
 async function fetchUserByName(username) {
-  const body = {
-    usernames: [username],
-    excludeBannedUsers: true,
-  };
+  const body = { usernames: [username], excludeBannedUsers: true };
   return await safeJson(`${USERS_BASE}/v1/usernames/users`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -136,8 +133,6 @@ function buildHtml({ username, data, error }) {
   const verified = hasUser ? (data.hasVerifiedBadge ? "Yes" : "No") : "—";
   const blurb = hasUser
     ? truncate(data.description || "—", 220)
-    : hasUser
-    ? "—"
     : "—";
 
   const statusText = hasUser
@@ -166,8 +161,14 @@ function buildHtml({ username, data, error }) {
     `<meta name="twitter:description" content="${esc(metaDesc)}">` +
     `<meta name="twitter:image" content="${esc(metaImage)}">` +
     `<link rel="stylesheet" href="https://favnc.pages.dev/css/roblox-user.css">` +
+    // your runtime stack
+    `<script src="https://favnc.pages.dev/web_runtime/console.js" defer></script>` +
+    `<script src="https://favnc.pages.dev/web_runtime/localstorage.js" defer></script>` +
+    `<script src="https://favnc.pages.dev/web_runtime/rhtml.js" defer></script>` +
+    `<script src="https://favnc.pages.dev/web_runtime/webperms.js" defer></script>` +
     "</head><body>" +
-    `<video id="bg" src="https://favnc.pages.dev/assets/chatbg.mp4" autoplay muted loop playsinline></video>` +
+    // background video (Akashi)
+    `<video id="bg" src="https://favnc.pages.dev/assets/_bkgrnds_akashi.mp4" autoplay muted loop playsinline></video>` +
     `<div id="shell">` +
     `<header id="topbar"><div id="brand"><span id="logo-dot"></span><span id="brand-text">Favnc · Roblox User</span></div>` +
     `<form id="search" autocomplete="off"><input id="search-input" type="text" placeholder="Search username…" spellcheck="false" value="${esc(
@@ -220,22 +221,22 @@ function buildHtml({ username, data, error }) {
     `<div id="loader" class="hidden"><div class="spinner"></div><div class="loader-text">Loading Roblox profile…</div></div>` +
     errorBanner +
     `</div>` +
-    `<script>(()=>{const f=document.getElementById("search");const i=document.getElementById("search-input");f.addEventListener("submit",e=>{e.preventDefault();const v=i.value.trim();if(!v)return;const base=window.location.origin+window.location.pathname;window.location.href=base+"?"+encodeURIComponent(v)});document.querySelectorAll(".tab").forEach(btn=>{btn.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");const t=btn.dataset.tab;document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));const panel=document.getElementById("panel-"+t);if(panel)panel.classList.add("active")})});window.addEventListener("load",()=>{const l=document.getElementById("loader");if(l)l.classList.add("hidden");const sk=document.getElementById("avatar-skeleton");const img=document.getElementById("avatar-img");if(img&&img.src){img.style.display="block";if(sk)sk.style.display="none";}});})();</script>` +
+    // audio toggle button (bottom-right)
+    `<button id="audio-toggle">Unmute background</button>` +
+    // inline JS (one line, like you like)
+    `<script>(()=>{const f=document.getElementById("search"),i=document.getElementById("search-input");f.addEventListener("submit",e=>{e.preventDefault();const v=i.value.trim();if(!v)return;const base=window.location.origin+window.location.pathname;window.location.href=base+"?"+encodeURIComponent(v)});document.querySelectorAll(".tab").forEach(btn=>{btn.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");const t=btn.dataset.tab;document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));const panel=document.getElementById("panel-"+t);if(panel)panel.classList.add("active")})});window.addEventListener("load",()=>{const l=document.getElementById("loader");if(l)l.classList.add("hidden");const sk=document.getElementById("avatar-skeleton");const img=document.getElementById("avatar-img");if(img&&img.src){img.style.display="block";if(sk)sk.style.display="none";}});const bg=document.getElementById("bg"),btn=document.getElementById("audio-toggle");if(btn&&bg){btn.addEventListener("click",()=>{if(bg.muted){if(confirm("Enable background audio?")){bg.muted=false;bg.volume=0.55;btn.textContent="Mute background";}}else{bg.muted=true;btn.textContent="Unmute background";}});}})();</script>` +
     "</body></html>"
   );
 }
 
 export async function onRequest({ request }) {
   const url = new URL(request.url);
-
-  // username: ?lightafk223 OR ?user=lightafk223 etc.
   let username =
     url.searchParams.get("user") ||
     url.searchParams.get("u") ||
     url.searchParams.get("name") ||
     url.searchParams.get("username") ||
     "";
-
   if (!username && url.search && url.search.startsWith("?")) {
     username = decodeURIComponent(url.search.slice(1));
   }
@@ -261,7 +262,7 @@ export async function onRequest({ request }) {
         error = "Failed to load Roblox profile.";
       } else {
         data = {
-          id: id,
+          id,
           name: core.name,
           displayName: core.displayName || core.name,
           description: core.description || "",
@@ -279,7 +280,6 @@ export async function onRequest({ request }) {
   }
 
   const html = buildHtml({ username, data, error });
-
   return new Response(html, {
     headers: { "content-type": "text/html; charset=utf-8" },
   });
