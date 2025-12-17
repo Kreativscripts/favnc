@@ -749,7 +749,6 @@
         if (circle) circle.style.stroke = hit ? "rgba(255,255,255,.95)" : "rgba(255,255,255,.18)";
       }
 
-      // Update currently selected panel with filter
       const active = document.querySelector("circle.node.active");
       const activeGroup = active ? active.closest("g") : null;
       const activeId = activeGroup ? activeGroup.dataset.id : "root";
