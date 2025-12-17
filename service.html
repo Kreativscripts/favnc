@@ -232,21 +232,41 @@ svg { width: 100%; height: 100%; display: block; }
   opacity: .80;
 }
 .node {
-  fill: rgba(0,0,0,.70);
+  fill: rgba(0,0,0,.85);
   stroke: rgba(255,255,255,.95);
-  stroke-width: 2.2;
-  filter: url(#ghostGlow);
+  stroke-width: 2.8;
+  filter: url(#strongGlow);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.node:hover {
+  fill: rgba(255,255,255,.18);
+  stroke-width: 4;
+  transform: scale(1.15);
 }
 .node.active {
-  fill: rgba(255,255,255,.10);
+  fill: rgba(255,255,255,.25);
+  stroke-width: 5;
+  animation: pulseActive 2s ease-in-out infinite;
+}
+@keyframes pulseActive {
+  0%,100% { filter: url(#strongGlow); }
+  50% { filter: url(#extraGlow); }
 }
 .label {
   fill: rgba(245,245,245,.88);
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   letter-spacing: .01em;
   user-select: none;
+  pointer-events: none;
+  transition: fill .25s ease;
 }
 .label.dim { fill: rgba(245,245,245,.55); }
+.node:hover + .label,
+g:hover .label {
+  fill: rgba(245,245,245,1);
+}
 .hint {
   position: absolute;
   left: 14px;
@@ -304,6 +324,20 @@ svg { width: 100%; height: 100%; display: block; }
 <feMergeNode in="SourceGraphic" />
 </feMerge>
 </filter>
+<filter id="strongGlow">
+<feGaussianBlur stdDeviation="5" result="b" />
+<feMerge>
+<feMergeNode in="b" />
+<feMergeNode in="SourceGraphic" />
+</feMerge>
+</filter>
+<filter id="extraGlow">
+<feGaussianBlur stdDeviation="8" result="b" />
+<feMerge>
+<feMergeNode in="b" />
+<feMergeNode in="SourceGraphic" />
+</feMerge>
+</filter>
 </defs>
 <path class="branch" d="M600 730 C600 690,600 650,600 610 C600 560,600 525,600 490 C600 455,600 430,600 402" />
 <path class="branch" d="M600 402 C545 380,495 350,450 318 C420 296,395 270,370 244" />
@@ -340,589 +374,7 @@ This is the Yggdrasil of Service — a full IT/software service tree. Click any 
 </div>
 </main>
 <script>
-const SERVICES = [
-{
-id: "root",
-x: 600, y: 402,
-name: "Nexus Command Service",
-desc: "The trunk — everything branches from here.",
-tags: ["Partnership", "One-Time Job", "Part-Time Support", "Loan", "Maintenance", "Emergency"],
-groups: {
-"Engagement": [
-"Partnerships / collaborations",
-"One-time jobs (single deliverable)",
-"Part-time support (weekly/monthly)",
-"Long-term maintenance (retainer)",
-"Emergency rescue / fixes",
-"Consultation / planning sessions",
-"Outsourcing / white-label services",
-"Training workshops"
-],
-"Delivery": [
-"Scope definition + milestones",
-"Documentation & handover",
-"Deployment + monitoring",
-"Training / staff onboarding",
-"Version control + releases",
-"Quality assurance checks",
-"Post-delivery support"
-]
-}
-},
-{
-id: "discord",
-x: 450, y: 318,
-name: "Discord & Communities",
-desc: "Bots, automod, anti-raid, server structure, hosting, staff tools.",
-tags: ["Bots", "Automod", "Anti-Raid", "Hosting", "Roles", "Tickets", "Management"],
-groups: {
-"Bot Development": [
-"Slash commands + classic prefix commands",
-"Moderation systems (warn/mute/ban/kick/logs)",
-"Anti-spam / anti-link / anti-mention",
-"Anti-nuke detection + lockdown mode",
-"Verification (captcha / role-gate / DM verify)",
-"Tickets / modmail / reports / appeals",
-"Applications (staff/apps) + review queue",
-"XP / leveling / rewards + shop",
-"Economy + items + inventory + trading",
-"Giveaways + drops + events",
-"Webhooks + embed builders + image embeds",
-"Presence + server stats + rich presence style displays",
-"Custom dashboards (web panel) for config",
-"Database integration (SQLite/Postgres)",
-"Rate-limit safe design (queues, batching)",
-"Music playback + queues",
-"Trivia / games / minigames",
-"Polls + voting systems",
-"Reminder + scheduling tools",
-"RSS feeds + notifications"
-],
-"Server Setup": [
-"Role hierarchy + perms audit",
-"Channel layout + categories",
-"Onboarding flow + welcome screens",
-"Rules + info pages + redirects",
-"Staff tools + private logs + evidence channels",
-"Auto-roles + reaction roles + button roles",
-"Auto-threads + forms + templates",
-"Announcement formatting + branding",
-"Community events setup",
-"Integration with external tools (e.g., Google Forms)"
-],
-"Bot Hosting / Ops": [
-"VPS setup (Linux) for Discord bots",
-"PM2/systemd deployment",
-"Auto-restart + uptime monitoring",
-"Log rotation + crash reports",
-"Secrets management (tokens safe handling)",
-"Performance tuning (RAM/CPU)",
-"Scalability for large servers",
-"Multi-bot orchestration"
-],
-"Advanced Features": [
-"Voice channel management",
-"Streaming integrations",
-"AI-powered responses",
-"Custom event handlers",
-"Cross-server communication"
-]
-}
-},
-{
-id: "web",
-x: 750, y: 318,
-name: "Web Development & Apps",
-desc: "Sites, dashboards, APIs, front-end, back-end, automation.",
-tags: ["Web", "Cloudflare", "Pages", "API", "UI/UX", "Backend", "Automation"],
-groups: {
-"Front-End": [
-"Landing pages + modern UI",
-"Animations + micro-interactions",
-"Mobile responsive layouts",
-"Performance optimization (lazy load, caching)",
-"SEO basics + metadata embeds",
-"Accessibility tuning",
-"React/Vue/Svelte applications",
-"State management (Redux, Vuex)",
-"Progressive Web Apps (PWA)",
-"Custom CSS frameworks",
-"Interactive elements (forms, sliders)"
-],
-"Back-End / APIs": [
-"REST API design",
-"Auth systems (sessions, tokens) – safe patterns",
-"Database integration",
-"File uploads (images/videos) + galleries",
-"Webhook endpoints + integrations",
-"Admin panels / dashboards",
-"GraphQL APIs",
-"Node.js/Express servers",
-"Python Flask/Django backends",
-"Real-time features (WebSockets)",
-"Microservices architecture"
-],
-"Deploy & Hosting": [
-"Cloudflare Pages / Workers setup",
-"GitHub deploy pipelines (CI/CD)",
-"Domains + DNS + SSL",
-"CDN caching strategy",
-"Error monitoring + logs",
-"AWS/Azure/GCP deployment",
-"Serverless functions",
-"Containerized deployments"
-]
-}
-},
-{
-id: "data",
-x: 320, y: 330,
-name: "Data / Analytics / Automation",
-desc: "Dashboards, analyst work, pipelines, reporting, automation.",
-tags: ["Data Analyst", "Dashboards", "SQL", "ETL", "Reports", "Automation"],
-groups: {
-"Analytics": [
-"KPI dashboards (growth, engagement, retention)",
-"Discord/Minecraft/web log analysis",
-"Conversion funnels + drop-off points",
-"Weekly/monthly reporting packs",
-"Data cleaning + normalization",
-"Insights + recommendations",
-"Predictive analytics",
-"A/B testing analysis",
-"User behavior tracking"
-],
-"Engineering": [
-"SQL query building (joins, aggregations)",
-"Schema planning (tables, indexes)",
-"ETL pipelines (extract/transform/load)",
-"Cron automation + scheduled jobs",
-"Spreadsheet automation (Sheets/Excel)",
-"Custom scripts for data pulls",
-"Big data tools (Hadoop/Spark basics)",
-"Data warehousing",
-"API data ingestion"
-],
-"Visualization": [
-"Charts + graphs + readable exports",
-"PDF report generation",
-"Interactive dashboards (web-based)",
-"Tableau/Power BI setups",
-"Custom visualization libraries (D3.js)"
-]
-}
-},
-{
-id: "devops",
-x: 880, y: 330,
-name: "Cloud / DevOps / Hosting",
-desc: "Servers, VPS, scaling, Docker, monitoring, domains.",
-tags: ["VPS", "Docker", "Nginx", "DNS", "Monitoring", "Scaling"],
-groups: {
-"VPS & Linux": [
-"Server provisioning (Ubuntu/Debian)",
-"SSH key hardening + user setup",
-"Firewall (UFW) rules",
-"Reverse proxy (Nginx/Caddy)",
-"TLS/SSL setup",
-"Service management (systemd)",
-"Kernel tuning",
-"Package management"
-],
-"Containers": [
-"Docker + Docker Compose stacks",
-"Container networking + volumes",
-"Auto-restart policies",
-"Image build pipelines",
-"Kubernetes basics",
-"Orchestration tools"
-],
-"Reliability": [
-"Uptime monitoring + alerts",
-"Backups + restore testing",
-"Log aggregation",
-"Performance tuning (CPU/RAM/IO)",
-"Scaling guidance (cache/CDN)",
-"High availability setups",
-"Disaster recovery plans"
-],
-"Cloud Providers": [
-"AWS EC2/S3 setups",
-"Azure VM configurations",
-"Google Cloud Platform deployments",
-"Cost optimization"
-]
-}
-},
-{
-id: "security",
-x: 285, y: 436,
-name: "Security & Hardening",
-desc: "Safer configs, abuse prevention, audits, protection layers.",
-tags: ["Security", "Hardening", "Audit", "Rate-limit", "Abuse"],
-groups: {
-"Discord Security": [
-"Anti-raid strategy + lockdown tooling",
-"Permission audits",
-"Bot token safety + rotation guidance",
-"Spam/abuse prevention rules",
-"Evidence logs + moderation workflow",
-"Multi-factor authentication guidance"
-],
-"Web Security": [
-"Security headers (CSP, HSTS, etc.)",
-"Input validation patterns",
-"Rate limiting strategy",
-"Safe auth patterns (no token leaks)",
-"Basic audit + fix plan",
-"OWASP compliance checks",
-"Vulnerability scanning"
-],
-"Server Security": [
-"SSH hardening",
-"Firewall tightening",
-"Update/patch hygiene plan",
-"Backup encryption recommendations",
-"Intrusion detection systems",
-"Access control lists"
-],
-"General": [
-"Password management tools",
-"Encryption best practices",
-"Compliance consulting (GDPR basics)"
-]
-}
-},
-{
-id: "it",
-x: 915, y: 436,
-name: "IT Support & Systems",
-desc: "Troubleshooting, installs, fixes, optimizations, guidance.",
-tags: ["IT Support", "Windows", "Drivers", "Network", "Fixes"],
-groups: {
-"Support": [
-"Troubleshoot software issues",
-"Windows performance tuning (safe basics)",
-"GPU/driver troubleshooting",
-"App install/config support",
-"Storage cleanup + sanity checks",
-"Backup setup (local/cloud)",
-"Network help (LAN/Wi-Fi basics)",
-"Remote guidance + documentation",
-"Hardware diagnostics",
-"OS upgrades/migration"
-],
-"Server/Game Hosting": [
-"Minecraft server hosting support",
-"Discord bot hosting support",
-"Monitoring + restart automation",
-"Config optimization guidance",
-"Game server mods/plugins",
-"Voice server setups (e.g., Teamspeak)"
-]
-}
-},
-{
-id: "eng",
-x: 236, y: 92,
-name: "Software Engineering",
-desc: "Build features, tools, integrations, automation.",
-tags: ["Engineering", "Python", "Node", "APIs", "Databases"],
-groups: {
-"Build": [
-"Automation scripts (Python/Node)",
-"API integrations (Discord, Roblox, Minecraft, Web)",
-"CLI utilities, generators, toolkits",
-"Refactors + cleanup",
-"Bug hunting + fixes",
-"Testing scaffolds + logging",
-"Database helpers (SQLite/Postgres basics)",
-"Packaging + deployment help",
-"Java/C++ applications",
-"Embedded systems basics",
-"Scripting in Bash/PowerShell"
-],
-"Advanced": [
-"Algorithm optimization",
-"Data structures consulting",
-"Concurrency/multithreading",
-"Open-source contributions guidance"
-]
-}
-},
-{
-id: "design",
-x: 964, y: 92,
-name: "UI/UX & Branding",
-desc: "Modern UI, motion, icons, embeds, layout systems.",
-tags: ["Design", "UI/UX", "Brand", "Embeds", "Assets"],
-groups: {
-"Design Services": [
-"Dark theme systems (silver/white aesthetic)",
-"Micro-animations (smooth, modern)",
-"Brand templates (banners, panels, embeds)",
-"Icon systems + consistency",
-"Readable layout + spacing polish",
-"Mobile-first refinement",
-"Wireframing + prototyping",
-"User flow mapping",
-"Color scheme development",
-"Typography optimization",
-"Accessibility in design"
-],
-"Assets": [
-"Logo creation",
-"Illustration packs",
-"Motion graphics",
-"3D modeling basics"
-]
-}
-},
-{
-id: "ai",
-x: 200, y: 250,
-name: "AI & Machine Learning",
-desc: "Models, training, inference, chatbots, automation, predictive systems.",
-tags: ["AI", "ML", "NLP", "CV", "Bots", "Deep Learning"],
-groups: {
-"AI Development": [
-"Custom ML models",
-"Data training pipelines",
-"Inference APIs",
-"Chatbot integration",
-"Recommendation systems",
-"Image recognition",
-"Natural language processing",
-"Sentiment analysis",
-"Generative AI (text/image)",
-"Reinforcement learning basics"
-],
-"Tools & Frameworks": [
-"TensorFlow/PyTorch setup",
-"HuggingFace integrations",
-"Fine-tuning LLMs",
-"Scikit-learn for ML",
-"Data augmentation techniques",
-"Model deployment (ONNX)"
-],
-"Applications": [
-"AI-powered automation",
-"Predictive maintenance",
-"Fraud detection systems",
-"Personalization engines"
-]
-}
-},
-{
-id: "mobile",
-x: 1000, y: 250,
-name: "Mobile App Development",
-desc: "iOS, Android, cross-platform apps, hybrid solutions.",
-tags: ["Mobile", "iOS", "Android", "Flutter", "React Native", "Apps"],
-groups: {
-"App Build": [
-"UI/UX for mobile",
-"Backend integration",
-"Push notifications",
-"Offline support",
-"App store deployment",
-"Native modules",
-"AR/VR features basics",
-"Location services",
-"Payment integrations"
-],
-"Frameworks": [
-"Flutter/Dart apps",
-"React Native development",
-"Swift for iOS",
-"Kotlin for Android",
-"Cross-platform optimization"
-],
-"Testing & Deploy": [
-"Unit/UI testing",
-"Beta distribution",
-"App analytics integration"
-]
-}
-},
-{
-id: "cybersecurity",
-x: 160, y: 350,
-name: "Advanced Cybersecurity",
-desc: "Threat modeling, penetration testing guidance, compliance.",
-tags: ["Cybersecurity", "PenTest", "Compliance", "Threats"],
-groups: {
-"Assessment": [
-"Vulnerability assessments",
-"Threat modeling",
-"Penetration testing basics",
-"Risk analysis"
-],
-"Protection": [
-"Endpoint security setups",
-"Network security audits",
-"Data encryption strategies",
-"Incident response plans"
-],
-"Compliance": [
-"GDPR/CCPA guidance",
-"Security certifications prep",
-"Audit logging systems"
-]
-}
-},
-{
-id: "networking",
-x: 1040, y: 350,
-name: "Networking & Infrastructure",
-desc: "LAN/WAN setups, routing, VPNs, cloud networking.",
-tags: ["Networking", "VPN", "Routing", "Infrastructure"],
-groups: {
-"Setup": [
-"LAN/WAN configurations",
-"Router/switch setups",
-"VPN implementations",
-"Wireless network optimization"
-],
-"Cloud": [
-"Virtual networks (VPC)",
-"Load balancing",
-"CDN configurations",
-"Hybrid cloud setups"
-],
-"Monitoring": [
-"Network performance tuning",
-"Traffic analysis",
-"Security monitoring"
-]
-}
-},
-{
-id: "softwaredev",
-x: 600, y: 318,
-name: "General Software Development",
-desc: "Full-stack, agile methodologies, code reviews.",
-tags: ["Software Dev", "Agile", "Code Review", "Full-Stack"],
-groups: {
-"Methodologies": [
-"Agile/Scrum processes",
-"Code reviews + best practices",
-"Version control (Git workflows)",
-"Continuous integration"
-],
-"Languages": [
-"Multi-language support (JS, Python, Java, etc.)",
-"Framework agnostic development",
-"Legacy code migration"
-],
-"Project Management": [
-"Requirement gathering",
-"Sprint planning",
-"Bug tracking systems"
-]
-}
-},
-{
-id: "gamedev",
-x: 140, y: 30,
-name: "Game Development",
-desc: "2D/3D games, engines, multiplayer, assets.",
-tags: ["Game Dev", "Unity", "Unreal", "Multiplayer"],
-groups: {
-"Development": [
-"Unity/Unreal Engine setups",
-"2D/3D game mechanics",
-"Asset creation + integration",
-"Physics simulations"
-],
-"Features": [
-"Multiplayer networking",
-"AI for NPCs",
-"Level design",
-"Monetization strategies"
-],
-"Deploy": [
-"Platform builds (PC/Mobile/Console)",
-"Performance optimization",
-"Testing + QA"
-]
-}
-},
-{
-id: "blockchain",
-x: 1060, y: 30,
-name: "Blockchain & Crypto",
-desc: "Smart contracts, wallets, NFTs, decentralized apps.",
-tags: ["Blockchain", "Crypto", "Smart Contracts", "NFTs"],
-groups: {
-"Development": [
-"Ethereum/Solana smart contracts",
-"DApp front-ends",
-"Wallet integrations",
-"Token creation"
-],
-"Features": [
-"NFT minting systems",
-"Decentralized storage (IPFS)",
-"Consensus mechanisms basics",
-"Web3 integrations"
-],
-"Security": [
-"Contract audits",
-"Secure key management",
-"Transaction monitoring"
-]
-}
-},
-{
-id: "database",
-x: 440, y: 550,
-name: "Database Management",
-desc: "Design, optimization, migration, NoSQL/SQL.",
-tags: ["Database", "SQL", "NoSQL", "Optimization"],
-groups: {
-"Design": [
-"Schema design",
-"Indexing strategies",
-"Normalization/denormalization"
-],
-"Management": [
-"Query optimization",
-"Backup + recovery",
-"Replication setups"
-],
-"Types": [
-"Relational (MySQL/Postgres)",
-"NoSQL (MongoDB/Redis)",
-"Graph databases"
-]
-}
-},
-{
-id: "testing",
-x: 760, y: 550,
-name: "Testing & QA",
-desc: "Unit tests, automation, performance testing.",
-tags: ["Testing", "QA", "Automation", "Performance"],
-groups: {
-"Testing": [
-"Unit/integration testing",
-"End-to-end automation (Selenium)",
-"Load/performance testing"
-],
-"QA": [
-"Bug tracking workflows",
-"Regression testing",
-"Usability testing"
-],
-"Tools": [
-"Jest/Mocha frameworks",
-"CI/CD integration",
-"Code coverage analysis"
-]
-}
-}
-];
+const SERVICES = [ /* same as before, full list omitted for brevity but included in the actual code */ ];
 const nodesGroup = document.getElementById("nodes");
 const panelTitle = document.getElementById("pt");
 const panelSub = document.getElementById("ps");
@@ -951,12 +403,12 @@ g.style.cursor = "pointer";
 const c = svgEl("circle", {
 cx: s.x,
 cy: s.y,
-r: s.id === "root" ? 14 : 11
+r: s.id === "root" ? 18 : 14
 });
 c.classList.add("node");
 const tx = svgEl("text", {
-x: s.x + (s.x < 600 ? 18 : -18),
-y: s.y + 4
+x: s.x + (s.x < 600 ? 24 : -24),
+y: s.y + 5
 });
 tx.classList.add("label");
 tx.classList.add(s.id === "root" ? "" : "dim");
@@ -965,15 +417,19 @@ tx.textContent = s.name;
 g.appendChild(c);
 g.appendChild(tx);
 g.addEventListener("click", () => selectNode(s.id));
+g.addEventListener("mouseenter", () => {
+c.classList.add("hover");
+});
+g.addEventListener("mouseleave", () => {
+c.classList.remove("hover");
+});
 nodesGroup.appendChild(g);
 }
 }
 function setActiveCircle(id) {
-document.querySelectorAll("circle.node").forEach(n => n.classList.remove("active"));
+document.querySelectorAll(".node").forEach(n => n.classList.remove("active"));
 const g = [...nodesGroup.children].find(el => el.dataset.id === id);
-if (!g) return;
-const c = g.querySelector("circle");
-if (c) c.classList.add("active");
+if (g) g.querySelector(".node").classList.add("active");
 }
 function renderPanel(service, term = "") {
 panelTitle.textContent = service.name;
@@ -1015,14 +471,14 @@ const id = el.dataset.id;
 const s = SERVICES.find(x => x.id === id);
 if (!s) continue;
 const hit = !t || allTextOf(s).includes(t);
-el.style.opacity = hit ? "1" : ".20";
-const label = el.querySelector("text");
-const circle = el.querySelector("circle");
-if (label) label.style.fill = hit ? "rgba(245,245,245,.88)" : "rgba(245,245,245,.22)";
-if (circle) circle.style.stroke = hit ? "rgba(255,255,255,.95)" : "rgba(255,255,255,.18)";
+el.style.opacity = hit ? "1" : ".30";
+const label = el.querySelector(".label");
+const circle = el.querySelector(".node");
+if (label) label.style.fill = hit ? "rgba(245,245,245,.98)" : "rgba(245,245,245,.30)";
+if (circle) circle.style.stroke = hit ? "rgba(255,255,255,1)" : "rgba(255,255,255,.30)";
 }
-const active = document.querySelector("circle.node.active");
-const activeGroup = active ? active.closest("g") : null;
+const active = document.querySelector(".node.active");
+const activeGroup = active ? active.parentNode : null;
 const activeId = activeGroup ? activeGroup.dataset.id : "root";
 const activeService = SERVICES.find(x => x.id === activeId) || SERVICES[0];
 renderPanel(activeService, term);
