@@ -1,3 +1,5 @@
-<video autoplay muted loop playsinline>
-  <source src="https://github.com/Kreativscripts/favnc/releases/download/bg-video/akashi.mp4" type="video/mp4">
-</video>
+<script src="https://favnc.pages.dev/web_runtime/console.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/webperms.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/redirect_login.js" defer></script>
