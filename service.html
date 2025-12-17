@@ -348,6 +348,17 @@
         <path class="twig" d="M450 318 C420 292,392 270,366 248 C340 226,314 204,288 182" />
         <path class="twig" d="M750 318 C780 292,808 270,834 248 C860 226,886 204,912 182" />
 
+        <!-- New branches for added nodes -->
+        <path class="twig" d="M320 330 C280 310,240 280,200 250" /> <!-- To AI -->
+        <path class="twig" d="M880 330 C920 310,960 280,1000 250" /> <!-- To Mobile -->
+        <path class="twig" d="M285 436 C240 410,200 380,160 350" /> <!-- To Cybersecurity -->
+        <path class="twig" d="M915 436 C960 410,1000 380,1040 350" /> <!-- To Networking -->
+        <path class="twig" d="M600 402 C600 380,600 350,600 318" /> <!-- Central upward to Software Dev -->
+        <path class="twig" d="M236 92 C200 70,170 50,140 30" /> <!-- To Game Dev -->
+        <path class="twig" d="M964 92 C1000 70,1030 50,1060 30" /> <!-- To Blockchain -->
+        <path class="twig" d="M600 610 C540 590,490 570,440 550" /> <!-- To Database -->
+        <path class="twig" d="M600 610 C660 590,710 570,760 550" /> <!-- To Testing -->
+
         <!-- Node container -->
         <g id="nodes"></g>
       </svg>
@@ -381,14 +392,18 @@
             "Part-time support (weekly/monthly)",
             "Long-term maintenance (retainer)",
             "Emergency rescue / fixes",
-            "Consultation / planning sessions"
+            "Consultation / planning sessions",
+            "Outsourcing / white-label services",
+            "Training workshops"
           ],
           "Delivery": [
             "Scope definition + milestones",
             "Documentation & handover",
             "Deployment + monitoring",
             "Training / staff onboarding",
-            "Version control + releases"
+            "Version control + releases",
+            "Quality assurance checks",
+            "Post-delivery support"
           ]
         }
       },
@@ -415,7 +430,12 @@
             "Presence + server stats + rich presence style displays",
             "Custom dashboards (web panel) for config",
             "Database integration (SQLite/Postgres)",
-            "Rate-limit safe design (queues, batching)"
+            "Rate-limit safe design (queues, batching)",
+            "Music playback + queues",
+            "Trivia / games / minigames",
+            "Polls + voting systems",
+            "Reminder + scheduling tools",
+            "RSS feeds + notifications"
           ],
           "Server Setup": [
             "Role hierarchy + perms audit",
@@ -425,7 +445,9 @@
             "Staff tools + private logs + evidence channels",
             "Auto-roles + reaction roles + button roles",
             "Auto-threads + forms + templates",
-            "Announcement formatting + branding"
+            "Announcement formatting + branding",
+            "Community events setup",
+            "Integration with external tools (e.g., Google Forms)"
           ],
           "Bot Hosting / Ops": [
             "VPS setup (Linux) for Discord bots",
@@ -433,7 +455,16 @@
             "Auto-restart + uptime monitoring",
             "Log rotation + crash reports",
             "Secrets management (tokens safe handling)",
-            "Performance tuning (RAM/CPU)"
+            "Performance tuning (RAM/CPU)",
+            "Scalability for large servers",
+            "Multi-bot orchestration"
+          ],
+          "Advanced Features": [
+            "Voice channel management",
+            "Streaming integrations",
+            "AI-powered responses",
+            "Custom event handlers",
+            "Cross-server communication"
           ]
         }
       },
@@ -451,7 +482,12 @@
             "Mobile responsive layouts",
             "Performance optimization (lazy load, caching)",
             "SEO basics + metadata embeds",
-            "Accessibility tuning"
+            "Accessibility tuning",
+            "React/Vue/Svelte applications",
+            "State management (Redux, Vuex)",
+            "Progressive Web Apps (PWA)",
+            "Custom CSS frameworks",
+            "Interactive elements (forms, sliders)"
           ],
           "Back-End / APIs": [
             "REST API design",
@@ -459,14 +495,22 @@
             "Database integration",
             "File uploads (images/videos) + galleries",
             "Webhook endpoints + integrations",
-            "Admin panels / dashboards"
+            "Admin panels / dashboards",
+            "GraphQL APIs",
+            "Node.js/Express servers",
+            "Python Flask/Django backends",
+            "Real-time features (WebSockets)",
+            "Microservices architecture"
           ],
           "Deploy & Hosting": [
             "Cloudflare Pages / Workers setup",
             "GitHub deploy pipelines (CI/CD)",
             "Domains + DNS + SSL",
             "CDN caching strategy",
-            "Error monitoring + logs"
+            "Error monitoring + logs",
+            "AWS/Azure/GCP deployment",
+            "Serverless functions",
+            "Containerized deployments"
           ]
         }
       },
@@ -484,7 +528,10 @@
             "Conversion funnels + drop-off points",
             "Weekly/monthly reporting packs",
             "Data cleaning + normalization",
-            "Insights + recommendations"
+            "Insights + recommendations",
+            "Predictive analytics",
+            "A/B testing analysis",
+            "User behavior tracking"
           ],
           "Engineering": [
             "SQL query building (joins, aggregations)",
@@ -492,12 +539,17 @@
             "ETL pipelines (extract/transform/load)",
             "Cron automation + scheduled jobs",
             "Spreadsheet automation (Sheets/Excel)",
-            "Custom scripts for data pulls"
+            "Custom scripts for data pulls",
+            "Big data tools (Hadoop/Spark basics)",
+            "Data warehousing",
+            "API data ingestion"
           ],
           "Visualization": [
             "Charts + graphs + readable exports",
             "PDF report generation",
-            "Interactive dashboards (web-based)"
+            "Interactive dashboards (web-based)",
+            "Tableau/Power BI setups",
+            "Custom visualization libraries (D3.js)"
           ]
         }
       },
@@ -515,20 +567,32 @@
             "Firewall (UFW) rules",
             "Reverse proxy (Nginx/Caddy)",
             "TLS/SSL setup",
-            "Service management (systemd)"
+            "Service management (systemd)",
+            "Kernel tuning",
+            "Package management"
           ],
           "Containers": [
             "Docker + Docker Compose stacks",
             "Container networking + volumes",
             "Auto-restart policies",
-            "Image build pipelines"
+            "Image build pipelines",
+            "Kubernetes basics",
+            "Orchestration tools"
           ],
           "Reliability": [
             "Uptime monitoring + alerts",
             "Backups + restore testing",
             "Log aggregation",
             "Performance tuning (CPU/RAM/IO)",
-            "Scaling guidance (cache/CDN)"
+            "Scaling guidance (cache/CDN)",
+            "High availability setups",
+            "Disaster recovery plans"
+          ],
+          "Cloud Providers": [
+            "AWS EC2/S3 setups",
+            "Azure VM configurations",
+            "Google Cloud Platform deployments",
+            "Cost optimization"
           ]
         }
       },
@@ -545,20 +609,30 @@
             "Permission audits",
             "Bot token safety + rotation guidance",
             "Spam/abuse prevention rules",
-            "Evidence logs + moderation workflow"
+            "Evidence logs + moderation workflow",
+            "Multi-factor authentication guidance"
           ],
           "Web Security": [
             "Security headers (CSP, HSTS, etc.)",
             "Input validation patterns",
             "Rate limiting strategy",
             "Safe auth patterns (no token leaks)",
-            "Basic audit + fix plan"
+            "Basic audit + fix plan",
+            "OWASP compliance checks",
+            "Vulnerability scanning"
           ],
           "Server Security": [
             "SSH hardening",
             "Firewall tightening",
             "Update/patch hygiene plan",
-            "Backup encryption recommendations"
+            "Backup encryption recommendations",
+            "Intrusion detection systems",
+            "Access control lists"
+          ],
+          "General": [
+            "Password management tools",
+            "Encryption best practices",
+            "Compliance consulting (GDPR basics)"
           ]
         }
       },
@@ -578,13 +652,17 @@
             "Storage cleanup + sanity checks",
             "Backup setup (local/cloud)",
             "Network help (LAN/Wi-Fi basics)",
-            "Remote guidance + documentation"
+            "Remote guidance + documentation",
+            "Hardware diagnostics",
+            "OS upgrades/migration"
           ],
           "Server/Game Hosting": [
             "Minecraft server hosting support",
             "Discord bot hosting support",
             "Monitoring + restart automation",
-            "Config optimization guidance"
+            "Config optimization guidance",
+            "Game server mods/plugins",
+            "Voice server setups (e.g., Teamspeak)"
           ]
         }
       },
@@ -604,7 +682,16 @@
             "Bug hunting + fixes",
             "Testing scaffolds + logging",
             "Database helpers (SQLite/Postgres basics)",
-            "Packaging + deployment help"
+            "Packaging + deployment help",
+            "Java/C++ applications",
+            "Embedded systems basics",
+            "Scripting in Bash/PowerShell"
+          ],
+          "Advanced": [
+            "Algorithm optimization",
+            "Data structures consulting",
+            "Concurrency/multithreading",
+            "Open-source contributions guidance"
           ]
         }
       },
@@ -622,7 +709,273 @@
             "Brand templates (banners, panels, embeds)",
             "Icon systems + consistency",
             "Readable layout + spacing polish",
-            "Mobile-first refinement"
+            "Mobile-first refinement",
+            "Wireframing + prototyping",
+            "User flow mapping",
+            "Color scheme development",
+            "Typography optimization",
+            "Accessibility in design"
+          ],
+          "Assets": [
+            "Logo creation",
+            "Illustration packs",
+            "Motion graphics",
+            "3D modeling basics"
+          ]
+        }
+      },
+
+      // New nodes added below
+
+      {
+        id: "ai",
+        x: 200, y: 250,
+        name: "AI & Machine Learning",
+        desc: "Models, training, inference, chatbots, automation, predictive systems.",
+        tags: ["AI", "ML", "NLP", "CV", "Bots", "Deep Learning"],
+        groups: {
+          "AI Development": [
+            "Custom ML models",
+            "Data training pipelines",
+            "Inference APIs",
+            "Chatbot integration",
+            "Recommendation systems",
+            "Image recognition",
+            "Natural language processing",
+            "Sentiment analysis",
+            "Generative AI (text/image)",
+            "Reinforcement learning basics"
+          ],
+          "Tools & Frameworks": [
+            "TensorFlow/PyTorch setup",
+            "HuggingFace integrations",
+            "Fine-tuning LLMs",
+            "Scikit-learn for ML",
+            "Data augmentation techniques",
+            "Model deployment (ONNX)"
+          ],
+          "Applications": [
+            "AI-powered automation",
+            "Predictive maintenance",
+            "Fraud detection systems",
+            "Personalization engines"
+          ]
+        }
+      },
+
+      {
+        id: "mobile",
+        x: 1000, y: 250,
+        name: "Mobile App Development",
+        desc: "iOS, Android, cross-platform apps, hybrid solutions.",
+        tags: ["Mobile", "iOS", "Android", "Flutter", "React Native", "Apps"],
+        groups: {
+          "App Build": [
+            "UI/UX for mobile",
+            "Backend integration",
+            "Push notifications",
+            "Offline support",
+            "App store deployment",
+            "Native modules",
+            "AR/VR features basics",
+            "Location services",
+            "Payment integrations"
+          ],
+          "Frameworks": [
+            "Flutter/Dart apps",
+            "React Native development",
+            "Swift for iOS",
+            "Kotlin for Android",
+            "Cross-platform optimization"
+          ],
+          "Testing & Deploy": [
+            "Unit/UI testing",
+            "Beta distribution",
+            "App analytics integration"
+          ]
+        }
+      },
+
+      {
+        id: "cybersecurity",
+        x: 160, y: 350,
+        name: "Advanced Cybersecurity",
+        desc: "Threat modeling, penetration testing guidance, compliance.",
+        tags: ["Cybersecurity", "PenTest", "Compliance", "Threats"],
+        groups: {
+          "Assessment": [
+            "Vulnerability assessments",
+            "Threat modeling",
+            "Penetration testing basics",
+            "Risk analysis"
+          ],
+          "Protection": [
+            "Endpoint security setups",
+            "Network security audits",
+            "Data encryption strategies",
+            "Incident response plans"
+          ],
+          "Compliance": [
+            "GDPR/CCPA guidance",
+            "Security certifications prep",
+            "Audit logging systems"
+          ]
+        }
+      },
+
+      {
+        id: "networking",
+        x: 1040, y: 350,
+        name: "Networking & Infrastructure",
+        desc: "LAN/WAN setups, routing, VPNs, cloud networking.",
+        tags: ["Networking", "VPN", "Routing", "Infrastructure"],
+        groups: {
+          "Setup": [
+            "LAN/WAN configurations",
+            "Router/switch setups",
+            "VPN implementations",
+            "Wireless network optimization"
+          ],
+          "Cloud": [
+            "Virtual networks (VPC)",
+            "Load balancing",
+            "CDN configurations",
+            "Hybrid cloud setups"
+          ],
+          "Monitoring": [
+            "Network performance tuning",
+            "Traffic analysis",
+            "Security monitoring"
+          ]
+        }
+      },
+
+      {
+        id: "softwaredev",
+        x: 600, y: 318,
+        name: "General Software Development",
+        desc: "Full-stack, agile methodologies, code reviews.",
+        tags: ["Software Dev", "Agile", "Code Review", "Full-Stack"],
+        groups: {
+          "Methodologies": [
+            "Agile/Scrum processes",
+            "Code reviews + best practices",
+            "Version control (Git workflows)",
+            "Continuous integration"
+          ],
+          "Languages": [
+            "Multi-language support (JS, Python, Java, etc.)",
+            "Framework agnostic development",
+            "Legacy code migration"
+          ],
+          "Project Management": [
+            "Requirement gathering",
+            "Sprint planning",
+            "Bug tracking systems"
+          ]
+        }
+      },
+
+      {
+        id: "gamedev",
+        x: 140, y: 30,
+        name: "Game Development",
+        desc: "2D/3D games, engines, multiplayer, assets.",
+        tags: ["Game Dev", "Unity", "Unreal", "Multiplayer"],
+        groups: {
+          "Development": [
+            "Unity/Unreal Engine setups",
+            "2D/3D game mechanics",
+            "Asset creation + integration",
+            "Physics simulations"
+          ],
+          "Features": [
+            "Multiplayer networking",
+            "AI for NPCs",
+            "Level design",
+            "Monetization strategies"
+          ],
+          "Deploy": [
+            "Platform builds (PC/Mobile/Console)",
+            "Performance optimization",
+            "Testing + QA"
+          ]
+        }
+      },
+
+      {
+        id: "blockchain",
+        x: 1060, y: 30,
+        name: "Blockchain & Crypto",
+        desc: "Smart contracts, wallets, NFTs, decentralized apps.",
+        tags: ["Blockchain", "Crypto", "Smart Contracts", "NFTs"],
+        groups: {
+          "Development": [
+            "Ethereum/Solana smart contracts",
+            "DApp front-ends",
+            "Wallet integrations",
+            "Token creation"
+          ],
+          "Features": [
+            "NFT minting systems",
+            "Decentralized storage (IPFS)",
+            "Consensus mechanisms basics",
+            "Web3 integrations"
+          ],
+          "Security": [
+            "Contract audits",
+            "Secure key management",
+            "Transaction monitoring"
+          ]
+        }
+      },
+
+      {
+        id: "database",
+        x: 440, y: 550,
+        name: "Database Management",
+        desc: "Design, optimization, migration, NoSQL/SQL.",
+        tags: ["Database", "SQL", "NoSQL", "Optimization"],
+        groups: {
+          "Design": [
+            "Schema design",
+            "Indexing strategies",
+            "Normalization/denormalization"
+          ],
+          "Management": [
+            "Query optimization",
+            "Backup + recovery",
+            "Replication setups"
+          ],
+          "Types": [
+            "Relational (MySQL/Postgres)",
+            "NoSQL (MongoDB/Redis)",
+            "Graph databases"
+          ]
+        }
+      },
+
+      {
+        id: "testing",
+        x: 760, y: 550,
+        name: "Testing & QA",
+        desc: "Unit tests, automation, performance testing.",
+        tags: ["Testing", "QA", "Automation", "Performance"],
+        groups: {
+          "Testing": [
+            "Unit/integration testing",
+            "End-to-end automation (Selenium)",
+            "Load/performance testing"
+          ],
+          "QA": [
+            "Bug tracking workflows",
+            "Regression testing",
+            "Usability testing"
+          ],
+          "Tools": [
+            "Jest/Mocha frameworks",
+            "CI/CD integration",
+            "Code coverage analysis"
           ]
         }
       }
