@@ -212,59 +212,32 @@ li {
   color: rgba(245,245,245,.50);
   font-size: 12px;
 }
-svg { width: 100%; height: 100%; display: block; }
-.branch {
-  fill: none;
-  stroke: rgba(255,255,255,.92);
-  stroke-width: 3.0;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: url(#ghostGlow);
-  opacity: .92;
+#modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+  padding: 40px;
+  overflow: auto;
 }
-.twig {
-  fill: none;
-  stroke: rgba(255,255,255,.70);
-  stroke-width: 2.1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: url(#ghostGlow);
-  opacity: .80;
+#modal.active {
+  display: flex;
 }
-.node {
-  fill: rgba(0,0,0,.85);
-  stroke: rgba(255,255,255,.95);
-  stroke-width: 2.8;
-  filter: url(#strongGlow);
+#closeModal {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  font-size: 36px;
   cursor: pointer;
-  transition: all .3s ease;
-}
-.node:hover {
-  fill: rgba(255,255,255,.22);
-  stroke-width: 4.5;
-  transform: scale(1.2);
-}
-.node.active {
-  fill: rgba(255,255,255,.30);
-  stroke-width: 6;
-  animation: pulseActive 2.4s ease-in-out infinite;
-}
-@keyframes pulseActive {
-  0%,100% { filter: url(#strongGlow); }
-  50% { filter: url(#extraGlow); }
-}
-.label {
-  fill: rgba(245,245,245,.88);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .01em;
-  user-select: none;
-  pointer-events: none;
-  transition: fill .3s ease;
-}
-.label.dim { fill: rgba(245,245,245,.55); }
-g:hover .label {
-  fill: rgba(245,245,245,1);
+  color: white;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
 }
 .hint {
   position: absolute;
@@ -294,6 +267,8 @@ g:hover .label {
   50% { opacity: 1; }
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.168.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 <div id="fog"></div>
@@ -314,71 +289,27 @@ g:hover .label {
 </header>
 <main>
 <div id="stage" class="card">
-<svg viewBox="0 0 1200 760" aria-label="Service Tree">
-<defs>
-<filter id="ghostGlow">
-<feGaussianBlur stdDeviation="3.4" result="b" />
-<feMerge>
-<feMergeNode in="b" />
-<feMergeNode in="SourceGraphic" />
-</feMerge>
-</filter>
-<filter id="strongGlow">
-<feGaussianBlur stdDeviation="6" result="b" />
-<feMerge>
-<feMergeNode in="b" />
-<feMergeNode in="SourceGraphic" />
-</feMerge>
-</filter>
-<filter id="extraGlow">
-<feGaussianBlur stdDeviation="10" result="b" />
-<feMerge>
-<feMergeNode in="b" />
-<feMergeNode in="SourceGraphic" />
-</feMerge>
-</filter>
-</defs>
-<path class="branch" d="M600 730 C600 690,600 650,600 610 C600 560,600 525,600 490 C600 455,600 430,600 402" />
-<path class="branch" d="M600 402 C545 380,495 350,450 318 C420 296,395 270,370 244" />
-<path class="branch" d="M600 402 C655 380,705 350,750 318 C780 296,805 270,830 244" />
-<path class="twig" d="M600 490 C540 468,488 444,438 414 C398 390,360 360,320 330" />
-<path class="twig" d="M600 490 C660 468,712 444,762 414 C802 390,840 360,880 330" />
-<path class="twig" d="M600 560 C540 548,488 532,432 510 C382 490,336 466,285 436" />
-<path class="twig" d="M600 560 C660 548,712 532,768 510 C818 490,864 466,915 436" />
-<path class="twig" d="M370 244 C340 220,315 198,292 172 C270 146,252 120,236 92" />
-<path class="twig" d="M830 244 C860 220,885 198,908 172 C930 146,948 120,964 92" />
-<path class="twig" d="M450 318 C420 292,392 270,366 248 C340 226,314 204,288 182" />
-<path class="twig" d="M750 318 C780 292,808 270,834 248 C860 226,886 204,912 182" />
-<path class="twig" d="M320 330 C280 310,240 280,200 250" />
-<path class="twig" d="M880 330 C920 310,960 280,1000 250" />
-<path class="twig" d="M285 436 C240 410,200 380,160 350" />
-<path class="twig" d="M915 436 C960 410,1000 380,1040 350" />
-<path class="twig" d="M600 402 C600 380,600 350,600 318" />
-<path class="twig" d="M236 92 C200 70,170 50,140 30" />
-<path class="twig" d="M964 92 C1000 70,1030 50,1060 30" />
-<path class="twig" d="M600 610 C540 590,490 570,440 550" />
-<path class="twig" d="M600 610 C660 590,710 570,760 550" />
-<g id="nodes"></g>
-</svg>
-<div class="hint"><span class="dot"></span>Click a node • Search to highlight + filter</div>
+<div id="canvas" style="width:100%;height:100%;"></div>
+<div class="hint"><span class="dot"></span>Drag to rotate • Click label to zoom • Search to highlight</div>
 </div>
 <div id="panel" class="card">
 <div id="panelTop">
-<div class="t" id="pt">Select a branch</div>
-<div class="s" id="ps">
-This is the Yggdrasil of Service — a full IT/software service tree. Click any node to see what’s inside.
-</div>
+<div class="t" id="pt">Explore the Sphere</div>
+<div class="s" id="ps">Rotate the 3D sphere and click any service label to view details.</div>
 </div>
 <div id="panelBody"></div>
 </div>
 </main>
+<div id="modal">
+<span id="closeModal">X</span>
+<div id="modalContent"></div>
+</div>
 <script>
 const SERVICES = [
 {
 id: "root",
-x: 600, y: 402,
 name: "Nexus Command Service",
-desc: "The trunk — everything branches from here.",
+desc: "The core — everything revolves around partnerships and custom solutions.",
 tags: ["Partnership", "One-Time Job", "Part-Time Support", "Loan", "Maintenance", "Emergency"],
 groups: {
 "Engagement": [
@@ -404,7 +335,6 @@ groups: {
 },
 {
 id: "discord",
-x: 450, y: 318,
 name: "Discord & Communities",
 desc: "Bots, automod, anti-raid, server structure, hosting, staff tools.",
 tags: ["Bots", "Automod", "Anti-Raid", "Hosting", "Roles", "Tickets", "Management"],
@@ -441,7 +371,7 @@ groups: {
 "Auto-threads + forms + templates",
 "Announcement formatting + branding",
 "Community events setup",
-"Integration with external tools (e.g., Google Forms)"
+"Integration with external tools"
 ],
 "Bot Hosting / Ops": [
 "VPS setup (Linux) for Discord bots",
@@ -464,7 +394,6 @@ groups: {
 },
 {
 id: "web",
-x: 750, y: 318,
 name: "Web Development & Apps",
 desc: "Sites, dashboards, APIs, front-end, back-end, automation.",
 tags: ["Web", "Cloudflare", "Pages", "API", "UI/UX", "Backend", "Automation"],
@@ -484,7 +413,7 @@ groups: {
 ],
 "Back-End / APIs": [
 "REST API design",
-"Auth systems (sessions, tokens) – safe patterns",
+"Auth systems (sessions, tokens)",
 "Database integration",
 "File uploads (images/videos) + galleries",
 "Webhook endpoints + integrations",
@@ -509,7 +438,6 @@ groups: {
 },
 {
 id: "data",
-x: 320, y: 330,
 name: "Data / Analytics / Automation",
 desc: "Dashboards, analyst work, pipelines, reporting, automation.",
 tags: ["Data Analyst", "Dashboards", "SQL", "ETL", "Reports", "Automation"],
@@ -547,7 +475,6 @@ groups: {
 },
 {
 id: "devops",
-x: 880, y: 330,
 name: "Cloud / DevOps / Hosting",
 desc: "Servers, VPS, scaling, Docker, monitoring, domains.",
 tags: ["VPS", "Docker", "Nginx", "DNS", "Monitoring", "Scaling"],
@@ -589,7 +516,6 @@ groups: {
 },
 {
 id: "security",
-x: 285, y: 436,
 name: "Security & Hardening",
 desc: "Safer configs, abuse prevention, audits, protection layers.",
 tags: ["Security", "Hardening", "Audit", "Rate-limit", "Abuse"],
@@ -628,7 +554,6 @@ groups: {
 },
 {
 id: "it",
-x: 915, y: 436,
 name: "IT Support & Systems",
 desc: "Troubleshooting, installs, fixes, optimizations, guidance.",
 tags: ["IT Support", "Windows", "Drivers", "Network", "Fixes"],
@@ -657,7 +582,6 @@ groups: {
 },
 {
 id: "eng",
-x: 236, y: 92,
 name: "Software Engineering",
 desc: "Build features, tools, integrations, automation.",
 tags: ["Engineering", "Python", "Node", "APIs", "Databases"],
@@ -685,7 +609,6 @@ groups: {
 },
 {
 id: "design",
-x: 964, y: 92,
 name: "UI/UX & Branding",
 desc: "Modern UI, motion, icons, embeds, layout systems.",
 tags: ["Design", "UI/UX", "Brand", "Embeds", "Assets"],
@@ -713,7 +636,6 @@ groups: {
 },
 {
 id: "ai",
-x: 200, y: 250,
 name: "AI & Machine Learning",
 desc: "Models, training, inference, chatbots, automation, predictive systems.",
 tags: ["AI", "ML", "NLP", "CV", "Bots", "Deep Learning"],
@@ -748,7 +670,6 @@ groups: {
 },
 {
 id: "mobile",
-x: 1000, y: 250,
 name: "Mobile App Development",
 desc: "iOS, Android, cross-platform apps, hybrid solutions.",
 tags: ["Mobile", "iOS", "Android", "Flutter", "React Native", "Apps"],
@@ -780,7 +701,6 @@ groups: {
 },
 {
 id: "cybersecurity",
-x: 160, y: 350,
 name: "Advanced Cybersecurity",
 desc: "Threat modeling, penetration testing guidance, compliance.",
 tags: ["Cybersecurity", "PenTest", "Compliance", "Threats"],
@@ -806,7 +726,6 @@ groups: {
 },
 {
 id: "networking",
-x: 1040, y: 350,
 name: "Networking & Infrastructure",
 desc: "LAN/WAN setups, routing, VPNs, cloud networking.",
 tags: ["Networking", "VPN", "Routing", "Infrastructure"],
@@ -832,7 +751,6 @@ groups: {
 },
 {
 id: "softwaredev",
-x: 600, y: 318,
 name: "General Software Development",
 desc: "Full-stack, agile methodologies, code reviews.",
 tags: ["Software Dev", "Agile", "Code Review", "Full-Stack"],
@@ -857,7 +775,6 @@ groups: {
 },
 {
 id: "gamedev",
-x: 140, y: 30,
 name: "Game Development",
 desc: "2D/3D games, engines, multiplayer, assets.",
 tags: ["Game Dev", "Unity", "Unreal", "Multiplayer"],
@@ -883,7 +800,6 @@ groups: {
 },
 {
 id: "blockchain",
-x: 1060, y: 30,
 name: "Blockchain & Crypto",
 desc: "Smart contracts, wallets, NFTs, decentralized apps.",
 tags: ["Blockchain", "Crypto", "Smart Contracts", "NFTs"],
@@ -909,7 +825,6 @@ groups: {
 },
 {
 id: "database",
-x: 440, y: 550,
 name: "Database Management",
 desc: "Design, optimization, migration, NoSQL/SQL.",
 tags: ["Database", "SQL", "NoSQL", "Optimization"],
@@ -933,7 +848,6 @@ groups: {
 },
 {
 id: "testing",
-x: 760, y: 550,
 name: "Testing & QA",
 desc: "Unit tests, automation, performance testing.",
 tags: ["Testing", "QA", "Automation", "Performance"],
@@ -956,111 +870,142 @@ groups: {
 }
 }
 ];
-const nodesGroup = document.getElementById("nodes");
-const panelTitle = document.getElementById("pt");
-const panelSub = document.getElementById("ps");
-const panelBody = document.getElementById("panelBody");
-const q = document.getElementById("q");
-function svgEl(tag, attrs = {}) {
-  const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
-  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
-  return el;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+const container = document.getElementById('canvas');
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(container.clientWidth, container.clientHeight);
+container.appendChild(renderer.domElement);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+directionalLight.position.set(5, 10, 7);
+scene.add(directionalLight);
+const sphereGeometry = new THREE.SphereGeometry(5, 64, 64);
+const sphereMaterial = new THREE.MeshPhongMaterial({
+color: 0x0a0a0a,
+emissive: 0x111122,
+shininess: 30,
+transparent: true,
+opacity: 0.7
+});
+const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+scene.add(sphere);
+camera.position.z = 14;
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.rotateSpeed = 0.25;
+controls.enableZoom = true;
+controls.minDistance = 10;
+controls.maxDistance = 20;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.3;
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+const sprites = [];
+function createLabel(text) {
+const canvas = document.createElement('canvas');
+canvas.width = 256;
+canvas.height = 128;
+const ctx = canvas.getContext('2d');
+ctx.fillStyle = 'rgba(0,0,0,0.6)';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.font = 'bold 28px system-ui';
+ctx.fillStyle = '#ffffff';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText(text, canvas.width/2, canvas.height/2);
+const texture = new THREE.CanvasTexture(canvas);
+const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+const sprite = new THREE.Sprite(material);
+sprite.scale.set(3, 1.5, 1);
+return sprite;
 }
-function normalize(text) {
-  return String(text || "").toLowerCase().trim();
+const goldenRatio = (1 + Math.sqrt(5)) / 2;
+const radius = 5.3;
+SERVICES.forEach((service, i) => {
+const y = (i / SERVICES.length) * 2 - 1;
+const phi = Math.acos(y);
+const theta = 2 * Math.PI * i * goldenRatio;
+const x = Math.cos(theta) * Math.sin(phi) * radius;
+const z = Math.sin(theta) * Math.sin(phi) * radius;
+const yPos = y * radius;
+const sprite = createLabel(service.name);
+sprite.position.set(x, yPos, z);
+sprite.userData = service;
+scene.add(sprite);
+sprites.push(sprite);
+});
+function animate() {
+requestAnimationFrame(animate);
+controls.update();
+sphere.rotation.y += 0.0005;
+renderer.render(scene, camera);
 }
-function allTextOf(service) {
-  const groupText = Object.entries(service.groups || {})
-    .map(([g, items]) => g + " " + (items || []).join(" "))
-    .join(" ");
-  return normalize(service.name + " " + service.desc + " " + (service.tags || []).join(" ") + " " + groupText);
+animate();
+window.addEventListener('resize', () => {
+camera.aspect = container.clientWidth / container.clientHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(container.clientWidth, container.clientHeight);
+});
+container.addEventListener('click', (event) => {
+const rect = container.getBoundingClientRect();
+mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+raycaster.setFromCamera(mouse, camera);
+const intersects = raycaster.intersectObjects(sprites);
+if (intersects.length > 0) {
+const service = intersects[0].object.userData;
+renderModal(service);
 }
-function renderNodes() {
-  nodesGroup.innerHTML = "";
-  for (const s of SERVICES) {
-    const g = svgEl("g");
-    g.dataset.id = s.id;
-    g.style.cursor = "pointer";
-    const c = svgEl("circle", {
-      cx: s.x,
-      cy: s.y,
-      r: s.id === "root" ? 20 : 15
-    });
-    c.classList.add("node");
-    const tx = svgEl("text", {
-      x: s.x + (s.x < 600 ? 28 : -28),
-      y: s.y + 6
-    });
-    tx.classList.add("label");
-    tx.classList.add(s.id === "root" ? "" : "dim");
-    tx.setAttribute("text-anchor", s.x < 600 ? "start" : "end");
-    tx.textContent = s.name;
-    g.appendChild(c);
-    g.appendChild(tx);
-    g.addEventListener("click", () => selectNode(s.id));
-    nodesGroup.appendChild(g);
-  }
+});
+const modal = document.getElementById('modal');
+const modalContent = document.getElementById('modalContent');
+const closeModal = document.getElementById('closeModal');
+closeModal.addEventListener('click', () => {
+modal.classList.remove('active');
+});
+function renderModal(service) {
+const chips = service.tags.map(t => `<span class="chip">${t}</span>`).join('');
+let groupsHtml = '';
+for (const [title, items] of Object.entries(service.groups)) {
+groupsHtml += `
+<div class="group">
+<h3>${title}</h3>
+<ul>
+${items.map(item => `<li>${item}</li>`).join('')}
+</ul>
+</div>
+`;
 }
-function setActiveCircle(id) {
-  document.querySelectorAll(".node").forEach(n => n.classList.remove("active"));
-  const g = [...nodesGroup.children].find(el => el.dataset.id === id);
-  if (g) g.querySelector(".node").classList.add("active");
+modalContent.innerHTML = `
+<div style="max-width:900px;width:100%;margin:auto;background:rgba(255,255,255,0.03);border-radius:22px;padding:30px;border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(12px);">
+<div style="font-size:32px;font-weight:800;margin-bottom:12px;">${service.name}</div>
+<div style="font-size:16px;color:rgba(245,245,245,0.7);margin-bottom:24px;">${service.desc}</div>
+<div class="chips" style="margin-bottom:24px;">${chips}</div>
+${groupsHtml}
+<div class="note">Need something not listed? Just ask — new branches grow fast.</div>
+</div>
+`;
+modal.classList.add('active');
 }
-function renderPanel(service, term = "") {
-  panelTitle.textContent = service.name;
-  panelSub.textContent = service.desc;
-  const t = normalize(term);
-  const chipsHtml = (service.tags || [])
-    .map(tag => `<span class="chip">${tag}</span>`)
-    .join("");
-  const groupsHtml = Object.entries(service.groups || {})
-    .map(([groupName, items]) => {
-      const filtered = (items || []).filter(it => !t || normalize(it).includes(t) || normalize(groupName).includes(t));
-      if (!filtered.length) return "";
-      return `
-        <div class="group">
-          <h3>${groupName}</h3>
-          <ul>
-            ${filtered.map(it => `<li>${it}</li>`).join("")}
-          </ul>
-        </div>
-      `;
-    })
-    .join("");
-  panelBody.innerHTML = `
-    <div class="chips">${chipsHtml}</div>
-    ${groupsHtml || `<div class="note">No matches for “${term}” in this branch. Try a different search.</div>`}
-    <div class="note">Need something not listed? Tell me the exact thing — it gets added as a new branch or leaf.</div>
-  `;
-}
-function selectNode(id) {
-  const s = SERVICES.find(x => x.id === id);
-  if (!s) return;
-  setActiveCircle(id);
-  renderPanel(s, q.value);
+function normalize(str) {
+return str.toLowerCase();
 }
 function highlight(term) {
-  const t = normalize(term);
-  for (const el of [...nodesGroup.children]) {
-    const id = el.dataset.id;
-    const s = SERVICES.find(x => x.id === id);
-    if (!s) continue;
-    const hit = !t || allTextOf(s).includes(t);
-    el.style.opacity = hit ? "1" : ".30";
-    const label = el.querySelector(".label");
-    const circle = el.querySelector(".node");
-    if (label) label.style.fill = hit ? "rgba(245,245,245,.98)" : "rgba(245,245,245,.30)";
-    if (circle) circle.style.stroke = hit ? "rgba(255,255,255,1)" : "rgba(255,255,255,.30)";
-  }
-  const active = document.querySelector(".node.active");
-  const activeGroup = active ? active.parentNode : null;
-  const activeId = activeGroup ? activeGroup.dataset.id : "root";
-  const activeService = SERVICES.find(x => x.id === activeId) || SERVICES[0];
-  renderPanel(activeService, term);
+const t = term ? normalize(term) : '';
+sprites.forEach(sprite => {
+const service = sprite.userData;
+const text = normalize(service.name + ' ' + (service.tags || []).join(' '));
+const match = t === '' || text.includes(t);
+sprite.material.opacity = match ? 1 : 0.3;
+sprite.scale.set(match ? 3.5 : 3, match ? 1.75 : 1.5, 1);
+});
 }
-q.addEventListener("input", (e) => highlight(e.target.value));
-renderNodes();
-selectNode("root");
+document.getElementById('q').addEventListener('input', e => highlight(e.target.value));
 </script>
 </body>
 </html>
