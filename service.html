@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#000000" />
 <title>Yggdrasil of Service</title>
 
+<link rel="icon" href="https://favnc.pages.dev/assets/icons/ygg.png" />
+<link rel="apple-touch-icon" href="https://favnc.pages.dev/assets/icons/ygg.png" />
+
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Nexus Command Service" />
 <meta property="og:description" content="Service from Nexus Command:
@@ -47,15 +50,12 @@ body{
   overflow:hidden;
 }
 a{color:inherit;text-decoration:none}
-#fog{
-  position:fixed;inset:0;pointer-events:none;
+#fog{position:fixed;inset:0;pointer-events:none;
   background:
     radial-gradient(900px 520px at 50% 20%, rgba(255,255,255,.08), rgba(0,0,0,0) 62%),
     radial-gradient(900px 620px at 50% 85%, rgba(255,255,255,.05), rgba(0,0,0,0) 60%);
 }
-#grain{
-  position:fixed;inset:-20%;pointer-events:none;
-  opacity:.14;mix-blend-mode:overlay;
+#grain{position:fixed;inset:-20%;pointer-events:none;opacity:.14;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
   animation:grainMove 7s linear infinite;
 }
@@ -67,7 +67,6 @@ header{
 }
 h1{margin:0;font-size:clamp(20px,2.6vw,36px);letter-spacing:.02em}
 h1 span{display:block;margin-top:6px;font-weight:500;font-size:12px;color:rgba(245,245,245,.55)}
-
 .topBtns{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
 .pill{
   border-radius:14px;padding:10px 12px;
@@ -79,10 +78,7 @@ h1 span{display:block;margin-top:6px;font-weight:500;font-size:12px;color:rgba(2
 }
 .pill:hover{transform:translateY(-2px);background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.20)}
 .search{min-width:min(520px,62vw);max-width:780px;display:flex;align-items:center;gap:10px}
-.search input{
-  width:100%;border:0;outline:0;background:transparent;
-  color:rgba(245,245,245,.9);font-size:14px
-}
+.search input{width:100%;border:0;outline:0;background:transparent;color:rgba(245,245,245,.9);font-size:14px}
 .search input::placeholder{color:rgba(245,245,245,.42)}
 
 main{
@@ -116,8 +112,7 @@ main{
   font-size:12px;
   backdrop-filter:blur(10px)
 }
-.dot{
-  display:inline-block;width:7px;height:7px;border-radius:50%;
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;
   background:rgba(255,255,255,.85);
   box-shadow:0 0 14px rgba(255,255,255,.35);
   margin-right:8px;vertical-align:middle;
@@ -127,15 +122,12 @@ main{
 
 #panel{display:flex;flex-direction:column}
 #panelTop{padding:16px 16px 10px;border-bottom:1px solid rgba(255,255,255,.08)}
-#panelTop .t{font-weight:800;letter-spacing:.02em}
+#panelTop .t{font-weight:900;letter-spacing:.02em}
 #panelTop .s{margin-top:6px;color:rgba(245,245,245,.60);font-size:12px;line-height:1.35}
 #panelBody{padding:12px 14px 16px;overflow:auto}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 12px}
-.chip{
-  padding:6px 10px;border-radius:999px;font-size:12px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.09);
-  color:rgba(245,245,245,.72);
+.chip{padding:6px 10px;border-radius:999px;font-size:12px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09);color:rgba(245,245,245,.72);
 }
 .group{margin:14px 0 0;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
 .group h3{margin:0 0 10px;font-size:13px;letter-spacing:.02em;color:rgba(255,255,255,.86)}
@@ -156,6 +148,22 @@ li{margin:6px 0;color:rgba(245,245,245,.86);line-height:1.3}
   background:rgba(255,255,255,.1);border-radius:50%;
   border:1px solid rgba(255,255,255,.12);
 }
+
+#holdUI{
+  position:absolute;inset:0;display:none;place-items:center;
+  pointer-events:none;z-index:9;
+}
+#holdUI .ring{
+  width:120px;height:120px;border-radius:999px;
+  background:rgba(0,0,0,.30);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(8px);
+  display:grid;place-items:center;
+  box-shadow:0 24px 88px rgba(0,0,0,.65);
+}
+#holdUI svg{display:block}
+#holdUI .txt{margin-top:8px;font-size:12px;color:rgba(245,245,245,.72);text-align:center}
+
 #errorBox{
   position:absolute;inset:0;display:none;place-items:center;
   background:rgba(0,0,0,.85);z-index:20;padding:22px;
@@ -175,16 +183,9 @@ li{margin:6px 0;color:rgba(245,245,245,.86);line-height:1.3}
   background:rgba(0,0,0,.45);
   border:1px solid rgba(255,255,255,.10);
   color:rgba(245,245,245,.85);
-  overflow:auto;
-  white-space:pre-wrap;
-  word-break:break-word;
+  overflow:auto;white-space:pre-wrap;word-break:break-word;
 }
 </style>
-
-<script src="https://favnc.pages.dev/web_runtime/console.js" defer></script>
-<script src="https://favnc.pages.dev/web_runtime/localstorage.js" defer></script>
-<script src="https://favnc.pages.dev/web_runtime/rhtml.js" defer></script>
-<script src="https://favnc.pages.dev/web_runtime/webperms.js" defer></script>
 
 <script type="importmap">
 {
@@ -203,7 +204,7 @@ li{margin:6px 0;color:rgba(245,245,245,.86);line-height:1.3}
 <header>
   <div>
     <h1>Yggdrasil of Service
-      <span>Nexus Command • Partnership • One-Time Job • Part-Time Support • Loan • and more</span>
+      <span>Hold a label for <b>5 seconds</b> to open • Spirit-silver branches • Sub-branches included</span>
     </h1>
   </div>
   <div class="topBtns">
@@ -218,14 +219,29 @@ li{margin:6px 0;color:rgba(245,245,245,.86);line-height:1.3}
 <main>
   <div id="stage" class="card">
     <div id="canvas"></div>
-    <div class="hint"><span class="dot"></span>Drag to rotate • Click a label to open details • Search to highlight</div>
+
+    <div id="holdUI">
+      <div class="ring">
+        <div style="display:grid;place-items:center;">
+          <svg width="96" height="96" viewBox="0 0 100 100">
+            <defs>
+              <filter id="g"><feGaussianBlur stdDeviation="0.7" /></filter>
+            </defs>
+            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="8"/>
+            <circle id="holdArc" cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="8" stroke-linecap="round"
+              stroke-dasharray="251.2" stroke-dashoffset="251.2" filter="url(#g)"/>
+          </svg>
+          <div class="txt" id="holdTxt">Hold to open</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint"><span class="dot"></span>Drag to rotate • Hold a label 5s to open • Search to glow-match</div>
+
     <div id="errorBox">
       <div class="inner">
         <div class="title">3D scene failed to load</div>
-        <div class="msg">
-          This usually happens if a CDN script is blocked, WebGL is disabled, or an extension is interfering.
-          Refresh, try another browser, or disable blocking extensions for this page.
-        </div>
+        <div class="msg">Refresh, try another browser, or disable blocking extensions for this page.</div>
         <code id="errorText"></code>
       </div>
     </div>
@@ -234,7 +250,7 @@ li{margin:6px 0;color:rgba(245,245,245,.86);line-height:1.3}
   <div id="panel" class="card">
     <div id="panelTop">
       <div class="t" id="pt">Yggdrasil Branches</div>
-      <div class="s" id="ps">A living tree of services — silver spirit branches. Click any label for the full list.</div>
+      <div class="s" id="ps">Main branches + sub-branches. Hold to open details.</div>
     </div>
     <div id="panelBody"></div>
   </div>
@@ -250,360 +266,106 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const SERVICES = [
-  {
-    id:"root",
-    name:"Nexus Command Service",
-    desc:"The core — everything revolves around partnerships and custom solutions.",
+  { id:"root", name:"Nexus Command Service", desc:"The core — everything revolves around partnerships and custom solutions.",
     tags:["Partnership","One-Time Job","Part-Time Support","Loan","Maintenance","Emergency"],
     groups:{
-      "Engagement":[
-        "Partnerships / collaborations",
-        "One-time jobs (single deliverable)",
-        "Part-time support (weekly/monthly)",
-        "Long-term maintenance (retainer)",
-        "Emergency rescue / fixes",
-        "Consultation / planning sessions",
-        "Outsourcing / white-label services",
-        "Training workshops"
-      ],
-      "Delivery":[
-        "Scope definition + milestones",
-        "Documentation & handover",
-        "Deployment + monitoring",
-        "Training / staff onboarding",
-        "Version control + releases",
-        "Quality assurance checks",
-        "Post-delivery support"
-      ]
+      "Engagement":[ "Partnerships / collaborations","One-time jobs (single deliverable)","Part-time support (weekly/monthly)","Long-term maintenance (retainer)","Emergency rescue / fixes","Consultation / planning sessions","Outsourcing / white-label services","Training workshops" ],
+      "Delivery":[ "Scope definition + milestones","Documentation & handover","Deployment + monitoring","Training / staff onboarding","Version control + releases","Quality assurance checks","Post-delivery support" ]
     }
   },
-  {
-    id:"discord",
-    name:"Discord & Communities",
-    desc:"Bots, automod, anti-raid, server structure, hosting, staff tools.",
+  { id:"discord", name:"Discord & Communities", desc:"Bots, automod, anti-raid, server structure, hosting, staff tools.",
     tags:["Bots","Automod","Anti-Raid","Hosting","Roles","Tickets","Management"],
     groups:{
-      "Bot Development":[
-        "Slash commands + classic prefix commands",
-        "Moderation systems (warn/mute/ban/kick/logs)",
-        "Anti-spam / anti-link / anti-mention",
-        "Anti-nuke detection + lockdown mode",
-        "Verification (captcha / role-gate / DM verify)",
-        "Tickets / modmail / reports / appeals",
-        "Applications (staff/apps) + review queue",
-        "XP / leveling / rewards + shop",
-        "Economy + items + inventory + trading",
-        "Giveaways + drops + events",
-        "Webhooks + embed builders + image embeds",
-        "Presence + server stats + rich presence style displays",
-        "Custom dashboards (web panel) for config",
-        "Database integration (SQLite/Postgres)",
-        "Rate-limit safe design (queues, batching)",
-        "Music playback + queues",
-        "Trivia / games / minigames",
-        "Polls + voting systems",
-        "Reminder + scheduling tools",
-        "RSS feeds + notifications"
-      ],
-      "Server Setup":[
-        "Role hierarchy + perms audit",
-        "Channel layout + categories",
-        "Onboarding flow + welcome screens",
-        "Rules + info pages + redirects",
-        "Staff tools + private logs + evidence channels",
-        "Auto-roles + reaction roles + button roles",
-        "Auto-threads + forms + templates",
-        "Announcement formatting + branding",
-        "Community events setup",
-        "Integration with external tools"
-      ],
-      "Bot Hosting / Ops":[
-        "VPS setup (Linux) for Discord bots",
-        "PM2/systemd deployment",
-        "Auto-restart + uptime monitoring",
-        "Log rotation + crash reports",
-        "Secrets management (tokens safe handling)",
-        "Performance tuning (RAM/CPU)",
-        "Scalability for large servers",
-        "Multi-bot orchestration"
-      ],
-      "Advanced Features":[
-        "Voice channel management",
-        "Streaming integrations",
-        "AI-powered responses",
-        "Custom event handlers",
-        "Cross-server communication"
-      ]
+      "Bot Development":[ "Slash/prefix commands","Moderation systems (warn/mute/ban/kick/logs)","Anti-spam / anti-link / anti-mention","Anti-nuke + lockdown mode","Verification flows","Tickets/modmail/reports/appeals","Applications + review queue","XP/leveling/rewards","Economy + trading","Giveaways + events","Webhook/embed builders","Presence + stats","Dashboards (web config)","Database integration","Rate-limit safe queues","Music + games + polls","Reminders + RSS notifications" ],
+      "Server Setup":[ "Role hierarchy + perms audit","Channel layout + categories","Onboarding flow","Rules/info pages","Staff tools + private logs","Auto roles + reaction/button roles","Auto-threads + forms","Announcement formatting + branding","Community events setup","Integrations" ],
+      "Bot Hosting / Ops":[ "VPS setup","PM2/systemd deployment","Auto-restart + monitoring","Log rotation + crash reports","Secrets handling","Performance tuning","Scaling for large servers","Multi-bot orchestration" ],
+      "Advanced Features":[ "Voice channel systems","Streaming integrations","AI-powered utilities","Cross-server tooling" ]
     }
   },
-  {
-    id:"web",
-    name:"Web Development & Apps",
-    desc:"Sites, dashboards, APIs, front-end, back-end, automation.",
+  { id:"web", name:"Web Development & Apps", desc:"Sites, dashboards, APIs, front-end, back-end, automation.",
     tags:["Web","Cloudflare","Pages","API","UI/UX","Backend","Automation"],
     groups:{
-      "Front-End":[
-        "Landing pages + modern UI",
-        "Animations + micro-interactions",
-        "Mobile responsive layouts",
-        "Performance optimization (lazy load, caching)",
-        "SEO basics + metadata embeds",
-        "Accessibility tuning",
-        "React/Vue/Svelte applications",
-        "Progressive Web Apps (PWA)",
-        "Interactive elements (forms, sliders)"
-      ],
-      "Back-End / APIs":[
-        "REST API design",
-        "Auth systems (sessions, tokens)",
-        "Database integration",
-        "File uploads (images/videos) + galleries",
-        "Webhook endpoints + integrations",
-        "Admin panels / dashboards",
-        "Real-time features (WebSockets)",
-        "Node.js/Express servers",
-        "Python Flask/Django backends"
-      ],
-      "Deploy & Hosting":[
-        "Cloudflare Pages / Workers setup",
-        "GitHub deploy pipelines (CI/CD)",
-        "Domains + DNS + SSL",
-        "CDN caching strategy",
-        "Error monitoring + logs",
-        "Serverless functions"
-      ]
+      "Front-End":[ "Landing pages + modern UI","Animations + micro-interactions","Mobile responsive layouts","Performance optimization","SEO basics + metadata","Accessibility tuning","React/Vue/Svelte apps","PWA","Interactive forms/tools" ],
+      "Back-End / APIs":[ "REST APIs","Auth systems","Database integration","File uploads (images/videos)","Webhook endpoints","Admin panels","Real-time (WebSockets)","Node/Express","Python Flask/Django" ],
+      "Deploy & Hosting":[ "Cloudflare Pages/Workers","CI/CD pipelines","Domains/DNS/SSL","CDN caching strategy","Monitoring/logs","Serverless functions" ]
     }
   },
-  {
-    id:"data",
-    name:"Data / Analytics / Automation",
-    desc:"Dashboards, analyst work, pipelines, reporting, automation.",
+  { id:"data", name:"Data / Analytics / Automation", desc:"Dashboards, analyst work, pipelines, reporting, automation.",
     tags:["Data Analyst","Dashboards","SQL","ETL","Reports","Automation"],
     groups:{
-      "Analytics":[
-        "KPI dashboards (growth, engagement, retention)",
-        "Discord/Minecraft/web log analysis",
-        "Conversion funnels + drop-off points",
-        "Weekly/monthly reporting packs",
-        "Data cleaning + normalization",
-        "Insights + recommendations",
-        "A/B testing analysis",
-        "User behavior tracking"
-      ],
-      "Engineering":[
-        "SQL query building (joins, aggregations)",
-        "Schema planning (tables, indexes)",
-        "ETL pipelines (extract/transform/load)",
-        "Cron automation + scheduled jobs",
-        "Spreadsheet automation (Sheets/Excel)",
-        "Custom scripts for data pulls",
-        "API data ingestion"
-      ],
-      "Visualization":[
-        "Charts + graphs + readable exports",
-        "Interactive dashboards (web-based)",
-        "Tableau/Power BI setups",
-        "Custom visualization libraries (D3.js)"
-      ]
+      "Analytics":[ "KPI dashboards","Log analysis","Funnels + drop-offs","Weekly/monthly reports","Cleaning/normalization","Insights + recommendations","A/B testing analysis","Behavior tracking" ],
+      "Engineering":[ "SQL queries","Schema planning","ETL pipelines","Cron automation","Sheets/Excel automation","Custom scripts","API ingestion" ],
+      "Visualization":[ "Charts + exports","Interactive dashboards","Power BI/Tableau","Custom visualization (D3)" ]
     }
   },
-  {
-    id:"devops",
-    name:"Cloud / DevOps / Hosting",
-    desc:"Servers, VPS, scaling, Docker, monitoring, domains.",
+  { id:"devops", name:"Cloud / DevOps / Hosting", desc:"Servers, VPS, scaling, Docker, monitoring, domains.",
     tags:["VPS","Docker","Nginx","DNS","Monitoring","Scaling"],
     groups:{
-      "VPS & Linux":[
-        "Server provisioning (Ubuntu/Debian)",
-        "SSH key hardening + user setup",
-        "Firewall (UFW) rules",
-        "Reverse proxy (Nginx/Caddy)",
-        "TLS/SSL setup",
-        "Service management (systemd)",
-        "Kernel tuning"
-      ],
-      "Containers":[
-        "Docker + Docker Compose stacks",
-        "Container networking + volumes",
-        "Auto-restart policies",
-        "Image build pipelines",
-        "Kubernetes basics"
-      ],
-      "Reliability":[
-        "Uptime monitoring + alerts",
-        "Backups + restore testing",
-        "Log aggregation",
-        "Performance tuning (CPU/RAM/IO)",
-        "Scaling guidance (cache/CDN)"
-      ],
-      "Cloud Providers":[
-        "AWS EC2/S3 setups",
-        "Azure VM configurations",
-        "Google Cloud Platform deployments",
-        "Cost optimization"
-      ]
+      "VPS & Linux":[ "Provisioning","SSH hardening","Firewall (UFW)","Reverse proxy","TLS/SSL","systemd services","Tuning" ],
+      "Containers":[ "Docker/Compose stacks","Networking + volumes","Auto-restart","Build pipelines","K8s basics" ],
+      "Reliability":[ "Uptime alerts","Backups + restore testing","Log aggregation","Performance tuning","Scaling guidance" ],
+      "Cloud Providers":[ "AWS EC2/S3","Azure VM","GCP deployments","Cost optimization" ]
     }
   },
-  {
-    id:"security",
-    name:"Security & Hardening",
-    desc:"Safer configs, abuse prevention, audits, protection layers.",
+  { id:"security", name:"Security & Hardening", desc:"Safer configs, abuse prevention, audits, protection layers.",
     tags:["Security","Hardening","Audit","Rate-limit","Abuse"],
     groups:{
-      "Discord Security":[
-        "Anti-raid strategy + lockdown tooling",
-        "Permission audits",
-        "Bot token safety + rotation guidance",
-        "Spam/abuse prevention rules",
-        "Evidence logs + moderation workflow",
-        "Multi-factor authentication guidance"
-      ],
-      "Web Security":[
-        "Security headers (CSP, HSTS, etc.)",
-        "Input validation patterns",
-        "Rate limiting strategy",
-        "Safe auth patterns (no token leaks)",
-        "Basic audit + fix plan",
-        "OWASP baseline checks"
-      ],
-      "Server Security":[
-        "SSH hardening",
-        "Firewall tightening",
-        "Update/patch hygiene plan",
-        "Backup encryption recommendations",
-        "Access control lists"
-      ],
-      "General":[
-        "Password management tools",
-        "Encryption best practices",
-        "Compliance guidance (GDPR basics)"
-      ]
+      "Discord Security":[ "Anti-raid strategy","Permission audits","Token safety + rotation guidance","Spam/abuse prevention","Evidence logs","MFA guidance" ],
+      "Web Security":[ "Security headers (CSP/HSTS)","Input validation","Rate limiting","Safe auth patterns","Audit + fix plan","OWASP baseline" ],
+      "Server Security":[ "SSH hardening","Firewall tightening","Patch plan","Backup guidance","Access control" ],
+      "General":[ "Password management","Encryption best practices","Compliance basics" ]
     }
   },
-  {
-    id:"it",
-    name:"IT Support & Systems",
-    desc:"Troubleshooting, installs, fixes, optimizations, guidance.",
+  { id:"it", name:"IT Support & Systems", desc:"Troubleshooting, installs, fixes, optimizations, guidance.",
     tags:["IT Support","Windows","Drivers","Network","Fixes"],
     groups:{
-      "Support":[
-        "Troubleshoot software issues",
-        "Windows performance tuning (safe basics)",
-        "GPU/driver troubleshooting",
-        "App install/config support",
-        "Storage cleanup + sanity checks",
-        "Backup setup (local/cloud)",
-        "Network help (LAN/Wi-Fi basics)",
-        "Remote guidance + documentation",
-        "Hardware diagnostics"
-      ],
-      "Server/Game Hosting":[
-        "Minecraft server hosting support",
-        "Discord bot hosting support",
-        "Monitoring + restart automation",
-        "Config optimization guidance",
-        "Game server mods/plugins"
-      ]
+      "Support":[ "Troubleshoot software issues","Windows performance tuning","GPU/driver troubleshooting","Install/config support","Storage sanity checks","Backups","Network help","Remote guidance","Hardware diagnostics" ],
+      "Server/Game Hosting":[ "Minecraft server support","Discord bot hosting support","Monitoring + restart automation","Config optimization","Mods/plugins" ]
     }
   },
-  {
-    id:"eng",
-    name:"Software Engineering",
-    desc:"Build features, tools, integrations, automation.",
+  { id:"eng", name:"Software Engineering", desc:"Build features, tools, integrations, automation.",
     tags:["Engineering","Python","Node","APIs","Databases"],
     groups:{
-      "Build":[
-        "Automation scripts (Python/Node)",
-        "API integrations (Discord, Roblox, Minecraft, Web)",
-        "CLI utilities, generators, toolkits",
-        "Refactors + cleanup",
-        "Bug hunting + fixes",
-        "Testing scaffolds + logging",
-        "Database helpers (SQLite/Postgres basics)"
-      ],
-      "Advanced":[
-        "Algorithm optimization",
-        "Data structures consulting",
-        "Concurrency/multithreading",
-        "Open-source contribution guidance"
-      ]
+      "Build":[ "Automation scripts","API integrations","CLI utilities","Refactors","Bug fixes","Testing + logging","DB helpers" ],
+      "Advanced":[ "Optimization","Concurrency guidance","Open-source contribution" ]
     }
   },
-  {
-    id:"design",
-    name:"UI/UX & Branding",
-    desc:"Modern UI, motion, icons, embeds, layout systems.",
+  { id:"design", name:"UI/UX & Branding", desc:"Modern UI, motion, icons, embeds, layout systems.",
     tags:["Design","UI/UX","Brand","Embeds","Assets"],
     groups:{
-      "Design Services":[
-        "Dark theme systems (silver/white aesthetic)",
-        "Micro-animations (smooth, modern)",
-        "Brand templates (banners, panels, embeds)",
-        "Icon systems + consistency",
-        "Readable layout + spacing polish",
-        "Mobile-first refinement",
-        "Wireframing + prototyping",
-        "User flow mapping",
-        "Typography optimization",
-        "Accessibility in design"
-      ],
-      "Assets":[
-        "Logo creation",
-        "Motion graphics",
-        "3D modeling basics"
-      ]
+      "Design Services":[ "Dark theme systems (silver/white)","Micro-animations","Brand templates","Icon systems","Layout polish","Mobile-first refinement","Wireframes/prototypes","User flow mapping","Typography","Accessibility" ],
+      "Assets":[ "Logo creation","Motion graphics","3D basics" ]
     }
   },
-  {
-    id:"ai",
-    name:"AI & Machine Learning",
-    desc:"Models, training, inference, chatbots, automation, predictive systems.",
+  { id:"ai", name:"AI & Machine Learning", desc:"Models, training, inference, chatbots, automation, predictive systems.",
     tags:["AI","ML","NLP","CV","Bots","Deep Learning"],
     groups:{
-      "AI Development":[
-        "Custom ML models",
-        "Data training pipelines",
-        "Inference APIs",
-        "Chatbot integration",
-        "Recommendation systems",
-        "Image recognition",
-        "Sentiment analysis",
-        "Generative AI (text/image)"
-      ],
-      "Tools & Frameworks":[
-        "TensorFlow/PyTorch setup",
-        "HuggingFace integrations",
-        "Fine-tuning LLMs",
-        "Scikit-learn for ML",
-        "Model deployment (ONNX)"
-      ],
-      "Applications":[
-        "AI-powered automation",
-        "Fraud detection systems",
-        "Personalization engines"
-      ]
+      "AI Development":[ "Custom ML models","Training pipelines","Inference APIs","Chatbot integration","Recommendation systems","Image recognition","Sentiment analysis","Generative AI" ],
+      "Tools & Frameworks":[ "TensorFlow/PyTorch","HuggingFace","Fine-tuning LLMs","Scikit-learn","Model deployment (ONNX)" ],
+      "Applications":[ "AI automation","Fraud detection","Personalization engines" ]
     }
   }
 ];
 
 const $ = (id)=>document.getElementById(id);
-const errorBox = $("errorBox");
-const errorText = $("errorText");
 const container = $("canvas");
 const modal = $("modal");
 const modalContent = $("modalContent");
 const closeModal = $("closeModal");
+const errorBox = $("errorBox");
+const errorText = $("errorText");
+
+const holdUI = $("holdUI");
+const holdArc = $("holdArc");
+const holdTxt = $("holdTxt");
 
 function showError(e){
   console.error(e);
   errorText.textContent = String(e && (e.stack || e.message || e)) || "Unknown error";
   errorBox.style.display = "grid";
 }
-
 function normalize(s){return (s||"").toLowerCase()}
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g,(m)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
-}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,(m)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));}
 
 closeModal.addEventListener("click", ()=>modal.classList.remove("active"));
 
@@ -611,12 +373,7 @@ function renderModal(service){
   const chips = (service.tags||[]).map(t=>`<span class="chip">${escapeHtml(t)}</span>`).join("");
   let groupsHtml = "";
   for(const [title, items] of Object.entries(service.groups||{})){
-    groupsHtml += `
-      <div class="group">
-        <h3>${escapeHtml(title)}</h3>
-        <ul>${items.map(i=>`<li>${escapeHtml(i)}</li>`).join("")}</ul>
-      </div>
-    `;
+    groupsHtml += `<div class="group"><h3>${escapeHtml(title)}</h3><ul>${items.map(i=>`<li>${escapeHtml(i)}</li>`).join("")}</ul></div>`;
   }
   modalContent.innerHTML = `
     <div style="max-width:900px;width:100%;margin:auto;background:rgba(255,255,255,0.03);border-radius:22px;padding:30px;border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(12px);">
@@ -624,20 +381,19 @@ function renderModal(service){
       <div style="font-size:16px;color:rgba(245,245,245,0.7);margin-bottom:24px;">${escapeHtml(service.desc||"")}</div>
       <div class="chips" style="margin-bottom:24px;">${chips}</div>
       ${groupsHtml}
-      <div class="note">Need something not listed? Just ask — new branches grow fast.</div>
-    </div>
-  `;
+      <div class="note">Need something not listed? New branches grow fast.</div>
+    </div>`;
   modal.classList.add("active");
 }
 
 try{
-  if(!window.WebGLRenderingContext) throw new Error("WebGL not supported in this browser.");
+  if(!window.WebGLRenderingContext) throw new Error("WebGL not supported.");
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x000000, 0.035);
+  scene.fog = new THREE.FogExp2(0x000000, 0.032);
 
-  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 200);
-  camera.position.set(0, 7.5, 18);
+  const camera = new THREE.PerspectiveCamera(58, 1, 0.1, 240);
+  camera.position.set(0, 10, 24);
 
   const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:"high-performance" });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
@@ -645,26 +401,26 @@ try{
   renderer.setClearColor(0x000000, 0);
   container.appendChild(renderer.domElement);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.65);
-  scene.add(ambient);
-
+  const amb = new THREE.AmbientLight(0xffffff, 0.70);
+  scene.add(amb);
   const key = new THREE.DirectionalLight(0xffffff, 0.95);
-  key.position.set(8, 12, 6);
+  key.position.set(12, 18, 10);
   scene.add(key);
-
-  const rim = new THREE.DirectionalLight(0xffffff, 0.55);
-  rim.position.set(-10, 6, -10);
-  scene.add(rim);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.06;
-  controls.rotateSpeed = 0.33;
+  controls.rotateSpeed = 0.32;
   controls.enableZoom = true;
-  controls.minDistance = 10;
-  controls.maxDistance = 32;
+  controls.minDistance = 12;
+  controls.maxDistance = 40;
   controls.autoRotate = true;
   controls.autoRotateSpeed = 0.35;
+
+  // CENTER the tree (and keep it centered)
+  const TREE_CENTER = new THREE.Vector3(0, 7.0, 0);
+  controls.target.copy(TREE_CENTER);
+  controls.update();
 
   function size(){
     const w = container.clientWidth || 1;
@@ -676,106 +432,65 @@ try{
   size();
   new ResizeObserver(size).observe(container);
 
-  const spiritMat = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    emissive: 0xffffff,
-    emissiveIntensity: 0.65,
-    metalness: 0.2,
-    roughness: 0.55
-  });
-
-  const trunkPts = [
-    new THREE.Vector3(0, -2.0, 0),
-    new THREE.Vector3(0.2, 1.5, -0.1),
-    new THREE.Vector3(-0.1, 5.5, 0.15),
-    new THREE.Vector3(0.0, 9.5, 0.0)
-  ];
-
-  function tubeFrom(points, radius){
-    const curve = new THREE.CatmullRomCurve3(points);
-    const geo = new THREE.TubeGeometry(curve, 160, radius, 10, false);
-    const mesh = new THREE.Mesh(geo, spiritMat);
-    scene.add(mesh);
-    return { curve, mesh };
-  }
-
-  tubeFrom(trunkPts, 0.38);
-
-  function branch(from, to, bendA, bendB, radius){
-    const mid1 = from.clone().lerp(to, 0.35).add(bendA);
-    const mid2 = from.clone().lerp(to, 0.70).add(bendB);
-    return tubeFrom([from, mid1, mid2, to], radius);
-  }
-
-  const rootTop = new THREE.Vector3(0, 9.4, 0);
-  const rootMid = new THREE.Vector3(0, 6.0, 0);
-
-  const branchTargets = [
-    { svc: SERVICES[0], p: new THREE.Vector3(0.0, 10.8, 0.0) },
-    { svc: SERVICES[1], p: new THREE.Vector3(-6.4, 9.8, 2.6) },
-    { svc: SERVICES[2], p: new THREE.Vector3(6.8, 9.5, 2.1) },
-    { svc: SERVICES[3], p: new THREE.Vector3(-7.0, 7.5, -2.7) },
-    { svc: SERVICES[4], p: new THREE.Vector3(7.2, 7.2, -2.9) },
-    { svc: SERVICES[5], p: new THREE.Vector3(-5.6, 5.4, 4.7) },
-    { svc: SERVICES[6], p: new THREE.Vector3(5.8, 5.2, 4.7) },
-    { svc: SERVICES[7], p: new THREE.Vector3(-4.2, 4.0, -5.6) },
-    { svc: SERVICES[8], p: new THREE.Vector3(4.4, 4.0, -5.7) },
-    { svc: SERVICES[9], p: new THREE.Vector3(0.0, 3.6, 6.6) }
-  ];
-
-  branchTargets.forEach((t, i)=>{
-    const base = (i===0? rootTop : rootMid.clone().add(new THREE.Vector3((i%2? -0.15:0.15), (i%3)*0.2, 0)));
-    const bendA = new THREE.Vector3((Math.sin(i*1.8))*0.8, 0.7+(i%3)*0.2, (Math.cos(i*1.3))*0.8);
-    const bendB = new THREE.Vector3((Math.cos(i*1.1))*0.9, 0.6, (Math.sin(i*1.5))*0.9);
-    branch(base, t.p, bendA, bendB, i===0?0.30:0.22);
-  });
-
-  const glowMat = new THREE.SpriteMaterial({
+  // Ghost / force-field look: bright additive spirit lines
+  const spiritLineMat = new THREE.LineBasicMaterial({
     color: 0xffffff,
     transparent: true,
-    opacity: 0.85,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
+    opacity: 0.55,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  const spiritLineMat2 = new THREE.LineBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.22,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
   });
 
-  function makeLabel(text){
-    const c = document.createElement("canvas");
-    c.width = 512;
-    c.height = 192;
-    const ctx = c.getContext("2d");
-    ctx.clearRect(0,0,c.width,c.height);
-
-    ctx.save();
-    ctx.shadowColor = "rgba(255,255,255,0.50)";
-    ctx.shadowBlur = 28;
-    ctx.fillStyle = "rgba(255,255,255,0.08)";
-    roundRect(ctx, 26, 46, c.width-52, c.height-92, 28);
-    ctx.fill();
-    ctx.restore();
-
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "rgba(255,255,255,0.22)";
-    roundRect(ctx, 26, 46, c.width-52, c.height-92, 28);
-    ctx.stroke();
-
-    ctx.save();
-    ctx.shadowColor = "rgba(255,255,255,0.7)";
-    ctx.shadowBlur = 18;
-    ctx.fillStyle = "rgba(255,255,255,0.96)";
-    ctx.font = "900 44px system-ui,Segoe UI,Roboto,Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(text, c.width/2, c.height/2);
-    ctx.restore();
-
-    const tex = new THREE.CanvasTexture(c);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    const mat = new THREE.SpriteMaterial({ map: tex, transparent:true, depthWrite:false });
-    const sp = new THREE.Sprite(mat);
-    sp.scale.set(5.4, 2.0, 1);
-    return sp;
+  function makeSpiritLine(points){
+    const g = new THREE.BufferGeometry().setFromPoints(points);
+    const a = new THREE.Line(g, spiritLineMat.clone());
+    const b = new THREE.Line(g, spiritLineMat2.clone());
+    scene.add(a); scene.add(b);
+    return [a,b];
   }
 
+  // Simple glow sprite
+  const glowMat = new THREE.SpriteMaterial({
+    color: 0xffffff, transparent:true, opacity:0.75,
+    depthWrite:false, blending:THREE.AdditiveBlending
+  });
+
+  // Force-field aura around trunk (ghost barrier)
+  const auraGeo = new THREE.CylinderGeometry(3.0, 2.2, 16.5, 48, 1, true);
+  const auraMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.08,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    wireframe: true
+  });
+  const aura = new THREE.Mesh(auraGeo, auraMat);
+  aura.position.set(0, 6.0, 0);
+  scene.add(aura);
+
+  const aura2Geo = new THREE.CylinderGeometry(3.4, 2.6, 18.0, 60, 1, true);
+  const aura2Mat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.05,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  const aura2 = new THREE.Mesh(aura2Geo, aura2Mat);
+  aura2.position.set(0, 6.0, 0);
+  scene.add(aura2);
+
+  // Labels
   function roundRect(ctx,x,y,w,h,r){
     ctx.beginPath();
     ctx.moveTo(x+r,y);
@@ -785,104 +500,292 @@ try{
     ctx.arcTo(x,y,x+w,y,r);
     ctx.closePath();
   }
+  function makeLabel(text, small=false){
+    const c = document.createElement("canvas");
+    c.width = 512;
+    c.height = 192;
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0,0,c.width,c.height);
 
-  const labels = [];
-  branchTargets.forEach((t, idx)=>{
-    const sp = makeLabel(t.svc.name);
-    sp.position.copy(t.p.clone().add(new THREE.Vector3(0, 0.45, 0)));
-    sp.userData = t.svc;
+    ctx.save();
+    ctx.shadowColor = "rgba(255,255,255,0.55)";
+    ctx.shadowBlur = small ? 18 : 28;
+    ctx.fillStyle = "rgba(255,255,255,0.06)";
+    roundRect(ctx, 26, 46, c.width-52, c.height-92, 28);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(255,255,255,0.24)";
+    roundRect(ctx, 26, 46, c.width-52, c.height-92, 28);
+    ctx.stroke();
+
+    ctx.save();
+    ctx.shadowColor = "rgba(255,255,255,0.80)";
+    ctx.shadowBlur = small ? 14 : 18;
+    ctx.fillStyle = "rgba(255,255,255,0.98)";
+    ctx.font = (small ? "900 36px " : "900 44px ") + "system-ui,Segoe UI,Roboto,Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, c.width/2, c.height/2);
+    ctx.restore();
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent:true, depthWrite:false });
+    const sp = new THREE.Sprite(mat);
+    sp.scale.set(small ? 4.3 : 6.2, small ? 1.6 : 2.2, 1);
+    return sp;
+  }
+
+  // Build trunk as stacked lines (less curvy)
+  const trunk = [
+    new THREE.Vector3(0, -2.0, 0),
+    new THREE.Vector3(0,  2.0, 0),
+    new THREE.Vector3(0,  6.3, 0),
+    new THREE.Vector3(0, 10.2, 0)
+  ];
+  makeSpiritLine(trunk);
+
+  const rootGlow = new THREE.Sprite(glowMat.clone());
+  rootGlow.position.set(0, 10.6, 0);
+  rootGlow.scale.set(3.2,3.2,1);
+  rootGlow.material.opacity = 0.78;
+  scene.add(rootGlow);
+
+  // Layout: main endpoints (sym + centered)
+  const main = [
+    { svc: SERVICES[0], p: new THREE.Vector3(0.0, 11.4, 0.0) },
+    { svc: SERVICES[1], p: new THREE.Vector3(-8.0, 10.0,  3.0) },
+    { svc: SERVICES[2], p: new THREE.Vector3( 8.0, 10.0,  3.0) },
+    { svc: SERVICES[3], p: new THREE.Vector3(-9.0,  7.2, -2.8) },
+    { svc: SERVICES[4], p: new THREE.Vector3( 9.0,  7.2, -2.8) },
+    { svc: SERVICES[5], p: new THREE.Vector3(-6.8,  5.2,  6.0) },
+    { svc: SERVICES[6], p: new THREE.Vector3( 6.8,  5.2,  6.0) },
+    { svc: SERVICES[7], p: new THREE.Vector3(-5.6,  3.7, -7.0) },
+    { svc: SERVICES[8], p: new THREE.Vector3( 5.6,  3.7, -7.0) },
+    { svc: SERVICES[9], p: new THREE.Vector3(0.0,   4.2,  8.4) }
+  ];
+
+  // Straighter branching: one hard bend point, not curvy splines
+  function branchLine(from, to, lift=1.0){
+    const mid = from.clone().lerp(to, 0.55);
+    mid.y += lift;
+    const pts = [from, mid, to];
+    makeSpiritLine(pts);
+  }
+
+  const trunkTop = new THREE.Vector3(0, 10.2, 0);
+  const trunkMid = new THREE.Vector3(0,  6.3, 0);
+
+  // main branches + main labels
+  const clickable = [];
+  main.forEach((t, i)=>{
+    const base = (i===0 ? trunkTop : trunkMid);
+    branchLine(base, t.p, i===0 ? 1.2 : 0.8);
+
+    const sp = makeLabel(t.svc.name, false);
+    sp.position.copy(t.p.clone().add(new THREE.Vector3(0, 0.55, 0)));
+    sp.userData = { type:"service", data:t.svc };
     scene.add(sp);
-    labels.push(sp);
+    clickable.push(sp);
 
     const g = new THREE.Sprite(glowMat.clone());
     g.position.copy(t.p);
-    g.scale.set(2.2,2.2,1);
-    g.material.opacity = 0.55;
+    g.scale.set(2.0,2.0,1);
+    g.material.opacity = 0.62;
     scene.add(g);
+
+    // SUB-BRANCHES (topics -> subtopics)
+    const groupNames = Object.keys(t.svc.groups||{});
+    const max = Math.min(groupNames.length, 7);
+    for(let k=0;k<max;k++){
+      const name = groupNames[k];
+      const ang = (k/max) * Math.PI*2;
+      const rad = 2.7 + (k%2)*0.55;
+      const subP = t.p.clone().add(new THREE.Vector3(Math.cos(ang)*rad, -0.1 + (k%3)*0.25, Math.sin(ang)*rad));
+
+      // line from main endpoint to sub endpoint
+      branchLine(t.p, subP, 0.35);
+
+      const sub = makeLabel(name, true);
+      sub.position.copy(subP.clone().add(new THREE.Vector3(0, 0.42, 0)));
+      sub.userData = { type:"sub", data:{ parent:t.svc, group:name } };
+      scene.add(sub);
+      clickable.push(sub);
+
+      const sg = new THREE.Sprite(glowMat.clone());
+      sg.position.copy(subP);
+      sg.scale.set(1.45,1.45,1);
+      sg.material.opacity = 0.48;
+      scene.add(sg);
+    }
   });
 
-  const rootGlow = new THREE.Sprite(glowMat.clone());
-  rootGlow.position.copy(new THREE.Vector3(0, 10.6, 0));
-  rootGlow.scale.set(3.2,3.2,1);
-  rootGlow.material.opacity = 0.7;
-  scene.add(rootGlow);
+  // Search highlight: includes subtopics too
+  function highlight(term){
+    const q = normalize(term);
+    clickable.forEach(sp=>{
+      const ud = sp.userData || {};
+      let hay = "";
+      if(ud.type==="service"){
+        const svc = ud.data||{};
+        hay = normalize((svc.name||"") + " " + (svc.tags||[]).join(" ") + " " + Object.keys(svc.groups||{}).join(" "));
+      }else if(ud.type==="sub"){
+        hay = normalize((ud.data?.parent?.name||"") + " " + (ud.data?.group||""));
+      }
+      const match = !q || hay.includes(q);
+      sp.material.opacity = match ? 1 : 0.20;
+      const s = (ud.type==="service") ? (match?6.8:6.2) : (match?4.8:4.3);
+      const sy = (ud.type==="service") ? (match?2.4:2.2) : (match?1.8:1.6);
+      sp.scale.set(s, sy, 1);
+    });
+  }
+  $("q").addEventListener("input", (e)=>highlight(e.target.value));
+
+  // Panel
+  const panelBody = $("panelBody");
+  panelBody.innerHTML = `
+    <div class="chips">
+      ${["Discord","Web","Data","DevOps","Security","IT","Engineering","Design","AI","Partnership"].map(x=>`<span class="chip">${x}</span>`).join("")}
+    </div>
+    <div style="color:rgba(245,245,245,.74);font-size:13px;line-height:1.45">
+      This is the <b>Yggdrasil of Service</b> — <b>main branches</b> + <b>sub-branches</b> (topics → subtopics).
+      <br/>Hold any label for <b>5 seconds</b> to open details.
+    </div>
+    <div class="group">
+      <h3>Popular (Top 10)</h3>
+      <ul>
+        <li>Discord Bot Hosting / Deployment</li>
+        <li>Discord Automod / Anti-Raid Setup</li>
+        <li>Bot Development (custom systems)</li>
+        <li>Web Development (Pages/Workers)</li>
+        <li>Data Analyst Dashboards / Reports</li>
+        <li>Cloud / VPS Setup + Monitoring</li>
+        <li>Security Hardening + Audits</li>
+        <li>IT Support / Troubleshooting</li>
+        <li>UI/UX & Branding Assets</li>
+        <li>Automation Scripts (Python/Node)</li>
+      </ul>
+    </div>
+    <div class="note">Tip: search “bot”, “sql”, “docker”, “security”, “hosting”, etc.</div>
+  `;
+
+  // HOLD-TO-OPEN (5 seconds)
+  const HOLD_MS = 5000;
+  let holdTimer = null;
+  let holdStart = 0;
+  let holdTarget = null;
 
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
-  function pick(ev){
+  function setHoldProgress(p){
+    const CIRC = 251.2;
+    const off = CIRC - (CIRC * Math.max(0, Math.min(1, p)));
+    holdArc.setAttribute("stroke-dashoffset", String(off));
+  }
+  function showHoldUI(label){
+    holdUI.style.display = "grid";
+    holdTxt.textContent = label || "Hold to open";
+    setHoldProgress(0);
+  }
+  function hideHoldUI(){
+    holdUI.style.display = "none";
+    setHoldProgress(0);
+  }
+
+  function pickObject(ev){
     const rect = renderer.domElement.getBoundingClientRect();
     mouse.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(mouse, camera);
-    const hits = raycaster.intersectObjects(labels, true);
-    if(hits.length){
-      const svc = hits[0].object.userData;
-      if(svc) renderModal(svc);
+    const hits = raycaster.intersectObjects(clickable, true);
+    return hits.length ? hits[0].object : null;
+  }
+
+  function openFromUserData(ud){
+    if(!ud) return;
+    if(ud.type==="service"){
+      renderModal(ud.data);
+    }else if(ud.type==="sub"){
+      const parent = ud.data.parent;
+      const group = ud.data.group;
+      const only = {
+        name: parent.name + " → " + group,
+        desc: parent.desc,
+        tags: parent.tags,
+        groups: { [group]: parent.groups[group] || [] }
+      };
+      renderModal(only);
     }
   }
-  renderer.domElement.addEventListener("click", pick);
 
-  function highlight(term){
-    const t = normalize(term);
-    labels.forEach(sp=>{
-      const svc = sp.userData || {};
-      const hay = normalize((svc.name||"") + " " + ((svc.tags||[]).join(" ")) + " " + Object.keys(svc.groups||{}).join(" "));
-      const match = !t || hay.includes(t);
-      sp.material.opacity = match ? 1 : 0.22;
-      sp.scale.set(match ? 6.1 : 5.4, match ? 2.25 : 2.0, 1);
-    });
+  function onDown(ev){
+    const obj = pickObject(ev);
+    if(!obj) return;
+    const ud = obj.userData;
+    holdTarget = obj;
+    holdStart = performance.now();
+    showHoldUI((ud?.type==="service") ? ud.data?.name : (ud?.data?.group || "Hold to open"));
+
+    holdTimer = { active:true };
+    const token = holdTimer;
+
+    const tick = ()=>{
+      if(!token.active) return;
+      const now = performance.now();
+      const p = (now - holdStart) / HOLD_MS;
+      setHoldProgress(p);
+      if(p >= 1){
+        token.active = false;
+        hideHoldUI();
+        openFromUserData(holdTarget?.userData);
+        holdTarget = null;
+        return;
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
 
-  $("q").addEventListener("input", (e)=>highlight(e.target.value));
-
-  const panelBody = $("panelBody");
-  function renderPanel(){
-    panelBody.innerHTML = `
-      <div class="chips">
-        ${["Discord","Web","Data","DevOps","Security","IT","Engineering","Design","AI","Partnership"].map(x=>`<span class="chip">${x}</span>`).join("")}
-      </div>
-      <div style="color:rgba(245,245,245,.74);font-size:13px;line-height:1.45">
-        This is the <b>Yggdrasil of Service</b> — every branch is a skill-tree path. Use search to glow-match the branches.
-      </div>
-      <div class="group">
-        <h3>Popular Services</h3>
-        <ul>
-          <li>Discord Bot Hosting / Deployment</li>
-          <li>Discord Automod / Anti-Raid Setup</li>
-          <li>Bot Development (custom commands / systems)</li>
-          <li>Web Development (Pages/Workers)</li>
-          <li>Data Analyst Dashboards / Reports</li>
-          <li>Cloud / VPS Setup + Monitoring</li>
-          <li>Security Hardening + Audits</li>
-          <li>IT Support / Troubleshooting</li>
-          <li>UI/UX & Branding Assets</li>
-          <li>Automation Scripts (Python/Node)</li>
-        </ul>
-      </div>
-      <div class="note">Click any branch label in the tree to open the full catalog for that category.</div>
-    `;
+  function cancelHold(){
+    if(holdTimer) holdTimer.active = false;
+    holdTimer = null;
+    holdTarget = null;
+    hideHoldUI();
   }
-  renderPanel();
 
+  renderer.domElement.addEventListener("pointerdown", onDown);
+  renderer.domElement.addEventListener("pointerup", cancelHold);
+  renderer.domElement.addEventListener("pointerleave", cancelHold);
+  renderer.domElement.addEventListener("pointercancel", cancelHold);
+  renderer.domElement.addEventListener("contextmenu", (e)=>e.preventDefault());
+
+  // Animate: shimmer + aura pulses
   let t0 = performance.now();
   function tick(now){
     const dt = (now - t0) * 0.001;
     t0 = now;
+
     controls.update();
 
-    rootGlow.material.opacity = 0.60 + Math.sin(now*0.002)*0.08;
+    const s = 1 + Math.sin(now*0.0016)*0.015;
+    aura.scale.set(s, 1, s);
+    aura.material.opacity = 0.07 + Math.sin(now*0.0019)*0.02;
 
-    spiritMat.emissiveIntensity = 0.62 + Math.sin(now*0.0016)*0.06;
+    const s2 = 1 + Math.sin(now*0.0012 + 1.1)*0.02;
+    aura2.scale.set(s2, 1, s2);
+    aura2.material.opacity = 0.045 + Math.sin(now*0.0015 + 0.7)*0.015;
+
+    rootGlow.material.opacity = 0.70 + Math.sin(now*0.002)*0.10;
 
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
 
-}catch(e){
-  showError(e);
-}
+}catch(e){showError(e);}
 </script>
 </body>
 </html>
