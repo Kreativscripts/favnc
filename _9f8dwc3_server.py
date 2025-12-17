@@ -17,6 +17,7 @@ INV_PATTERNS = ("discord.gg/",".gg/","discord/invite")
 BIN_DIR.mkdir(parents=True, exist_ok=True)
 BIN_DIR.parent.mkdir(parents=True, exist_ok=True)
 
+
 def load_db():
     if not DB_FILE.exists():
         return []
