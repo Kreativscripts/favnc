@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#000000" />
 <title>Yggdrasil of Service</title>
+
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Nexus Command Service" />
 <meta property="og:description" content="Service from Nexus Command:
@@ -35,981 +36,853 @@
 • UI/UX & Branding
 -# See more..." />
 <meta name="twitter:image" content="https://favnc.pages.dev/assets/yggdrasil-loki.gif" />
+
 <style>
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-body {
-  background: #000;
-  color: rgba(245,245,245,.92);
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  overflow: hidden;
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background:#000;
+  color:rgba(245,245,245,.92);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  overflow:hidden;
 }
-a { color: inherit; text-decoration: none; }
-#fog {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
+a{color:inherit;text-decoration:none}
+#fog{
+  position:fixed;inset:0;pointer-events:none;
   background:
     radial-gradient(900px 520px at 50% 20%, rgba(255,255,255,.08), rgba(0,0,0,0) 62%),
     radial-gradient(900px 620px at 50% 85%, rgba(255,255,255,.05), rgba(0,0,0,0) 60%);
-  filter: saturate(1);
 }
-#grain {
-  position: fixed;
-  inset: -20%;
-  pointer-events: none;
-  opacity: .14;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
-  animation: grainMove 7s linear infinite;
+#grain{
+  position:fixed;inset:-20%;pointer-events:none;
+  opacity:.14;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  animation:grainMove 7s linear infinite;
 }
-@keyframes grainMove {
-  0% { transform: translate(-2%,-2%) rotate(0deg); }
-  100% { transform: translate(2%,2%) rotate(360deg); }
+@keyframes grainMove{0%{transform:translate(-2%,-2%) rotate(0deg)}100%{transform:translate(2%,2%) rotate(360deg)}}
+
+header{
+  position:fixed;top:18px;left:18px;right:18px;z-index:5;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
 }
-header {
-  position: fixed;
-  top: 18px;
-  left: 18px;
-  right: 18px;
-  z-index: 5;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
+h1{margin:0;font-size:clamp(20px,2.6vw,36px);letter-spacing:.02em}
+h1 span{display:block;margin-top:6px;font-weight:500;font-size:12px;color:rgba(245,245,245,.55)}
+
+.topBtns{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.pill{
+  border-radius:14px;padding:10px 12px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 18px 55px rgba(0,0,0,.60);
+  transition:transform .18s ease,background .18s ease,border-color .18s ease;
 }
-h1 {
-  margin: 0;
-  font-size: clamp(20px,2.6vw,36px);
-  letter-spacing: .02em;
+.pill:hover{transform:translateY(-2px);background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.20)}
+.search{min-width:min(520px,62vw);max-width:780px;display:flex;align-items:center;gap:10px}
+.search input{
+  width:100%;border:0;outline:0;background:transparent;
+  color:rgba(245,245,245,.9);font-size:14px
 }
-h1 span {
-  display: block;
-  margin-top: 6px;
-  font-weight: 500;
-  font-size: 12px;
-  color: rgba(245,245,245,.55);
+.search input::placeholder{color:rgba(245,245,245,.42)}
+
+main{
+  position:fixed;inset:0;
+  padding:92px 18px 18px;
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:14px;
 }
-.topBtns {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+@media (max-width:980px){
+  body{overflow:auto}
+  main{position:relative;inset:auto;min-height:100vh;grid-template-columns:1fr;overflow:auto}
+  #stage{height:64vh}
 }
-.pill {
-  border-radius: 14px;
-  padding: 10px 12px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.10);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 18px 55px rgba(0,0,0,.60);
-  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+.card{
+  border-radius:22px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 24px 88px rgba(0,0,0,.62);
+  overflow:hidden;
 }
-.pill:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.07);
-  border-color: rgba(255,255,255,.20);
+#stage{position:relative}
+#canvas{width:100%;height:100%}
+.hint{
+  position:absolute;left:14px;bottom:14px;
+  padding:10px 12px;border-radius:14px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.08);
+  color:rgba(245,245,245,.65);
+  font-size:12px;
+  backdrop-filter:blur(10px)
 }
-.search {
-  min-width: min(520px, 62vw);
-  max-width: 780px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,.85);
+  box-shadow:0 0 14px rgba(255,255,255,.35);
+  margin-right:8px;vertical-align:middle;
+  animation:pulse 1.6s ease-in-out infinite;
 }
-.search input {
-  width: 100%;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: rgba(245,245,245,.9);
-  font-size: 14px;
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+
+#panel{display:flex;flex-direction:column}
+#panelTop{padding:16px 16px 10px;border-bottom:1px solid rgba(255,255,255,.08)}
+#panelTop .t{font-weight:800;letter-spacing:.02em}
+#panelTop .s{margin-top:6px;color:rgba(245,245,245,.60);font-size:12px;line-height:1.35}
+#panelBody{padding:12px 14px 16px;overflow:auto}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 12px}
+.chip{
+  padding:6px 10px;border-radius:999px;font-size:12px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09);
+  color:rgba(245,245,245,.72);
 }
-.search input::placeholder { color: rgba(245,245,245,.42); }
-main {
-  position: fixed;
-  inset: 0;
-  padding: 92px 18px 18px;
-  display: grid;
-  grid-template-columns: 1.25fr .75fr;
-  gap: 14px;
+.group{margin:14px 0 0;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+.group h3{margin:0 0 10px;font-size:13px;letter-spacing:.02em;color:rgba(255,255,255,.86)}
+ul{margin:0;padding:0 0 0 18px}
+li{margin:6px 0;color:rgba(245,245,245,.86);line-height:1.3}
+.note{margin-top:10px;color:rgba(245,245,245,.50);font-size:12px}
+
+#modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.95);
+  z-index:10;display:none;flex-direction:column;
+  padding:40px;overflow:auto;
 }
-@media (max-width: 980px) {
-  body { overflow: auto; }
-  main {
-    position: relative;
-    inset: auto;
-    min-height: 100vh;
-    grid-template-columns: 1fr;
-    overflow: auto;
-  }
-  #stage { height: 64vh; }
+#modal.active{display:flex}
+#closeModal{
+  position:absolute;top:30px;right:30px;
+  font-size:30px;cursor:pointer;color:#fff;
+  width:50px;height:50px;text-align:center;line-height:50px;
+  background:rgba(255,255,255,.1);border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);
 }
-.card {
-  border-radius: 22px;
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 24px 88px rgba(0,0,0,.62);
-  overflow: hidden;
+#errorBox{
+  position:absolute;inset:0;display:none;place-items:center;
+  background:rgba(0,0,0,.85);z-index:20;padding:22px;
 }
-#stage { position: relative; }
-#panel { display: flex; flex-direction: column; }
-#panelTop {
-  padding: 16px 16px 10px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+#errorBox .inner{
+  max-width:720px;width:100%;
+  border-radius:22px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);
+  padding:18px 18px;
+  box-shadow:0 24px 88px rgba(0,0,0,.70);
 }
-#panelTop .t { font-weight: 800; letter-spacing: .02em; }
-#panelTop .s {
-  margin-top: 6px;
-  color: rgba(245,245,245,.60);
-  font-size: 12px;
-  line-height: 1.35;
-}
-#panelBody {
-  padding: 12px 14px 16px;
-  overflow: auto;
-}
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 10px 0 12px;
-}
-.chip {
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.09);
-  color: rgba(245,245,245,.72);
-}
-.group {
-  margin: 14px 0 0;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255,255,255,.08);
-}
-.group h3 {
-  margin: 0 0 10px;
-  font-size: 13px;
-  letter-spacing: .02em;
-  color: rgba(255,255,255,.86);
-}
-ul {
-  margin: 0;
-  padding: 0 0 0 18px;
-}
-li {
-  margin: 6px 0;
-  color: rgba(245,245,245,.86);
-  line-height: 1.3;
-}
-.note {
-  margin-top: 10px;
-  color: rgba(245,245,245,.50);
-  font-size: 12px;
-}
-#modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.95);
-  z-index: 10;
-  display: none;
-  flex-direction: column;
-  padding: 40px;
-  overflow: auto;
-}
-#modal.active {
-  display: flex;
-}
-#closeModal {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  font-size: 36px;
-  cursor: pointer;
-  color: white;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  line-height: 50px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-}
-.hint {
-  position: absolute;
-  left: 14px;
-  bottom: 14px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(0,0,0,.35);
-  border: 1px solid rgba(255,255,255,.08);
-  color: rgba(245,245,245,.65);
-  font-size: 12px;
-  backdrop-filter: blur(10px);
-}
-.dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.85);
-  box-shadow: 0 0 14px rgba(255,255,255,.35);
-  margin-right: 8px;
-  vertical-align: middle;
-  animation: pulse 1.6s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity: .55; }
-  50% { opacity: 1; }
+#errorBox .inner .title{font-weight:900;font-size:18px;margin-bottom:8px}
+#errorBox .inner .msg{color:rgba(245,245,245,.75);font-size:13px;line-height:1.4}
+#errorBox .inner code{
+  display:block;margin-top:10px;padding:10px 12px;border-radius:14px;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.10);
+  color:rgba(245,245,245,.85);
+  overflow:auto;
+  white-space:pre-wrap;
+  word-break:break-word;
 }
 </style>
-<script src="https://unpkg.com/three@0.168.0/build/three.min.js"></script>
-<script src="https://unpkg.com/three@0.168.0/examples/js/controls/OrbitControls.js"></script>
+
 <script src="https://favnc.pages.dev/web_runtime/console.js" defer></script>
 <script src="https://favnc.pages.dev/web_runtime/localstorage.js" defer></script>
 <script src="https://favnc.pages.dev/web_runtime/rhtml.js" defer></script>
 <script src="https://favnc.pages.dev/web_runtime/webperms.js" defer></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"
+  }
+}
+</script>
 </head>
+
 <body>
 <div id="fog"></div>
 <div id="grain"></div>
+
 <header>
-<div>
-<h1>Yggdrasil of Service
-<span>Nexus Command • Partnership • One-Time Job • Part-Time Support • Loan • and more</span>
-</h1>
-</div>
-<div class="topBtns">
-<div class="pill search">
-<span style="opacity:.55">⌕</span>
-<input id="q" placeholder="Search any service… (e.g., discord bot, data analyst, devops, automod, loan, hosting)" />
-</div>
-<a class="pill" href="https://favnc.pages.dev/main">← Go back</a>
-</div>
+  <div>
+    <h1>Yggdrasil of Service
+      <span>Nexus Command • Partnership • One-Time Job • Part-Time Support • Loan • and more</span>
+    </h1>
+  </div>
+  <div class="topBtns">
+    <div class="pill search">
+      <span style="opacity:.55">⌕</span>
+      <input id="q" placeholder="Search any service… (e.g., discord bot, data analyst, devops, automod, loan, hosting)" />
+    </div>
+    <a class="pill" href="https://favnc.pages.dev/main">← Go back</a>
+  </div>
 </header>
+
 <main>
-<div id="stage" class="card">
-<div id="canvas" style="width:100%;height:100%;"></div>
-<div class="hint"><span class="dot"></span>Drag to rotate • Click label to zoom • Search to highlight</div>
-</div>
-<div id="panel" class="card">
-<div id="panelTop">
-<div class="t" id="pt">Explore the Sphere</div>
-<div class="s" id="ps">Rotate the 3D sphere and click any service label to view details.</div>
-</div>
-<div id="panelBody"></div>
-</div>
+  <div id="stage" class="card">
+    <div id="canvas"></div>
+    <div class="hint"><span class="dot"></span>Drag to rotate • Click a label to open details • Search to highlight</div>
+    <div id="errorBox">
+      <div class="inner">
+        <div class="title">3D scene failed to load</div>
+        <div class="msg">
+          This usually happens if a CDN script is blocked, WebGL is disabled, or an extension is interfering.
+          Refresh, try another browser, or disable blocking extensions for this page.
+        </div>
+        <code id="errorText"></code>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel" class="card">
+    <div id="panelTop">
+      <div class="t" id="pt">Yggdrasil Branches</div>
+      <div class="s" id="ps">A living tree of services — silver spirit branches. Click any label for the full list.</div>
+    </div>
+    <div id="panelBody"></div>
+  </div>
 </main>
+
 <div id="modal">
-<span id="closeModal">X</span>
-<div id="modalContent"></div>
+  <span id="closeModal">✕</span>
+  <div id="modalContent"></div>
 </div>
-<script>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
 const SERVICES = [
-{
-id: "root",
-name: "Nexus Command Service",
-desc: "The core — everything revolves around partnerships and custom solutions.",
-tags: ["Partnership", "One-Time Job", "Part-Time Support", "Loan", "Maintenance", "Emergency"],
-groups: {
-"Engagement": [
-"Partnerships / collaborations",
-"One-time jobs (single deliverable)",
-"Part-time support (weekly/monthly)",
-"Long-term maintenance (retainer)",
-"Emergency rescue / fixes",
-"Consultation / planning sessions",
-"Outsourcing / white-label services",
-"Training workshops"
-],
-"Delivery": [
-"Scope definition + milestones",
-"Documentation & handover",
-"Deployment + monitoring",
-"Training / staff onboarding",
-"Version control + releases",
-"Quality assurance checks",
-"Post-delivery support"
-]
-}
-},
-{
-id: "discord",
-name: "Discord & Communities",
-desc: "Bots, automod, anti-raid, server structure, hosting, staff tools.",
-tags: ["Bots", "Automod", "Anti-Raid", "Hosting", "Roles", "Tickets", "Management"],
-groups: {
-"Bot Development": [
-"Slash commands + classic prefix commands",
-"Moderation systems (warn/mute/ban/kick/logs)",
-"Anti-spam / anti-link / anti-mention",
-"Anti-nuke detection + lockdown mode",
-"Verification (captcha / role-gate / DM verify)",
-"Tickets / modmail / reports / appeals",
-"Applications (staff/apps) + review queue",
-"XP / leveling / rewards + shop",
-"Economy + items + inventory + trading",
-"Giveaways + drops + events",
-"Webhooks + embed builders + image embeds",
-"Presence + server stats + rich presence style displays",
-"Custom dashboards (web panel) for config",
-"Database integration (SQLite/Postgres)",
-"Rate-limit safe design (queues, batching)",
-"Music playback + queues",
-"Trivia / games / minigames",
-"Polls + voting systems",
-"Reminder + scheduling tools",
-"RSS feeds + notifications"
-],
-"Server Setup": [
-"Role hierarchy + perms audit",
-"Channel layout + categories",
-"Onboarding flow + welcome screens",
-"Rules + info pages + redirects",
-"Staff tools + private logs + evidence channels",
-"Auto-roles + reaction roles + button roles",
-"Auto-threads + forms + templates",
-"Announcement formatting + branding",
-"Community events setup",
-"Integration with external tools"
-],
-"Bot Hosting / Ops": [
-"VPS setup (Linux) for Discord bots",
-"PM2/systemd deployment",
-"Auto-restart + uptime monitoring",
-"Log rotation + crash reports",
-"Secrets management (tokens safe handling)",
-"Performance tuning (RAM/CPU)",
-"Scalability for large servers",
-"Multi-bot orchestration"
-],
-"Advanced Features": [
-"Voice channel management",
-"Streaming integrations",
-"AI-powered responses",
-"Custom event handlers",
-"Cross-server communication"
-]
-}
-},
-{
-id: "web",
-name: "Web Development & Apps",
-desc: "Sites, dashboards, APIs, front-end, back-end, automation.",
-tags: ["Web", "Cloudflare", "Pages", "API", "UI/UX", "Backend", "Automation"],
-groups: {
-"Front-End": [
-"Landing pages + modern UI",
-"Animations + micro-interactions",
-"Mobile responsive layouts",
-"Performance optimization (lazy load, caching)",
-"SEO basics + metadata embeds",
-"Accessibility tuning",
-"React/Vue/Svelte applications",
-"State management (Redux, Vuex)",
-"Progressive Web Apps (PWA)",
-"Custom CSS frameworks",
-"Interactive elements (forms, sliders)"
-],
-"Back-End / APIs": [
-"REST API design",
-"Auth systems (sessions, tokens)",
-"Database integration",
-"File uploads (images/videos) + galleries",
-"Webhook endpoints + integrations",
-"Admin panels / dashboards",
-"GraphQL APIs",
-"Node.js/Express servers",
-"Python Flask/Django backends",
-"Real-time features (WebSockets)",
-"Microservices architecture"
-],
-"Deploy & Hosting": [
-"Cloudflare Pages / Workers setup",
-"GitHub deploy pipelines (CI/CD)",
-"Domains + DNS + SSL",
-"CDN caching strategy",
-"Error monitoring + logs",
-"AWS/Azure/GCP deployment",
-"Serverless functions",
-"Containerized deployments"
-]
-}
-},
-{
-id: "data",
-name: "Data / Analytics / Automation",
-desc: "Dashboards, analyst work, pipelines, reporting, automation.",
-tags: ["Data Analyst", "Dashboards", "SQL", "ETL", "Reports", "Automation"],
-groups: {
-"Analytics": [
-"KPI dashboards (growth, engagement, retention)",
-"Discord/Minecraft/web log analysis",
-"Conversion funnels + drop-off points",
-"Weekly/monthly reporting packs",
-"Data cleaning + normalization",
-"Insights + recommendations",
-"Predictive analytics",
-"A/B testing analysis",
-"User behavior tracking"
-],
-"Engineering": [
-"SQL query building (joins, aggregations)",
-"Schema planning (tables, indexes)",
-"ETL pipelines (extract/transform/load)",
-"Cron automation + scheduled jobs",
-"Spreadsheet automation (Sheets/Excel)",
-"Custom scripts for data pulls",
-"Big data tools (Hadoop/Spark basics)",
-"Data warehousing",
-"API data ingestion"
-],
-"Visualization": [
-"Charts + graphs + readable exports",
-"PDF report generation",
-"Interactive dashboards (web-based)",
-"Tableau/Power BI setups",
-"Custom visualization libraries (D3.js)"
-]
-}
-},
-{
-id: "devops",
-name: "Cloud / DevOps / Hosting",
-desc: "Servers, VPS, scaling, Docker, monitoring, domains.",
-tags: ["VPS", "Docker", "Nginx", "DNS", "Monitoring", "Scaling"],
-groups: {
-"VPS & Linux": [
-"Server provisioning (Ubuntu/Debian)",
-"SSH key hardening + user setup",
-"Firewall (UFW) rules",
-"Reverse proxy (Nginx/Caddy)",
-"TLS/SSL setup",
-"Service management (systemd)",
-"Kernel tuning",
-"Package management"
-],
-"Containers": [
-"Docker + Docker Compose stacks",
-"Container networking + volumes",
-"Auto-restart policies",
-"Image build pipelines",
-"Kubernetes basics",
-"Orchestration tools"
-],
-"Reliability": [
-"Uptime monitoring + alerts",
-"Backups + restore testing",
-"Log aggregation",
-"Performance tuning (CPU/RAM/IO)",
-"Scaling guidance (cache/CDN)",
-"High availability setups",
-"Disaster recovery plans"
-],
-"Cloud Providers": [
-"AWS EC2/S3 setups",
-"Azure VM configurations",
-"Google Cloud Platform deployments",
-"Cost optimization"
-]
-}
-},
-{
-id: "security",
-name: "Security & Hardening",
-desc: "Safer configs, abuse prevention, audits, protection layers.",
-tags: ["Security", "Hardening", "Audit", "Rate-limit", "Abuse"],
-groups: {
-"Discord Security": [
-"Anti-raid strategy + lockdown tooling",
-"Permission audits",
-"Bot token safety + rotation guidance",
-"Spam/abuse prevention rules",
-"Evidence logs + moderation workflow",
-"Multi-factor authentication guidance"
-],
-"Web Security": [
-"Security headers (CSP, HSTS, etc.)",
-"Input validation patterns",
-"Rate limiting strategy",
-"Safe auth patterns (no token leaks)",
-"Basic audit + fix plan",
-"OWASP compliance checks",
-"Vulnerability scanning"
-],
-"Server Security": [
-"SSH hardening",
-"Firewall tightening",
-"Update/patch hygiene plan",
-"Backup encryption recommendations",
-"Intrusion detection systems",
-"Access control lists"
-],
-"General": [
-"Password management tools",
-"Encryption best practices",
-"Compliance consulting (GDPR basics)"
-]
-}
-},
-{
-id: "it",
-name: "IT Support & Systems",
-desc: "Troubleshooting, installs, fixes, optimizations, guidance.",
-tags: ["IT Support", "Windows", "Drivers", "Network", "Fixes"],
-groups: {
-"Support": [
-"Troubleshoot software issues",
-"Windows performance tuning (safe basics)",
-"GPU/driver troubleshooting",
-"App install/config support",
-"Storage cleanup + sanity checks",
-"Backup setup (local/cloud)",
-"Network help (LAN/Wi-Fi basics)",
-"Remote guidance + documentation",
-"Hardware diagnostics",
-"OS upgrades/migration"
-],
-"Server/Game Hosting": [
-"Minecraft server hosting support",
-"Discord bot hosting support",
-"Monitoring + restart automation",
-"Config optimization guidance",
-"Game server mods/plugins",
-"Voice server setups (e.g., Teamspeak)"
-]
-}
-},
-{
-id: "eng",
-name: "Software Engineering",
-desc: "Build features, tools, integrations, automation.",
-tags: ["Engineering", "Python", "Node", "APIs", "Databases"],
-groups: {
-"Build": [
-"Automation scripts (Python/Node)",
-"API integrations (Discord, Roblox, Minecraft, Web)",
-"CLI utilities, generators, toolkits",
-"Refactors + cleanup",
-"Bug hunting + fixes",
-"Testing scaffolds + logging",
-"Database helpers (SQLite/Postgres basics)",
-"Packaging + deployment help",
-"Java/C++ applications",
-"Embedded systems basics",
-"Scripting in Bash/PowerShell"
-],
-"Advanced": [
-"Algorithm optimization",
-"Data structures consulting",
-"Concurrency/multithreading",
-"Open-source contributions guidance"
-]
-}
-},
-{
-id: "design",
-name: "UI/UX & Branding",
-desc: "Modern UI, motion, icons, embeds, layout systems.",
-tags: ["Design", "UI/UX", "Brand", "Embeds", "Assets"],
-groups: {
-"Design Services": [
-"Dark theme systems (silver/white aesthetic)",
-"Micro-animations (smooth, modern)",
-"Brand templates (banners, panels, embeds)",
-"Icon systems + consistency",
-"Readable layout + spacing polish",
-"Mobile-first refinement",
-"Wireframing + prototyping",
-"User flow mapping",
-"Color scheme development",
-"Typography optimization",
-"Accessibility in design"
-],
-"Assets": [
-"Logo creation",
-"Illustration packs",
-"Motion graphics",
-"3D modeling basics"
-]
-}
-},
-{
-id: "ai",
-name: "AI & Machine Learning",
-desc: "Models, training, inference, chatbots, automation, predictive systems.",
-tags: ["AI", "ML", "NLP", "CV", "Bots", "Deep Learning"],
-groups: {
-"AI Development": [
-"Custom ML models",
-"Data training pipelines",
-"Inference APIs",
-"Chatbot integration",
-"Recommendation systems",
-"Image recognition",
-"Natural language processing",
-"Sentiment analysis",
-"Generative AI (text/image)",
-"Reinforcement learning basics"
-],
-"Tools & Frameworks": [
-"TensorFlow/PyTorch setup",
-"HuggingFace integrations",
-"Fine-tuning LLMs",
-"Scikit-learn for ML",
-"Data augmentation techniques",
-"Model deployment (ONNX)"
-],
-"Applications": [
-"AI-powered automation",
-"Predictive maintenance",
-"Fraud detection systems",
-"Personalization engines"
-]
-}
-},
-{
-id: "mobile",
-name: "Mobile App Development",
-desc: "iOS, Android, cross-platform apps, hybrid solutions.",
-tags: ["Mobile", "iOS", "Android", "Flutter", "React Native", "Apps"],
-groups: {
-"App Build": [
-"UI/UX for mobile",
-"Backend integration",
-"Push notifications",
-"Offline support",
-"App store deployment",
-"Native modules",
-"AR/VR features basics",
-"Location services",
-"Payment integrations"
-],
-"Frameworks": [
-"Flutter/Dart apps",
-"React Native development",
-"Swift for iOS",
-"Kotlin for Android",
-"Cross-platform optimization"
-],
-"Testing & Deploy": [
-"Unit/UI testing",
-"Beta distribution",
-"App analytics integration"
-]
-}
-},
-{
-id: "cybersecurity",
-name: "Advanced Cybersecurity",
-desc: "Threat modeling, penetration testing guidance, compliance.",
-tags: ["Cybersecurity", "PenTest", "Compliance", "Threats"],
-groups: {
-"Assessment": [
-"Vulnerability assessments",
-"Threat modeling",
-"Penetration testing basics",
-"Risk analysis"
-],
-"Protection": [
-"Endpoint security setups",
-"Network security audits",
-"Data encryption strategies",
-"Incident response plans"
-],
-"Compliance": [
-"GDPR/CCPA guidance",
-"Security certifications prep",
-"Audit logging systems"
-]
-}
-},
-{
-id: "networking",
-name: "Networking & Infrastructure",
-desc: "LAN/WAN setups, routing, VPNs, cloud networking.",
-tags: ["Networking", "VPN", "Routing", "Infrastructure"],
-groups: {
-"Setup": [
-"LAN/WAN configurations",
-"Router/switch setups",
-"VPN implementations",
-"Wireless network optimization"
-],
-"Cloud": [
-"Virtual networks (VPC)",
-"Load balancing",
-"CDN configurations",
-"Hybrid cloud setups"
-],
-"Monitoring": [
-"Network performance tuning",
-"Traffic analysis",
-"Security monitoring"
-]
-}
-},
-{
-id: "softwaredev",
-name: "General Software Development",
-desc: "Full-stack, agile methodologies, code reviews.",
-tags: ["Software Dev", "Agile", "Code Review", "Full-Stack"],
-groups: {
-"Methodologies": [
-"Agile/Scrum processes",
-"Code reviews + best practices",
-"Version control (Git workflows)",
-"Continuous integration"
-],
-"Languages": [
-"Multi-language support (JS, Python, Java, etc.)",
-"Framework agnostic development",
-"Legacy code migration"
-],
-"Project Management": [
-"Requirement gathering",
-"Sprint planning",
-"Bug tracking systems"
-]
-}
-},
-{
-id: "gamedev",
-name: "Game Development",
-desc: "2D/3D games, engines, multiplayer, assets.",
-tags: ["Game Dev", "Unity", "Unreal", "Multiplayer"],
-groups: {
-"Development": [
-"Unity/Unreal Engine setups",
-"2D/3D game mechanics",
-"Asset creation + integration",
-"Physics simulations"
-],
-"Features": [
-"Multiplayer networking",
-"AI for NPCs",
-"Level design",
-"Monetization strategies"
-],
-"Deploy": [
-"Platform builds (PC/Mobile/Console)",
-"Performance optimization",
-"Testing + QA"
-]
-}
-},
-{
-id: "blockchain",
-name: "Blockchain & Crypto",
-desc: "Smart contracts, wallets, NFTs, decentralized apps.",
-tags: ["Blockchain", "Crypto", "Smart Contracts", "NFTs"],
-groups: {
-"Development": [
-"Ethereum/Solana smart contracts",
-"DApp front-ends",
-"Wallet integrations",
-"Token creation"
-],
-"Features": [
-"NFT minting systems",
-"Decentralized storage (IPFS)",
-"Consensus mechanisms basics",
-"Web3 integrations"
-],
-"Security": [
-"Contract audits",
-"Secure key management",
-"Transaction monitoring"
-]
-}
-},
-{
-id: "database",
-name: "Database Management",
-desc: "Design, optimization, migration, NoSQL/SQL.",
-tags: ["Database", "SQL", "NoSQL", "Optimization"],
-groups: {
-"Design": [
-"Schema design",
-"Indexing strategies",
-"Normalization/denormalization"
-],
-"Management": [
-"Query optimization",
-"Backup + recovery",
-"Replication setups"
-],
-"Types": [
-"Relational (MySQL/Postgres)",
-"NoSQL (MongoDB/Redis)",
-"Graph databases"
-]
-}
-},
-{
-id: "testing",
-name: "Testing & QA",
-desc: "Unit tests, automation, performance testing.",
-tags: ["Testing", "QA", "Automation", "Performance"],
-groups: {
-"Testing": [
-"Unit/integration testing",
-"End-to-end automation (Selenium)",
-"Load/performance testing"
-],
-"QA": [
-"Bug tracking workflows",
-"Regression testing",
-"Usability testing"
-],
-"Tools": [
-"Jest/Mocha frameworks",
-"CI/CD integration",
-"Code coverage analysis"
-]
-}
-}
+  {
+    id:"root",
+    name:"Nexus Command Service",
+    desc:"The core — everything revolves around partnerships and custom solutions.",
+    tags:["Partnership","One-Time Job","Part-Time Support","Loan","Maintenance","Emergency"],
+    groups:{
+      "Engagement":[
+        "Partnerships / collaborations",
+        "One-time jobs (single deliverable)",
+        "Part-time support (weekly/monthly)",
+        "Long-term maintenance (retainer)",
+        "Emergency rescue / fixes",
+        "Consultation / planning sessions",
+        "Outsourcing / white-label services",
+        "Training workshops"
+      ],
+      "Delivery":[
+        "Scope definition + milestones",
+        "Documentation & handover",
+        "Deployment + monitoring",
+        "Training / staff onboarding",
+        "Version control + releases",
+        "Quality assurance checks",
+        "Post-delivery support"
+      ]
+    }
+  },
+  {
+    id:"discord",
+    name:"Discord & Communities",
+    desc:"Bots, automod, anti-raid, server structure, hosting, staff tools.",
+    tags:["Bots","Automod","Anti-Raid","Hosting","Roles","Tickets","Management"],
+    groups:{
+      "Bot Development":[
+        "Slash commands + classic prefix commands",
+        "Moderation systems (warn/mute/ban/kick/logs)",
+        "Anti-spam / anti-link / anti-mention",
+        "Anti-nuke detection + lockdown mode",
+        "Verification (captcha / role-gate / DM verify)",
+        "Tickets / modmail / reports / appeals",
+        "Applications (staff/apps) + review queue",
+        "XP / leveling / rewards + shop",
+        "Economy + items + inventory + trading",
+        "Giveaways + drops + events",
+        "Webhooks + embed builders + image embeds",
+        "Presence + server stats + rich presence style displays",
+        "Custom dashboards (web panel) for config",
+        "Database integration (SQLite/Postgres)",
+        "Rate-limit safe design (queues, batching)",
+        "Music playback + queues",
+        "Trivia / games / minigames",
+        "Polls + voting systems",
+        "Reminder + scheduling tools",
+        "RSS feeds + notifications"
+      ],
+      "Server Setup":[
+        "Role hierarchy + perms audit",
+        "Channel layout + categories",
+        "Onboarding flow + welcome screens",
+        "Rules + info pages + redirects",
+        "Staff tools + private logs + evidence channels",
+        "Auto-roles + reaction roles + button roles",
+        "Auto-threads + forms + templates",
+        "Announcement formatting + branding",
+        "Community events setup",
+        "Integration with external tools"
+      ],
+      "Bot Hosting / Ops":[
+        "VPS setup (Linux) for Discord bots",
+        "PM2/systemd deployment",
+        "Auto-restart + uptime monitoring",
+        "Log rotation + crash reports",
+        "Secrets management (tokens safe handling)",
+        "Performance tuning (RAM/CPU)",
+        "Scalability for large servers",
+        "Multi-bot orchestration"
+      ],
+      "Advanced Features":[
+        "Voice channel management",
+        "Streaming integrations",
+        "AI-powered responses",
+        "Custom event handlers",
+        "Cross-server communication"
+      ]
+    }
+  },
+  {
+    id:"web",
+    name:"Web Development & Apps",
+    desc:"Sites, dashboards, APIs, front-end, back-end, automation.",
+    tags:["Web","Cloudflare","Pages","API","UI/UX","Backend","Automation"],
+    groups:{
+      "Front-End":[
+        "Landing pages + modern UI",
+        "Animations + micro-interactions",
+        "Mobile responsive layouts",
+        "Performance optimization (lazy load, caching)",
+        "SEO basics + metadata embeds",
+        "Accessibility tuning",
+        "React/Vue/Svelte applications",
+        "Progressive Web Apps (PWA)",
+        "Interactive elements (forms, sliders)"
+      ],
+      "Back-End / APIs":[
+        "REST API design",
+        "Auth systems (sessions, tokens)",
+        "Database integration",
+        "File uploads (images/videos) + galleries",
+        "Webhook endpoints + integrations",
+        "Admin panels / dashboards",
+        "Real-time features (WebSockets)",
+        "Node.js/Express servers",
+        "Python Flask/Django backends"
+      ],
+      "Deploy & Hosting":[
+        "Cloudflare Pages / Workers setup",
+        "GitHub deploy pipelines (CI/CD)",
+        "Domains + DNS + SSL",
+        "CDN caching strategy",
+        "Error monitoring + logs",
+        "Serverless functions"
+      ]
+    }
+  },
+  {
+    id:"data",
+    name:"Data / Analytics / Automation",
+    desc:"Dashboards, analyst work, pipelines, reporting, automation.",
+    tags:["Data Analyst","Dashboards","SQL","ETL","Reports","Automation"],
+    groups:{
+      "Analytics":[
+        "KPI dashboards (growth, engagement, retention)",
+        "Discord/Minecraft/web log analysis",
+        "Conversion funnels + drop-off points",
+        "Weekly/monthly reporting packs",
+        "Data cleaning + normalization",
+        "Insights + recommendations",
+        "A/B testing analysis",
+        "User behavior tracking"
+      ],
+      "Engineering":[
+        "SQL query building (joins, aggregations)",
+        "Schema planning (tables, indexes)",
+        "ETL pipelines (extract/transform/load)",
+        "Cron automation + scheduled jobs",
+        "Spreadsheet automation (Sheets/Excel)",
+        "Custom scripts for data pulls",
+        "API data ingestion"
+      ],
+      "Visualization":[
+        "Charts + graphs + readable exports",
+        "Interactive dashboards (web-based)",
+        "Tableau/Power BI setups",
+        "Custom visualization libraries (D3.js)"
+      ]
+    }
+  },
+  {
+    id:"devops",
+    name:"Cloud / DevOps / Hosting",
+    desc:"Servers, VPS, scaling, Docker, monitoring, domains.",
+    tags:["VPS","Docker","Nginx","DNS","Monitoring","Scaling"],
+    groups:{
+      "VPS & Linux":[
+        "Server provisioning (Ubuntu/Debian)",
+        "SSH key hardening + user setup",
+        "Firewall (UFW) rules",
+        "Reverse proxy (Nginx/Caddy)",
+        "TLS/SSL setup",
+        "Service management (systemd)",
+        "Kernel tuning"
+      ],
+      "Containers":[
+        "Docker + Docker Compose stacks",
+        "Container networking + volumes",
+        "Auto-restart policies",
+        "Image build pipelines",
+        "Kubernetes basics"
+      ],
+      "Reliability":[
+        "Uptime monitoring + alerts",
+        "Backups + restore testing",
+        "Log aggregation",
+        "Performance tuning (CPU/RAM/IO)",
+        "Scaling guidance (cache/CDN)"
+      ],
+      "Cloud Providers":[
+        "AWS EC2/S3 setups",
+        "Azure VM configurations",
+        "Google Cloud Platform deployments",
+        "Cost optimization"
+      ]
+    }
+  },
+  {
+    id:"security",
+    name:"Security & Hardening",
+    desc:"Safer configs, abuse prevention, audits, protection layers.",
+    tags:["Security","Hardening","Audit","Rate-limit","Abuse"],
+    groups:{
+      "Discord Security":[
+        "Anti-raid strategy + lockdown tooling",
+        "Permission audits",
+        "Bot token safety + rotation guidance",
+        "Spam/abuse prevention rules",
+        "Evidence logs + moderation workflow",
+        "Multi-factor authentication guidance"
+      ],
+      "Web Security":[
+        "Security headers (CSP, HSTS, etc.)",
+        "Input validation patterns",
+        "Rate limiting strategy",
+        "Safe auth patterns (no token leaks)",
+        "Basic audit + fix plan",
+        "OWASP baseline checks"
+      ],
+      "Server Security":[
+        "SSH hardening",
+        "Firewall tightening",
+        "Update/patch hygiene plan",
+        "Backup encryption recommendations",
+        "Access control lists"
+      ],
+      "General":[
+        "Password management tools",
+        "Encryption best practices",
+        "Compliance guidance (GDPR basics)"
+      ]
+    }
+  },
+  {
+    id:"it",
+    name:"IT Support & Systems",
+    desc:"Troubleshooting, installs, fixes, optimizations, guidance.",
+    tags:["IT Support","Windows","Drivers","Network","Fixes"],
+    groups:{
+      "Support":[
+        "Troubleshoot software issues",
+        "Windows performance tuning (safe basics)",
+        "GPU/driver troubleshooting",
+        "App install/config support",
+        "Storage cleanup + sanity checks",
+        "Backup setup (local/cloud)",
+        "Network help (LAN/Wi-Fi basics)",
+        "Remote guidance + documentation",
+        "Hardware diagnostics"
+      ],
+      "Server/Game Hosting":[
+        "Minecraft server hosting support",
+        "Discord bot hosting support",
+        "Monitoring + restart automation",
+        "Config optimization guidance",
+        "Game server mods/plugins"
+      ]
+    }
+  },
+  {
+    id:"eng",
+    name:"Software Engineering",
+    desc:"Build features, tools, integrations, automation.",
+    tags:["Engineering","Python","Node","APIs","Databases"],
+    groups:{
+      "Build":[
+        "Automation scripts (Python/Node)",
+        "API integrations (Discord, Roblox, Minecraft, Web)",
+        "CLI utilities, generators, toolkits",
+        "Refactors + cleanup",
+        "Bug hunting + fixes",
+        "Testing scaffolds + logging",
+        "Database helpers (SQLite/Postgres basics)"
+      ],
+      "Advanced":[
+        "Algorithm optimization",
+        "Data structures consulting",
+        "Concurrency/multithreading",
+        "Open-source contribution guidance"
+      ]
+    }
+  },
+  {
+    id:"design",
+    name:"UI/UX & Branding",
+    desc:"Modern UI, motion, icons, embeds, layout systems.",
+    tags:["Design","UI/UX","Brand","Embeds","Assets"],
+    groups:{
+      "Design Services":[
+        "Dark theme systems (silver/white aesthetic)",
+        "Micro-animations (smooth, modern)",
+        "Brand templates (banners, panels, embeds)",
+        "Icon systems + consistency",
+        "Readable layout + spacing polish",
+        "Mobile-first refinement",
+        "Wireframing + prototyping",
+        "User flow mapping",
+        "Typography optimization",
+        "Accessibility in design"
+      ],
+      "Assets":[
+        "Logo creation",
+        "Motion graphics",
+        "3D modeling basics"
+      ]
+    }
+  },
+  {
+    id:"ai",
+    name:"AI & Machine Learning",
+    desc:"Models, training, inference, chatbots, automation, predictive systems.",
+    tags:["AI","ML","NLP","CV","Bots","Deep Learning"],
+    groups:{
+      "AI Development":[
+        "Custom ML models",
+        "Data training pipelines",
+        "Inference APIs",
+        "Chatbot integration",
+        "Recommendation systems",
+        "Image recognition",
+        "Sentiment analysis",
+        "Generative AI (text/image)"
+      ],
+      "Tools & Frameworks":[
+        "TensorFlow/PyTorch setup",
+        "HuggingFace integrations",
+        "Fine-tuning LLMs",
+        "Scikit-learn for ML",
+        "Model deployment (ONNX)"
+      ],
+      "Applications":[
+        "AI-powered automation",
+        "Fraud detection systems",
+        "Personalization engines"
+      ]
+    }
+  }
 ];
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
-const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-const container = document.getElementById('canvas');
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(container.clientWidth, container.clientHeight);
-container.appendChild(renderer.domElement);
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-scene.add(ambientLight);
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-directionalLight.position.set(5, 10, 7);
-scene.add(directionalLight);
-const sphereGeometry = new THREE.SphereGeometry(5, 64, 64);
-const sphereMaterial = new THREE.MeshPhongMaterial({
-color: 0x0a0a0a,
-emissive: 0x111122,
-shininess: 30,
-transparent: true,
-opacity: 0.7
-});
-const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-scene.add(sphere);
-camera.position.z = 14;
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.rotateSpeed = 0.25;
-controls.enableZoom = true;
-controls.minDistance = 10;
-controls.maxDistance = 20;
-controls.autoRotate = true;
-controls.autoRotateSpeed = 0.3;
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-const sprites = [];
-function createLabel(text) {
-const canvas = document.createElement('canvas');
-canvas.width = 256;
-canvas.height = 128;
-const ctx = canvas.getContext('2d');
-ctx.fillStyle = 'rgba(0,0,0,0.6)';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.font = 'bold 28px system-ui';
-ctx.fillStyle = '#ffffff';
-ctx.textAlign = 'center';
-ctx.textBaseline = 'middle';
-ctx.fillText(text, canvas.width/2, canvas.height/2);
-const texture = new THREE.CanvasTexture(canvas);
-const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
-const sprite = new THREE.Sprite(material);
-sprite.scale.set(3, 1.5, 1);
-return sprite;
+
+const $ = (id)=>document.getElementById(id);
+const errorBox = $("errorBox");
+const errorText = $("errorText");
+const container = $("canvas");
+const modal = $("modal");
+const modalContent = $("modalContent");
+const closeModal = $("closeModal");
+
+function showError(e){
+  console.error(e);
+  errorText.textContent = String(e && (e.stack || e.message || e)) || "Unknown error";
+  errorBox.style.display = "grid";
 }
-const goldenRatio = (1 + Math.sqrt(5)) / 2;
-const radius = 5.3;
-SERVICES.forEach((service, i) => {
-const y = (i / SERVICES.length) * 2 - 1;
-const phi = Math.acos(y);
-const theta = 2 * Math.PI * i * goldenRatio;
-const x = Math.cos(theta) * Math.sin(phi) * radius;
-const z = Math.sin(theta) * Math.sin(phi) * radius;
-const yPos = y * radius;
-const sprite = createLabel(service.name);
-sprite.position.set(x, yPos, z);
-sprite.userData = service;
-scene.add(sprite);
-sprites.push(sprite);
-});
-function animate() {
-requestAnimationFrame(animate);
-controls.update();
-sphere.rotation.y += 0.0005;
-renderer.render(scene, camera);
+
+function normalize(s){return (s||"").toLowerCase()}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,(m)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
 }
-animate();
-window.addEventListener('resize', () => {
-camera.aspect = container.clientWidth / container.clientHeight;
-camera.updateProjectionMatrix();
-renderer.setSize(container.clientWidth, container.clientHeight);
-});
-container.addEventListener('click', (event) => {
-const rect = container.getBoundingClientRect();
-mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-raycaster.setFromCamera(mouse, camera);
-const intersects = raycaster.intersectObjects(sprites);
-if (intersects.length > 0) {
-const service = intersects[0].object.userData;
-renderModal(service);
+
+closeModal.addEventListener("click", ()=>modal.classList.remove("active"));
+
+function renderModal(service){
+  const chips = (service.tags||[]).map(t=>`<span class="chip">${escapeHtml(t)}</span>`).join("");
+  let groupsHtml = "";
+  for(const [title, items] of Object.entries(service.groups||{})){
+    groupsHtml += `
+      <div class="group">
+        <h3>${escapeHtml(title)}</h3>
+        <ul>${items.map(i=>`<li>${escapeHtml(i)}</li>`).join("")}</ul>
+      </div>
+    `;
+  }
+  modalContent.innerHTML = `
+    <div style="max-width:900px;width:100%;margin:auto;background:rgba(255,255,255,0.03);border-radius:22px;padding:30px;border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(12px);">
+      <div style="font-size:32px;font-weight:900;margin-bottom:12px;">${escapeHtml(service.name)}</div>
+      <div style="font-size:16px;color:rgba(245,245,245,0.7);margin-bottom:24px;">${escapeHtml(service.desc||"")}</div>
+      <div class="chips" style="margin-bottom:24px;">${chips}</div>
+      ${groupsHtml}
+      <div class="note">Need something not listed? Just ask — new branches grow fast.</div>
+    </div>
+  `;
+  modal.classList.add("active");
 }
-});
-const modal = document.getElementById('modal');
-const modalContent = document.getElementById('modalContent');
-const closeModal = document.getElementById('closeModal');
-closeModal.addEventListener('click', () => {
-modal.classList.remove('active');
-});
-function renderModal(service) {
-const chips = service.tags.map(t => `<span class="chip">${t}</span>`).join('');
-let groupsHtml = '';
-for (const [title, items] of Object.entries(service.groups)) {
-groupsHtml += `
-<div class="group">
-<h3>${title}</h3>
-<ul>
-${items.map(item => `<li>${item}</li>`).join('')}
-</ul>
-</div>
-`;
+
+try{
+  if(!window.WebGLRenderingContext) throw new Error("WebGL not supported in this browser.");
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x000000, 0.035);
+
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 200);
+  camera.position.set(0, 7.5, 18);
+
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:"high-performance" });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.setClearColor(0x000000, 0);
+  container.appendChild(renderer.domElement);
+
+  const ambient = new THREE.AmbientLight(0xffffff, 0.65);
+  scene.add(ambient);
+
+  const key = new THREE.DirectionalLight(0xffffff, 0.95);
+  key.position.set(8, 12, 6);
+  scene.add(key);
+
+  const rim = new THREE.DirectionalLight(0xffffff, 0.55);
+  rim.position.set(-10, 6, -10);
+  scene.add(rim);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.06;
+  controls.rotateSpeed = 0.33;
+  controls.enableZoom = true;
+  controls.minDistance = 10;
+  controls.maxDistance = 32;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.35;
+
+  function size(){
+    const w = container.clientWidth || 1;
+    const h = container.clientHeight || 1;
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w,h,false);
+  }
+  size();
+  new ResizeObserver(size).observe(container);
+
+  const spiritMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    emissive: 0xffffff,
+    emissiveIntensity: 0.65,
+    metalness: 0.2,
+    roughness: 0.55
+  });
+
+  const trunkPts = [
+    new THREE.Vector3(0, -2.0, 0),
+    new THREE.Vector3(0.2, 1.5, -0.1),
+    new THREE.Vector3(-0.1, 5.5, 0.15),
+    new THREE.Vector3(0.0, 9.5, 0.0)
+  ];
+
+  function tubeFrom(points, radius){
+    const curve = new THREE.CatmullRomCurve3(points);
+    const geo = new THREE.TubeGeometry(curve, 160, radius, 10, false);
+    const mesh = new THREE.Mesh(geo, spiritMat);
+    scene.add(mesh);
+    return { curve, mesh };
+  }
+
+  tubeFrom(trunkPts, 0.38);
+
+  function branch(from, to, bendA, bendB, radius){
+    const mid1 = from.clone().lerp(to, 0.35).add(bendA);
+    const mid2 = from.clone().lerp(to, 0.70).add(bendB);
+    return tubeFrom([from, mid1, mid2, to], radius);
+  }
+
+  const rootTop = new THREE.Vector3(0, 9.4, 0);
+  const rootMid = new THREE.Vector3(0, 6.0, 0);
+
+  const branchTargets = [
+    { svc: SERVICES[0], p: new THREE.Vector3(0.0, 10.8, 0.0) },
+    { svc: SERVICES[1], p: new THREE.Vector3(-6.4, 9.8, 2.6) },
+    { svc: SERVICES[2], p: new THREE.Vector3(6.8, 9.5, 2.1) },
+    { svc: SERVICES[3], p: new THREE.Vector3(-7.0, 7.5, -2.7) },
+    { svc: SERVICES[4], p: new THREE.Vector3(7.2, 7.2, -2.9) },
+    { svc: SERVICES[5], p: new THREE.Vector3(-5.6, 5.4, 4.7) },
+    { svc: SERVICES[6], p: new THREE.Vector3(5.8, 5.2, 4.7) },
+    { svc: SERVICES[7], p: new THREE.Vector3(-4.2, 4.0, -5.6) },
+    { svc: SERVICES[8], p: new THREE.Vector3(4.4, 4.0, -5.7) },
+    { svc: SERVICES[9], p: new THREE.Vector3(0.0, 3.6, 6.6) }
+  ];
+
+  branchTargets.forEach((t, i)=>{
+    const base = (i===0? rootTop : rootMid.clone().add(new THREE.Vector3((i%2? -0.15:0.15), (i%3)*0.2, 0)));
+    const bendA = new THREE.Vector3((Math.sin(i*1.8))*0.8, 0.7+(i%3)*0.2, (Math.cos(i*1.3))*0.8);
+    const bendB = new THREE.Vector3((Math.cos(i*1.1))*0.9, 0.6, (Math.sin(i*1.5))*0.9);
+    branch(base, t.p, bendA, bendB, i===0?0.30:0.22);
+  });
+
+  const glowMat = new THREE.SpriteMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.85,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+
+  function makeLabel(text){
+    const c = document.createElement("canvas");
+    c.width = 512;
+    c.height = 192;
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0,0,c.width,c.height);
+
+    ctx.save();
+    ctx.shadowColor = "rgba(255,255,255,0.50)";
+    ctx.shadowBlur = 28;
+    ctx.fillStyle = "rgba(255,255,255,0.08)";
+    roundRect(ctx, 26, 46, c.width-52, c.height-92, 28);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(255,255,255,0.22)";
+    roundRect(ctx, 26, 46, c.width-52, c.height-92, 28);
+    ctx.stroke();
+
+    ctx.save();
+    ctx.shadowColor = "rgba(255,255,255,0.7)";
+    ctx.shadowBlur = 18;
+    ctx.fillStyle = "rgba(255,255,255,0.96)";
+    ctx.font = "900 44px system-ui,Segoe UI,Roboto,Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, c.width/2, c.height/2);
+    ctx.restore();
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent:true, depthWrite:false });
+    const sp = new THREE.Sprite(mat);
+    sp.scale.set(5.4, 2.0, 1);
+    return sp;
+  }
+
+  function roundRect(ctx,x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  const labels = [];
+  branchTargets.forEach((t, idx)=>{
+    const sp = makeLabel(t.svc.name);
+    sp.position.copy(t.p.clone().add(new THREE.Vector3(0, 0.45, 0)));
+    sp.userData = t.svc;
+    scene.add(sp);
+    labels.push(sp);
+
+    const g = new THREE.Sprite(glowMat.clone());
+    g.position.copy(t.p);
+    g.scale.set(2.2,2.2,1);
+    g.material.opacity = 0.55;
+    scene.add(g);
+  });
+
+  const rootGlow = new THREE.Sprite(glowMat.clone());
+  rootGlow.position.copy(new THREE.Vector3(0, 10.6, 0));
+  rootGlow.scale.set(3.2,3.2,1);
+  rootGlow.material.opacity = 0.7;
+  scene.add(rootGlow);
+
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  function pick(ev){
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const hits = raycaster.intersectObjects(labels, true);
+    if(hits.length){
+      const svc = hits[0].object.userData;
+      if(svc) renderModal(svc);
+    }
+  }
+  renderer.domElement.addEventListener("click", pick);
+
+  function highlight(term){
+    const t = normalize(term);
+    labels.forEach(sp=>{
+      const svc = sp.userData || {};
+      const hay = normalize((svc.name||"") + " " + ((svc.tags||[]).join(" ")) + " " + Object.keys(svc.groups||{}).join(" "));
+      const match = !t || hay.includes(t);
+      sp.material.opacity = match ? 1 : 0.22;
+      sp.scale.set(match ? 6.1 : 5.4, match ? 2.25 : 2.0, 1);
+    });
+  }
+
+  $("q").addEventListener("input", (e)=>highlight(e.target.value));
+
+  const panelBody = $("panelBody");
+  function renderPanel(){
+    panelBody.innerHTML = `
+      <div class="chips">
+        ${["Discord","Web","Data","DevOps","Security","IT","Engineering","Design","AI","Partnership"].map(x=>`<span class="chip">${x}</span>`).join("")}
+      </div>
+      <div style="color:rgba(245,245,245,.74);font-size:13px;line-height:1.45">
+        This is the <b>Yggdrasil of Service</b> — every branch is a skill-tree path. Use search to glow-match the branches.
+      </div>
+      <div class="group">
+        <h3>Popular Services</h3>
+        <ul>
+          <li>Discord Bot Hosting / Deployment</li>
+          <li>Discord Automod / Anti-Raid Setup</li>
+          <li>Bot Development (custom commands / systems)</li>
+          <li>Web Development (Pages/Workers)</li>
+          <li>Data Analyst Dashboards / Reports</li>
+          <li>Cloud / VPS Setup + Monitoring</li>
+          <li>Security Hardening + Audits</li>
+          <li>IT Support / Troubleshooting</li>
+          <li>UI/UX & Branding Assets</li>
+          <li>Automation Scripts (Python/Node)</li>
+        </ul>
+      </div>
+      <div class="note">Click any branch label in the tree to open the full catalog for that category.</div>
+    `;
+  }
+  renderPanel();
+
+  let t0 = performance.now();
+  function tick(now){
+    const dt = (now - t0) * 0.001;
+    t0 = now;
+    controls.update();
+
+    rootGlow.material.opacity = 0.60 + Math.sin(now*0.002)*0.08;
+
+    spiritMat.emissiveIntensity = 0.62 + Math.sin(now*0.0016)*0.06;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+}catch(e){
+  showError(e);
 }
-modalContent.innerHTML = `
-<div style="max-width:900px;width:100%;margin:auto;background:rgba(255,255,255,0.03);border-radius:22px;padding:30px;border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(12px);">
-<div style="font-size:32px;font-weight:800;margin-bottom:12px;">${service.name}</div>
-<div style="font-size:16px;color:rgba(245,245,245,0.7);margin-bottom:24px;">${service.desc}</div>
-<div class="chips" style="margin-bottom:24px;">${chips}</div>
-${groupsHtml}
-<div class="note">Need something not listed? Just ask — new branches grow fast.</div>
-</div>
-`;
-modal.classList.add('active');
-}
-function normalize(str) {
-return str.toLowerCase();
-}
-function highlight(term) {
-const t = term ? normalize(term) : '';
-sprites.forEach(sprite => {
-const service = sprite.userData;
-const text = normalize(service.name + ' ' + (service.tags || []).join(' '));
-const match = t === '' || text.includes(t);
-sprite.material.opacity = match ? 1 : 0.3;
-sprite.scale.set(match ? 3.5 : 3, match ? 1.75 : 1.5, 1);
-});
-}
-document.getElementById('q').addEventListener('input', e => highlight(e.target.value));
 </script>
 </body>
 </html>
