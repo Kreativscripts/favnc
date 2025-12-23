@@ -26,7 +26,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative}
 .bg-overlay{position:absolute;inset:0;background:radial-gradient(circle at top,rgba(255,255,255,.45),transparent 60%),radial-gradient(circle at bottom,rgba(0,0,0,.8),#000 80%);mix-blend-mode:soft-light}
 .blur-overlay{position:absolute;inset:0;backdrop-filter:blur(0);opacity:0;transition:opacity .25s ease,backdrop-filter .25s ease;pointer-events:none;z-index:4}
 .blur-overlay.show{opacity:1;backdrop-filter:blur(16px);pointer-events:auto}
-
 .main-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;z-index:3}
 .nez-card{width:min(720px,94vw);display:flex;gap:18px;padding:18px 20px;border-radius:24px;background:linear-gradient(135deg,rgba(247,249,255,.94),rgba(232,237,255,.96));box-shadow:0 0 0 1px rgba(255,255,255,.9),0 24px 60px rgba(6,10,40,.85);border:1px solid rgba(192,202,255,.7);position:relative;overflow:hidden;transition:opacity .25s ease,transform .25s ease;z-index:5}
 .nez-card.hidden{opacity:0;transform:scale(.95);pointer-events:none}
@@ -44,7 +43,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative}
 #okayBtn::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,0),rgba(255,255,255,.9),rgba(255,255,255,0));transform:translateX(-120%)}
 #okayBtn:hover::before{animation:shine 1.1s ease-out}
 @keyframes shine{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
-
 .player-wrap{position:absolute;right:16px;bottom:16px;width:260px;padding:12px;border-radius:18px;background:rgba(4,6,20,.92);border:1px solid rgba(255,255,255,.08);box-shadow:0 16px 38px rgba(0,0,0,.85);color:#e7ebff;font-size:.8rem;backdrop-filter:blur(16px);z-index:2}
 .player-top{display:flex;gap:10px}
 .player-art{width:54px;height:54px;border-radius:14px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.8)}
@@ -61,7 +59,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative}
 input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:999px;background:rgba(255,255,255,.16);outline:none}
 input[type=range]::-webkit-slider-thumb{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(65,105,225,.35)}
 input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(65,105,225,.35)}
-
 .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(980px,94vw);padding:18px 18px 14px;border-radius:26px;background:rgba(4,6,20,.64);border:1px solid rgba(255,255,255,.10);box-shadow:0 28px 80px rgba(0,0,0,.82);backdrop-filter:blur(16px);z-index:6;animation:hubIn .22s ease-out}
 .hub.hidden{display:none}
 @keyframes hubIn{from{opacity:0;transform:translate(-50%,-50%) scale(.98)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
@@ -79,7 +76,6 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 .hub-hint{font-size:.74rem;opacity:.75;color:#dbe0ff}
 @media(max-width:940px){.hub-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.hub-grid{grid-template-columns:1fr}.hub{padding:14px}.nez-card{flex-direction:column;align-items:center;text-align:center}.nez-okay-row{justify-content:center}.player-wrap{right:10px;bottom:10px;width:230px}}
-
 .hub-ic{position:relative;width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 22px rgba(0,0,0,.55),inset 0 0 18px rgba(255,255,255,.06)}
 .hub-ic::before,.hub-ic::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);opacity:.95}
 .hub-go{position:relative;width:18px;height:18px;opacity:.75}
@@ -88,7 +84,6 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 .hub-card:hover .hub-go{opacity:1}
 .hub-card:hover .hub-go::before{filter:drop-shadow(0 0 14px rgba(255,255,255,.55))}
 .hub-card:hover .hub-ic{box-shadow:0 18px 34px rgba(0,0,0,.72),inset 0 0 22px rgba(255,255,255,.09)}
-
 .hub-ic[data-i="tools"]::before{width:16px;height:16px;border:2px solid rgba(255,255,255,.85);border-radius:4px;transform:translate(-50%,-50%) rotate(45deg)}
 .hub-ic[data-i="tools"]::after{width:18px;height:2px;background:rgba(255,255,255,.75);top:58%}
 .hub-ic[data-i="user"]::before{width:12px;height:12px;border-radius:999px;border:2px solid rgba(255,255,255,.85);top:45%}
@@ -101,6 +96,20 @@ input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;bac
 .hub-ic[data-i="contact"]::after{width:16px;height:10px;border-left:2px solid rgba(255,255,255,.75);border-bottom:2px solid rgba(255,255,255,.75);transform:translate(-50%,-55%) rotate(-45deg);opacity:.8}
 .hub-ic[data-i="donate"]::before{width:16px;height:16px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),rgba(255,255,255,.15));transform:translate(-50%,-50%) rotate(45deg);border-radius:4px;box-shadow:0 0 18px rgba(255,255,255,.16)}
 .hub-ic[data-i="donate"]::after{width:8px;height:8px;border-radius:999px;border:2px solid rgba(255,255,255,.75);top:58%;opacity:.7}
+.profile-wrap{position:absolute;top:16px;right:16px;z-index:9}
+.profile-avatar{width:46px;height:46px;border-radius:999px;overflow:hidden;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.78);border:1px solid rgba(255,255,255,.28);transition:transform .12s ease}
+.profile-avatar:hover{transform:translateY(-1px)}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-card{position:absolute;top:56px;right:0;width:300px;padding:16px 16px 14px;border-radius:20px;background:rgba(6,8,24,.95);border:1px solid rgba(255,255,255,.14);box-shadow:0 26px 70px rgba(0,0,0,.92);backdrop-filter:blur(18px);color:#eef1ff;opacity:0;transform:translateY(-8px) scale(.965);pointer-events:none;transition:.18s ease}
+.profile-wrap:hover .profile-card,.profile-wrap.pinned .profile-card{opacity:1;transform:none;pointer-events:auto}
+.profile-edit{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.95rem;color:#fff;text-decoration:none;opacity:.75;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10)}
+.profile-edit:hover{opacity:1;background:rgba(255,255,255,.10)}
+.profile-edit:hover::after{content:"Edit Profile";position:absolute;right:38px;top:4px;background:rgba(0,0,0,.92);border:1px solid rgba(255,255,255,.14);padding:6px 9px;border-radius:8px;font-size:.72rem;white-space:nowrap}
+.profile-head{display:flex;gap:12px;align-items:center}
+.profile-head img{width:56px;height:56px;border-radius:16px;object-fit:cover;box-shadow:0 14px 30px rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.10)}
+.profile-name{font-weight:750;font-size:1rem;letter-spacing:.02em}
+.profile-about{margin-top:10px;font-size:.86rem;opacity:.9;line-height:1.4}
+.profile-ip{margin-top:12px;font-size:.76rem;opacity:.65;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
 </style>
 </head><body>
 
