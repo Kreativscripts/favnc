@@ -197,7 +197,6 @@ window.addEventListener("DOMContentLoaded",function(){
 var STORAGE_KEY="favnc_username",seenKey="favnc_seen_hub_v1";
 var user=localStorage.getItem(STORAGE_KEY);if(!user||!user.trim())user="Operator";
 var nameSpan=document.getElementById("userNameSpan");if(nameSpan)nameSpan.textContent=user;
-
 var audio=document.getElementById("songAudio"),playBtn=document.getElementById("songPlayBtn"),prog=document.getElementById("songProgress"),vol=document.getElementById("songVolume"),cur=document.getElementById("songCurrent"),dur=document.getElementById("songDuration");
 function fmt(t){if(!isFinite(t)||t<0)t=0;var m=Math.floor(t/60),s=Math.floor(t%60);return m+":"+(s<10?"0"+s:s)}
 function updateTimes(){if(!audio)return;if(dur&&audio.duration)dur.textContent=fmt(audio.duration);if(cur)cur.textContent=fmt(audio.currentTime||0);if(prog&&audio.duration)prog.value=((audio.currentTime||0)/audio.duration)*100||0}
@@ -205,20 +204,16 @@ if(audio){audio.addEventListener("timeupdate",updateTimes);audio.addEventListene
 if(playBtn&&audio){playBtn.addEventListener("click",function(){if(audio.paused){audio.play().then(function(){playBtn.textContent="❚❚"}).catch(function(){})}else{audio.pause();playBtn.textContent="▶"}})}
 if(prog&&audio){prog.addEventListener("input",function(){if(!audio.duration)return;var p=Number(prog.value)||0;audio.currentTime=(p/100)*audio.duration;updateTimes()})}
 if(vol&&audio){vol.addEventListener("input",function(){var v=Number(vol.value)||0;audio.volume=Math.min(1,Math.max(0,v/100))});audio.volume=(Number(vol.value)||70)/100}
-
 var nez=document.getElementById("nezCard"),blur=document.getElementById("blurOverlay"),okay=document.getElementById("okayBtn"),hub=document.getElementById("hub");
 function showHub(){if(nez)nez.classList.add("hidden");if(hub)hub.classList.remove("hidden");if(blur)blur.classList.add("show")}
 function hideHub(){if(hub)hub.classList.add("hidden");if(blur)blur.classList.remove("show")}
-
 if(okay)okay.addEventListener("click",function(){try{localStorage.setItem(seenKey,"1")}catch(e){}showHub()});
 try{if(localStorage.getItem(seenKey)==="1")showHub()}catch(e){}
-
 document.addEventListener("keydown",function(e){
 if(!hub||hub.classList.contains("hidden"))return;
 if(e.key==="Escape"){hideHub();return}
 if(e.key>="1"&&e.key<="6"){var el=hub.querySelector('.hub-card[data-k="'+e.key+'"]');if(el)window.location.href=el.href}
 });
-
 if(hub){
 hub.addEventListener("mousemove",function(e){
 var r=hub.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
@@ -226,9 +221,18 @@ hub.style.transform="translate(-50%,-50%) perspective(900px) rotateY("+(x*3)+"de
 });
 hub.addEventListener("mouseleave",function(){hub.style.transform="translate(-50%,-50%)"});
 }
+try{
+var u=localStorage.getItem("favnc_username")||"favnc_username";
+var about=localStorage.getItem("favnc_about")||"Nexus Command Operator";
+document.getElementById("favnc_username").textContent=u;
+document.getElementById("favnc_about").textContent=about;
+fetch("https://api.ipify.org?format=json").then(r=>r.json()).then(d=>{
+document.getElementById("favnc_ip").textContent=d.ip;
+}).catch(()=>{});
+}catch(e){}
 
 var origin=window.location.origin||"https://favnc.pages.dev";
-var phrases=["/favnc","/hello-"+encodeURIComponent(user)+"-Fav_Nonchalant","/Nexus-Command"],i=0,c=0,del=false;
+var phrases=["/favnc","/hello-"+encodeURIComponent(user)+"","/Nexus-Command"],i=0,c=0,del=false;
 function typeTick(){
 var full=phrases[i];
 if(!del){c++;if(c>full.length){c=full.length;setTimeout(function(){del=true},900)}}
