@@ -228,41 +228,6 @@ fetch("https://api.ipify.org?format=json").then(r=>r.json()).then(d=>{
 document.getElementById("favnc_ip").textContent=d.ip;
 }).catch(()=>{});
 }catch(e){}
-try{
-var defPfp="https://favnc.pages.dev/assets/icons/MemberVIOLET.png";
-var pfp=localStorage.getItem("favnc_pfp");
-if(!pfp||!pfp.trim())pfp=defPfp;
-
-var u=localStorage.getItem("favnc_username")||"favnc_username";
-var about=localStorage.getItem("favnc_about")||"favnc_about";
-
-var p1=document.getElementById("favnc_pfp"),p2=document.getElementById("favnc_pfp_card");
-if(p1)p1.src=pfp;if(p2)p2.src=pfp;
-
-var un=document.getElementById("favnc_username"),ab=document.getElementById("favnc_about");
-if(un)un.textContent=u;if(ab)ab.textContent=about;
-
-fetch("https://api.ipify.org?format=json").then(r=>r.json()).then(d=>{
-var ipEl=document.getElementById("favnc_ip");
-if(ipEl)ipEl.textContent=d.ip;
-}).catch(function(){});
-
-var wrap=document.querySelector(".profile-wrap"),av=document.querySelector(".profile-avatar");
-if(wrap&&av){
-av.addEventListener("click",function(e){
-e.preventDefault();e.stopPropagation();
-wrap.classList.toggle("pinned");
-});
-document.addEventListener("click",function(e){
-if(!wrap.classList.contains("pinned"))return;
-if(wrap.contains(e.target))return;
-wrap.classList.remove("pinned");
-});
-document.addEventListener("keydown",function(e){
-if(e.key==="Escape"&&wrap.classList.contains("pinned"))wrap.classList.remove("pinned");
-});
-}
-}catch(e){}
 
 var origin=window.location.origin||"https://favnc.pages.dev";
 var phrases=["/favnc","/hello-"+encodeURIComponent(user)+"","/Nexus-Command"],i=0,c=0,del=false;
