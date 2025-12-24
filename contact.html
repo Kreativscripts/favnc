@@ -1,388 +1,256 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#000000">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#000000">
 
-  <title>Contact Fav</title>
-  <link rel="icon" href="https://favnc.pages.dev/assets/icons/contact.png">
+<title>Contact Fav</title>
+<link rel="icon" href="https://favnc.pages.dev/assets/icons/contact.png">
 
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Contact Fav">
-  <meta property="og:description" content="Reach me fast—email for formal stuff, Roblox for socials.">
-  <meta property="og:image" content="https://favnc.pages.dev/assets/embeds/contact.gif">
-  <meta property="og:site_name" content="FavNC">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact Fav">
+<meta property="og:description" content="Official contact routes for Fav / Nexus Command">
+<meta property="og:image" content="https://favnc.pages.dev/assets/embeds/contact.gif">
+<meta property="og:site_name" content="FavNC">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Contact Fav">
-  <meta name="twitter:description" content="Reach me fast—email for formal stuff, Roblox for socials.">
-  <meta name="twitter:image" content="https://favnc.pages.dev/assets/embeds/contact.gif">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contact Fav">
+<meta name="twitter:description" content="Official contact routes for Fav / Nexus Command">
+<meta name="twitter:image" content="https://favnc.pages.dev/assets/embeds/contact.gif">
 
-  <style>
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-    body{
-      background:#000;
-      color:#eef;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      overflow-x:hidden;
-    }
-    a{color:inherit;text-decoration:none}
-    #bg{
-      position:fixed;inset:0;pointer-events:none;
-      background:
-        radial-gradient(900px 520px at 50% 28%, rgba(180,190,255,.16), rgba(0,0,0,0) 60%),
-        radial-gradient(880px 560px at 50% 78%, rgba(255,255,255,.06), rgba(0,0,0,0) 62%),
-        radial-gradient(520px 380px at 20% 60%, rgba(160,80,255,.08), rgba(0,0,0,0) 65%);
-      filter:saturate(1.05);
-    }
-    #grain{
-      position:fixed;inset:-20%;pointer-events:none;
-      opacity:.16;mix-blend-mode:overlay;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
-      animation:g 7s linear infinite;
-    }
-    @keyframes g{0%{transform:translate(-2%,-2%) rotate(0deg)}100%{transform:translate(2%,2%) rotate(360deg)}}
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background:#000;
+  color:#eef;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  overflow-x:hidden
+}
+a{color:inherit;text-decoration:none}
 
-    .back{
-      position:fixed;top:14px;right:14px;z-index:10;
-      padding:10px 12px;border-radius:14px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      backdrop-filter:blur(12px);
-      transition:.2s;
-      box-shadow:0 12px 40px rgba(0,0,0,.55);
-    }
-    .back:hover{transform:translateY(-2px);background:rgba(255,255,255,.08)}
+#bg{
+  position:fixed;inset:0;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 50% 30%,rgba(180,190,255,.16),rgba(0,0,0,0) 60%),
+    radial-gradient(800px 520px at 50% 80%,rgba(255,255,255,.06),rgba(0,0,0,0) 62%)
+}
+#grain{
+  position:fixed;inset:-20%;pointer-events:none;
+  opacity:.15;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  animation:g 7s linear infinite
+}
+@keyframes g{to{transform:translate(2%,2%) rotate(360deg)}}
 
-    main{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:52px 18px;
-    }
+.back{
+  position:fixed;top:14px;right:14px;z-index:10;
+  padding:10px 12px;border-radius:14px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(12px);
+  transition:.2s
+}
+.back:hover{transform:translateY(-2px)}
 
-    .panel{
-      width:min(980px,100%);
-      display:grid;
-      gap:16px;
-      grid-template-columns:1.1fr .9fr;
-      align-items:start;
-      transform:translateY(14px);
-      opacity:0;
-      animation:in .7s ease forwards;
-    }
-    @keyframes in{to{transform:translateY(0);opacity:1}}
-    @media (max-width:920px){
-      .panel{grid-template-columns:1fr}
-    }
+main{
+  min-height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:52px 18px
+}
 
-    .hero{
-      text-align:left;
-      padding:26px 22px;
-      border-radius:22px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      backdrop-filter:blur(14px);
-      box-shadow:0 22px 70px rgba(0,0,0,.65);
-      position:relative;
-      overflow:hidden;
-    }
-    .hero:before{
-      content:"";
-      position:absolute;inset:-1px;
-      background:linear-gradient(120deg, rgba(255,255,255,.10), rgba(255,255,255,0) 38%, rgba(180,190,255,.08));
-      opacity:.55;
-      pointer-events:none;
-    }
-    .hero-inner{position:relative}
-    .kicker{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.10);
-      color:rgba(238,238,255,.86);
-      font-size:12px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-    .dot{
-      width:8px;height:8px;border-radius:99px;
-      background:rgba(255,255,255,.85);
-      box-shadow:0 0 18px rgba(255,255,255,.35);
-    }
-    h1{
-      margin:12px 0 8px;
-      font-size:clamp(36px,4.4vw,58px);
-      letter-spacing:.01em;
-      line-height:1.05;
-    }
-    .desc{
-      margin:0;
-      max-width:58ch;
-      color:rgba(238,238,255,.72);
-      font-size:15px;
-      line-height:1.55;
-    }
-    .hint{
-      margin-top:14px;
-      color:rgba(238,238,255,.55);
-      font-size:12px;
-    }
+.panel{
+  width:min(980px,100%);
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:16px;
+  animation:in .6s ease forwards;
+  opacity:0;
+  transform:translateY(14px)
+}
+@keyframes in{to{opacity:1;transform:none}}
+@media(max-width:900px){.panel{grid-template-columns:1fr}}
 
-    .grid{
-      display:grid;
-      gap:12px;
-      grid-template-columns:1fr 1fr;
-    }
-    @media (max-width:560px){
-      .grid{grid-template-columns:1fr}
-    }
+.hero{
+  padding:26px;
+  border-radius:22px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter:blur(14px)
+}
+.hero h1{
+  margin:0 0 8px;
+  font-size:clamp(36px,4.5vw,56px)
+}
+.hero p{
+  margin:0;
+  color:rgba(238,238,255,.72);
+  font-size:15px
+}
 
-    .card{
-      position:relative;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 14px;
-      border-radius:18px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      backdrop-filter:blur(12px);
-      box-shadow:0 18px 60px rgba(0,0,0,.55);
-      transition:transform .18s ease, background .18s ease, border-color .18s ease;
-      user-select:none;
-      min-height:62px;
-      overflow:hidden;
-    }
-    .card:after{
-      content:"";
-      position:absolute;inset:0;
-      background:radial-gradient(420px 140px at 10% 20%, rgba(255,255,255,.10), rgba(0,0,0,0) 60%);
-      opacity:.35;
-      pointer-events:none;
-    }
-    .card:hover{
-      transform:translateY(-3px);
-      background:rgba(255,255,255,.075);
-      border-color:rgba(255,255,255,.16);
-    }
-    .icon{
-      width:38px;height:38px;border-radius:14px;
-      display:grid;place-items:center;
-      background:rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 0 0 1px rgba(255,255,255,.04) inset;
-      flex:0 0 auto;
-    }
-    .icon svg{width:20px;height:20px;opacity:.95}
-    .meta{display:flex;flex-direction:column;gap:2px;min-width:0;position:relative;z-index:1}
-    .tag{font-weight:750;letter-spacing:.01em}
-    .sub{font-size:12px;color:rgba(238,238,255,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.grid{
+  display:grid;
+  gap:12px;
+  grid-template-columns:1fr 1fr
+}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
 
-    .pill{
-      margin-left:auto;
-      font-size:11px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.12);
-      color:rgba(238,238,255,.72);
-      position:relative;
-      z-index:1;
-    }
+.card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px;
+  border-radius:18px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(12px);
+  box-shadow:0 18px 60px rgba(0,0,0,.55);
+  transition:.18s;
+  position:relative
+}
+.card:hover{transform:translateY(-3px);background:rgba(255,255,255,.075)}
 
-    .discord-disabled{
-      cursor:not-allowed;
-      opacity:.92;
-      border-color:rgba(255,120,120,.28);
-    }
-    .discord-disabled:hover{
-      transform:translateY(-1px);
-      background:rgba(255,255,255,.065);
-      border-color:rgba(255,120,120,.35);
-    }
-    .badge-invalid{
-      margin-left:auto;
-      font-size:11px;
-      font-weight:800;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      padding:7px 11px;
-      border-radius:999px;
-      background:rgba(120,0,0,.25);
-      border:1px solid rgba(255,120,120,.38);
-      color:rgba(255,200,200,.92);
-      box-shadow:0 0 22px rgba(255,90,90,.10);
-      position:relative;
-      z-index:1;
-    }
+.pfp{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  object-fit:cover;
+  background:#000;
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 0 0 1px rgba(255,255,255,.05) inset
+}
 
-    .tooltip{
-      position:absolute;
-      left:14px;
-      right:14px;
-      bottom:10px;
-      transform:translateY(10px);
-      opacity:0;
-      pointer-events:none;
-      transition:.16s ease;
-      display:flex;
-      justify-content:flex-start;
-      z-index:5;
-    }
-    .tooltip span{
-      font-size:12px;
-      color:rgba(238,238,255,.88);
-      background:rgba(0,0,0,.62);
-      border:1px solid rgba(255,255,255,.12);
-      padding:8px 10px;
-      border-radius:14px;
-      backdrop-filter:blur(10px);
-      box-shadow:0 16px 60px rgba(0,0,0,.75);
-      max-width:100%;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .discord-disabled:hover .tooltip{opacity:1;transform:translateY(0)}
+.meta{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tag{font-weight:750}
+.sub{font-size:12px;color:rgba(238,238,255,.65)}
 
-    footer{
-      grid-column:1/-1;
-      color:rgba(238,238,255,.45);
-      font-size:12px;
-      padding:2px 4px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .fine{opacity:.9}
-    .sep{opacity:.35}
-    .mini{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      color:rgba(238,238,255,.45);
-    }
-  </style>
+.pill{
+  margin-left:auto;
+  font-size:11px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.12)
+}
+
+.discord-disabled{
+  cursor:not-allowed;
+  border-color:rgba(255,120,120,.35)
+}
+.badge-invalid{
+  margin-left:auto;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.12em;
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(120,0,0,.25);
+  border:1px solid rgba(255,120,120,.4);
+  color:rgba(255,200,200,.95)
+}
+
+.tooltip{
+  position:absolute;
+  bottom:10px;left:14px;right:14px;
+  opacity:0;
+  transform:translateY(6px);
+  transition:.15s;
+  pointer-events:none
+}
+.tooltip span{
+  background:rgba(0,0,0,.65);
+  border:1px solid rgba(255,255,255,.12);
+  padding:8px 10px;
+  border-radius:14px;
+  font-size:12px
+}
+.discord-disabled:hover .tooltip{opacity:1;transform:none}
+
+footer{
+  grid-column:1/-1;
+  font-size:12px;
+  color:rgba(238,238,255,.45);
+  display:flex;
+  justify-content:space-between
+}
+</style>
 </head>
 
 <body>
-  <a class="back" href="https://favnc.pages.dev/main">&larr; Go back</a>
-  <div id="bg"></div>
-  <div id="grain"></div>
+<a class="back" href="https://favnc.pages.dev/main">&larr; Go back</a>
+<div id="bg"></div><div id="grain"></div>
 
-  <main>
-    <div class="panel">
-      <div class="hero">
-        <div class="hero-inner">
-          <div class="kicker"><span class="dot"></span> Nexus Command Contact</div>
-          <h1>Contact Fav</h1>
-          <p class="desc">Fast routes only. Email for formal stuff, Roblox for socials. Discord is currently unavailable due to the account being deleted.</p>
-          <div class="hint">Tip: Hover cards for details. Roblox links open in a new tab.</div>
-        </div>
+<main>
+<div class="panel">
+
+  <div class="hero">
+    <h1>Contact Fav</h1>
+    <p>Email is primary. Roblox is active. Discord is unavailable.</p>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="mailto:favnc@proton.me">
+      <img class="pfp" src="assets/icons/emaill.png" alt="Email">
+      <div class="meta">
+        <div class="tag">Email</div>
+        <div class="sub">favnc@proton.me</div>
       </div>
+      <div class="pill">Primary</div>
+    </a>
 
-      <div class="grid">
-        <a class="card" href="mailto:favnc@proton.me">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M4 6.5h16v11H4v-11Z" stroke="currentColor" stroke-width="1.7" opacity=".9"/>
-              <path d="M4.4 7.2 12 13l7.6-5.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="tag">Email</div>
-            <div class="sub">favnc@proton.me</div>
-          </div>
-          <div class="pill">Primary</div>
-        </a>
-
-        <div class="card discord-disabled" role="button" aria-disabled="true">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M7.5 7.2c2.6-1.9 6.4-1.9 9 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-              <path d="M6.6 18.2c1.9 1.1 8.9 1.1 10.8 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-              <path d="M8.1 15.8c-1.2-1.9-1.6-4.7-.6-7.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-              <path d="M15.9 15.8c1.2-1.9 1.6-4.7.6-7.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-              <path d="M9.5 12.4h.01M14.5 12.4h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="tag">Discord</div>
-            <div class="sub">lightafk223</div>
-          </div>
-          <div class="badge-invalid">Invalid</div>
-          <div class="tooltip"><span>lightafk223 account was deleted</span></div>
-        </div>
-
-        <a class="card" href="https://www.roblox.com/users/3963189371/profile" target="_blank" rel="noopener">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M8 4h8l4 4v8l-4 4H8l-4-4V8l4-4Z" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M10 10h4v4h-4v-4Z" stroke="currentColor" stroke-width="1.7"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="tag">Roblox</div>
-            <div class="sub">Account #1</div>
-          </div>
-          <div class="pill">Profile</div>
-        </a>
-
-        <a class="card" href="https://www.roblox.com/users/8398852302/profile" target="_blank" rel="noopener">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M8 4h8l4 4v8l-4 4H8l-4-4V8l4-4Z" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M10 10h4v4h-4v-4Z" stroke="currentColor" stroke-width="1.7"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="tag">Roblox</div>
-            <div class="sub">Account #2</div>
-          </div>
-          <div class="pill">Profile</div>
-        </a>
-
-        <a class="card" href="https://www.roblox.com/communities/35314160/fav-nioncha" target="_blank" rel="noopener" style="grid-column:1/-1">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M4.5 19.5v-9.2c0-.6.3-1.2.9-1.6l5.8-3.4c.5-.3 1.2-.3 1.8 0l5.8 3.4c.6.4.9 1 .9 1.6v9.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-              <path d="M9 19.5v-5.2c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v5.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="tag">Roblox Group</div>
-            <div class="sub">fav-nioncha</div>
-          </div>
-          <div class="pill">Community</div>
-        </a>
+    <div class="card discord-disabled">
+      <img class="pfp" src="assets/icons/lightafk223.png" alt="Discord">
+      <div class="meta">
+        <div class="tag">Discord</div>
+        <div class="sub">lightafk223</div>
       </div>
-
-      <footer>
-        <div class="mini">
-          <span class="fine">© FavNC</span>
-          <span class="sep">•</span>
-          <span class="fine">Contact Page</span>
-        </div>
-        <div class="mini">
-          <span class="fine">Status:</span>
-          <span class="fine">Discord unavailable</span>
-        </div>
-      </footer>
+      <div class="badge-invalid">INVALID</div>
+      <div class="tooltip"><span>lightafk223 account was deleted</span></div>
     </div>
-  </main>
 
-  <script src="https://favnc.pages.dev/web_runtime/console.js" defer></script>
-  <script src="https://favnc.pages.dev/web_runtime/localstorage.js" defer></script>
-  <script src="https://favnc.pages.dev/web_runtime/rhtml.js" defer></script>
-  <script src="https://favnc.pages.dev/web_runtime/webperms.js" defer></script>
-  <script src="https://favnc.pages.dev/web_runtime/redirect_login.js" defer></script>
+    <a class="card" href="https://www.roblox.com/users/3963189371/profile" target="_blank">
+      <img class="pfp" src="assets/icons/lightafk223.png" alt="Roblox 1">
+      <div class="meta">
+        <div class="tag">Roblox</div>
+        <div class="sub">Account #1</div>
+      </div>
+      <div class="pill">Profile</div>
+    </a>
+
+    <a class="card" href="https://www.roblox.com/users/8398852302/profile" target="_blank">
+      <img class="pfp" src="assets/icons/Fav_Altnc1.png" alt="Roblox 2">
+      <div class="meta">
+        <div class="tag">Roblox</div>
+        <div class="sub">Account #2</div>
+      </div>
+      <div class="pill">Profile</div>
+    </a>
+
+    <a class="card" href="https://www.roblox.com/communities/35314160/fav-nioncha" target="_blank" style="grid-column:1/-1">
+      <img class="pfp" src="assets/icons/favnonchalantcc.png" alt="Roblox Group">
+      <div class="meta">
+        <div class="tag">Roblox Group</div>
+        <div class="sub">fav-nioncha</div>
+      </div>
+      <div class="pill">Community</div>
+    </a>
+  </div>
+
+  <footer>
+    <span>© FavNC</span>
+    <span>Discord unavailable</span>
+  </footer>
+
+</div>
+</main>
+
+<script src="https://favnc.pages.dev/web_runtime/console.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/webperms.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/redirect_login.js" defer></script>
 </body>
 </html>
