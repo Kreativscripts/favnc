@@ -1,7 +1,8 @@
-import * as THREE from "https://unpkg.com/three@0.161.0/build/three.module.js";
-import { PointerLockControls } from "https://unpkg.com/three@0.161.0/examples/jsm/controls/PointerLockControls.js";
+import * as THREE from "three";
+import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
 import { TextureBank } from "https://favnc.pages.dev/sandbox_sys__/texture.js";
 import { VFX } from "https://favnc.pages.dev/sandbox_sys__/vfx.js";
+import * as CANNON from "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js";
 
 const ENGINE = "NexusCommandEngine_1_0_0";
 const SAVE_KEY = ENGINE + "_save";
@@ -18,44 +19,33 @@ const SFX = {
 const DEFAULTS = {
   settings: { volume: 0.65, sensitivity: 0.65, fov: 85, chunks: 8 },
   keybinds: {
-    forward: "KeyW",
-    backward: "KeyS",
-    left: "KeyA",
-    right: "KeyD",
-    jump: "Space",
-    sprint: "ShiftLeft",
+    forward: "KeyW", backward: "KeyS", left: "KeyA", right: "KeyD",
+    jump: "Space", sprint: "ShiftLeft",
     rotate: "KeyR",
-    flashlight: "KeyF",
+    throw: "KeyG",
     save: "KeyP",
-    toolBlock: "Digit1",
-    toolLight: "Digit2",
-    toolFire: "Digit3",
-    toolWater: "Digit4",
-    toolDelete: "Digit5",
-    toolGrab: "Digit6",
+    toolProp: "Digit1",
+    toolGrav: "Digit2",
+    toolExplode: "Digit3",
+    toolFire: "Digit4",
+    toolWater: "Digit5",
+    toolDelete: "Digit6",
     pause: "Escape"
   },
-  player: { pos: [0,2.2,6], yaw: 0, pitch: 0 },
+  player: { pos: [0,2.2,6] },
   world: { objects: [] }
 };
 
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-function now(){ return performance.now(); }
-
-function log(){
-  console.log.apply(console, ["[NCE]", ...arguments]);
-}
-
-function safeJSONParse(s, fallback){
-  try { return JSON.parse(s); } catch(e){ return fallback; }
-}
+function safeJSONParse(s, fallback){ try { return JSON.parse(s); } catch(e){ return fallback; } }
+function structuredClone(obj){ return JSON.parse(JSON.stringify(obj)); }
+function log(){ console.log.apply(console, ["[NCE]", ...arguments]); }
 
 function loadSave(){
   const raw = localStorage.getItem(SAVE_KEY);
   if(!raw) return structuredClone(DEFAULTS);
   const data = safeJSONParse(raw, null);
   if(!data) return structuredClone(DEFAULTS);
-
   const merged = structuredClone(DEFAULTS);
   merged.settings = Object.assign({}, merged.settings, data.settings||{});
   merged.keybinds = Object.assign({}, merged.keybinds, data.keybinds||{});
@@ -67,7 +57,7 @@ function loadSave(){
 
 function saveAll(state){
   localStorage.setItem(SAVE_KEY, JSON.stringify(state));
-  log("Saved", state.world.objects.length, "objects");
+  log("Saved", (state.world.objects||[]).length, "objects");
 }
 
 function clearSave(){
@@ -75,20 +65,11 @@ function clearSave(){
   log("Save cleared");
 }
 
-function structuredClone(obj){
-  return JSON.parse(JSON.stringify(obj));
-}
-
-function isCodePressed(keys, code){
-  return keys.has(code);
-}
-
 function makeAudioBank(volume){
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const master = ctx.createGain();
   master.gain.value = volume;
   master.connect(ctx.destination);
-
   const buffers = {};
   const active = {};
 
@@ -118,7 +99,6 @@ function makeAudioBank(volume){
       stop(opts.tag);
       active[opts.tag] = src;
     }
-
     return src;
   }
 
@@ -129,15 +109,10 @@ function makeAudioBank(volume){
     delete active[tag];
   }
 
-  function setVolume(v){
-    master.gain.value = v;
-  }
+  function setVolume(v){ master.gain.value = v; }
+  function resume(){ if(ctx.state !== "running") return ctx.resume(); }
 
-  function resume(){
-    if(ctx.state !== "running") return ctx.resume();
-  }
-
-  return { ctx, load, play, stop, setVolume, resume };
+  return { load, play, stop, setVolume, resume };
 }
 
 const ui = {
@@ -166,7 +141,9 @@ const ui = {
 };
 
 const state = loadSave();
-let currentTool = "block";
+const audio = makeAudioBank(state.settings.volume);
+
+let currentTool = "prop";
 let pendingRebind = null;
 
 function setTool(t){
@@ -175,35 +152,39 @@ function setTool(t){
   log("Tool:", t);
 }
 
-function openSettings(open){
-  ui.panel.classList.toggle("hidden", !open);
-}
+function openSettings(open){ ui.panel.classList.toggle("hidden", !open); }
+function showHUD(show){ ui.hud.classList.toggle("hidden", !show); }
+function showBlocker(show){ ui.blocker.classList.toggle("hidden", !show); }
 
-function showHUD(show){
-  ui.hud.classList.toggle("hidden", !show);
-}
+function getKey(action){ return state.keybinds[action] || DEFAULTS.keybinds[action]; }
 
-function showBlocker(show){
-  ui.blocker.classList.toggle("hidden", !show);
+function toolFromKey(code){
+  if(code === getKey("toolProp")) return "prop";
+  if(code === getKey("toolGrav")) return "grav";
+  if(code === getKey("toolExplode")) return "explode";
+  if(code === getKey("toolFire")) return "fire";
+  if(code === getKey("toolWater")) return "water";
+  if(code === getKey("toolDelete")) return "delete";
+  return null;
 }
 
 function buildHotkeyUI(){
   ui.hotkeys.innerHTML = "";
   const entries = [
-    ["Tool: Block", "toolBlock"],
-    ["Tool: Light", "toolLight"],
+    ["Tool: Prop Gun", "toolProp"],
+    ["Tool: Gravity Gun", "toolGrav"],
+    ["Tool: Explode", "toolExplode"],
     ["Tool: Fire", "toolFire"],
     ["Tool: Water", "toolWater"],
     ["Tool: Delete", "toolDelete"],
-    ["Tool: Grab", "toolGrab"],
     ["Move: Forward", "forward"],
     ["Move: Back", "backward"],
     ["Move: Left", "left"],
     ["Move: Right", "right"],
     ["Jump", "jump"],
     ["Sprint", "sprint"],
-    ["Rotate Block", "rotate"],
-    ["Flashlight", "flashlight"],
+    ["Rotate Prop", "rotate"],
+    ["Throw", "throw"],
     ["Save", "save"],
     ["Pause", "pause"]
   ];
@@ -242,16 +223,10 @@ function updateHotkeyUI(){
 function bootUI(){
   setTool(currentTool);
 
-  ui.slots.forEach(b=>{
-    b.addEventListener("click", ()=> setTool(b.dataset.tool));
-  });
+  ui.slots.forEach(b=> b.addEventListener("click", ()=> setTool(b.dataset.tool)));
 
-  ui.btnReset.addEventListener("click", ()=>{
-    clearSave();
-    location.reload();
-  });
-
-  ui.btnSave.addEventListener("click", ()=> saveAll(state));
+  ui.btnReset.addEventListener("click", ()=>{ clearSave(); location.reload(); });
+  ui.btnSave.addEventListener("click", ()=> saveTick());
   ui.btnReload.addEventListener("click", ()=> location.reload());
   ui.btnClearWorld.addEventListener("click", ()=>{
     state.world.objects = [];
@@ -286,17 +261,13 @@ function bootUI(){
     saveAll(state);
   });
 
-  ui.btnExport.addEventListener("click", ()=>{
-    ui.saveBox.value = JSON.stringify(state);
-  });
-
+  ui.btnExport.addEventListener("click", ()=>{ ui.saveBox.value = JSON.stringify(state); });
   ui.btnImport.addEventListener("click", ()=>{
     const data = safeJSONParse(ui.saveBox.value, null);
     if(!data){ alert("Invalid JSON"); return; }
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
     location.reload();
   });
-
   ui.btnDefaults.addEventListener("click", ()=>{
     localStorage.setItem(SAVE_KEY, JSON.stringify(DEFAULTS));
     location.reload();
@@ -326,68 +297,49 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
-const camera = new THREE.PerspectiveCamera(state.settings.fov, window.innerWidth / window.innerHeight, 0.05, 400);
-camera.position.set(state.player.pos[0], state.player.pos[1], state.player.pos[2]);
+const camera = new THREE.PerspectiveCamera(state.settings.fov, window.innerWidth / window.innerHeight, 0.05, 500);
+camera.position.fromArray(state.player.pos);
 
 const controls = new PointerLockControls(camera, document.body);
+controls.pointerSpeed = clamp(state.settings.sensitivity, 0.05, 2.0);
 
-const clock = new THREE.Clock();
 const keys = new Set();
+const clock = new THREE.Clock();
 let canJump = false;
 let velocity = new THREE.Vector3();
 let direction = new THREE.Vector3();
 let lastFootstep = 0;
 
-const audio = makeAudioBank(state.settings.volume);
+const ray = new THREE.Raycaster();
+const pointer = new THREE.Vector2(0,0);
 
-async function loadSFX(){
-  await audio.load("waterTouch", SFX.waterTouch);
-  await audio.load("waterFlow", SFX.waterFlow);
-  await audio.load("walk", SFX.walk);
-  await audio.load("pickup", SFX.pickup);
-  await audio.load("drop", SFX.drop);
-  await audio.load("fire", SFX.fire);
-}
-
-const texGridCanvas = TextureBank.gridTexture();
-const texMetalCanvas = TextureBank.metalTexture();
-const texWaterCanvas = TextureBank.waterTexture();
-
-const texGrid = new THREE.CanvasTexture(texGridCanvas);
+const texGrid = new THREE.CanvasTexture(TextureBank.gridTexture());
 texGrid.wrapS = texGrid.wrapT = THREE.RepeatWrapping;
 texGrid.repeat.set(6,6);
 
-const texMetal = new THREE.CanvasTexture(texMetalCanvas);
+const texMetal = new THREE.CanvasTexture(TextureBank.metalTexture());
 texMetal.wrapS = texMetal.wrapT = THREE.RepeatWrapping;
 texMetal.repeat.set(1,1);
 
-const texWater = new THREE.CanvasTexture(texWaterCanvas);
+const texWater = new THREE.CanvasTexture(TextureBank.waterTexture());
 texWater.wrapS = texWater.wrapT = THREE.RepeatWrapping;
 texWater.repeat.set(2,2);
 
 const matGround = new THREE.MeshStandardMaterial({ map: texGrid, roughness: 0.95, metalness: 0.05 });
-const matBlock = new THREE.MeshStandardMaterial({ map: texMetal, roughness: 0.75, metalness: 0.25 });
-const matWater = new THREE.MeshStandardMaterial({ map: texWater, roughness: 0.15, metalness: 0.05, transparent: true, opacity: 0.85 });
-
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(200,200,1,1), matGround);
-ground.rotation.x = -Math.PI/2;
-ground.receiveShadow = false;
-ground.userData.type = "ground";
-scene.add(ground);
+const matProp = new THREE.MeshStandardMaterial({ map: texMetal, roughness: 0.75, metalness: 0.25 });
+const matWater = new THREE.MeshStandardMaterial({ map: texWater, roughness: 0.12, metalness: 0.05, transparent: true, opacity: 0.85 });
 
 const hemi = new THREE.HemisphereLight(0xffffff, 0x080a15, 0.95);
 scene.add(hemi);
 
-const sun = new THREE.DirectionalLight(0xffffff, 0.65);
-sun.position.set(10, 18, 6);
+const sun = new THREE.DirectionalLight(0xffffff, 0.6);
+sun.position.set(12, 20, 8);
 scene.add(sun);
 
-const flashlight = new THREE.SpotLight(0xffffff, 2.2, 40, Math.PI/8, 0.25, 1);
-flashlight.visible = false;
-flashlight.position.set(0,0,0);
-flashlight.target.position.set(0,0,-1);
-camera.add(flashlight);
-camera.add(flashlight.target);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(320,320,1,1), matGround);
+ground.rotation.x = -Math.PI/2;
+ground.userData.type = "ground";
+scene.add(ground);
 
 const arms = makeArms();
 camera.add(arms);
@@ -395,251 +347,242 @@ camera.add(arms);
 const fireFX = VFX.makeFire(THREE);
 const waterFX = VFX.makeWater(THREE);
 const sparksFX = VFX.makeSparks(THREE);
-scene.add(fireFX.object);
-scene.add(waterFX.object);
-scene.add(sparksFX.object);
+scene.add(fireFX.object, waterFX.object, sparksFX.object);
 
-const ray = new THREE.Raycaster();
-const pointer = new THREE.Vector2(0,0);
+// ---------------- PHYSICS (CANNON) ----------------
+const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -9.82, 0) });
+world.broadphase = new CANNON.SAPBroadphase(world);
+world.allowSleep = true;
 
-const worldObjects = [];
-let grabbed = null;
-let grabbedOffset = new THREE.Vector3();
-let blockRot = 0;
+const physMat = new CANNON.Material("phys");
+const groundMat = new CANNON.Material("ground");
+world.addContactMaterial(new CANNON.ContactMaterial(groundMat, physMat, { friction: 0.6, restitution: 0.08 }));
+world.addContactMaterial(new CANNON.ContactMaterial(physMat, physMat, { friction: 0.35, restitution: 0.14 }));
+
+const groundBody = new CANNON.Body({ type: CANNON.Body.STATIC, material: groundMat });
+groundBody.addShape(new CANNON.Plane());
+groundBody.quaternion.setFromEuler(-Math.PI/2, 0, 0);
+world.addBody(groundBody);
+
+const objects = []; // { mesh, body, def }
+let propRot = 0;
+
+// Gravity gun grab
+let grabbed = null; // { obj, dist, localHit }
+let grabConstraint = null;
+let grabPivotBody = null;
 
 function makeArms(){
   const g = new THREE.Group();
   const armMat = new THREE.MeshStandardMaterial({ color: 0x10131f, roughness: 0.6, metalness: 0.05 });
   const glowMat = new THREE.MeshStandardMaterial({ color: 0x1a1f30, roughness: 0.2, metalness: 0.15, emissive: 0x05070f });
-
   const left = new THREE.Mesh(new THREE.BoxGeometry(0.14,0.44,0.16), armMat);
   const right = new THREE.Mesh(new THREE.BoxGeometry(0.14,0.44,0.16), armMat);
-
   left.position.set(-0.22,-0.28,-0.55);
   right.position.set(0.22,-0.28,-0.55);
-
   const wristL = new THREE.Mesh(new THREE.BoxGeometry(0.16,0.16,0.18), glowMat);
   const wristR = new THREE.Mesh(new THREE.BoxGeometry(0.16,0.16,0.18), glowMat);
   wristL.position.set(-0.22,-0.50,-0.55);
   wristR.position.set(0.22,-0.50,-0.55);
-
   g.add(left, right, wristL, wristR);
   return g;
 }
 
 function updateFogFromChunks(){
-  const d = state.settings.chunks * 18;
+  const d = state.settings.chunks * 22;
   scene.fog = new THREE.FogExp2(0x000000, 1/(d*d));
-  camera.far = clamp(d*3.0, 120, 420);
+  camera.far = clamp(d*3.2, 150, 520);
   camera.updateProjectionMatrix();
   log("Chunks:", state.settings.chunks, "FogDist:", d, "Far:", camera.far);
 }
 updateFogFromChunks();
 
 function resize(){
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
+  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 }
 window.addEventListener("resize", resize);
 
-function addObject(def){
-  const t = def.type;
-
-  let obj = null;
-
-  if(t === "block"){
-    obj = new THREE.Mesh(new THREE.BoxGeometry(def.sx||1, def.sy||1, def.sz||1), matBlock);
-    obj.position.fromArray(def.pos || [0,1,0]);
-    obj.rotation.set(0, def.ry||0, 0);
-    obj.userData.type = "block";
-    obj.userData.id = def.id || crypto.randomUUID();
-  }
-
-  if(t === "light"){
-    obj = new THREE.PointLight(0xffffff, def.intensity||1.3, def.range||16, 2);
-    obj.position.fromArray(def.pos || [0,3,0]);
-    obj.userData.type = "light";
-    obj.userData.id = def.id || crypto.randomUUID();
-
-    const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.7 }));
-    bulb.position.set(0,0,0);
-    obj.add(bulb);
-  }
-
-  if(t === "water"){
-    obj = new THREE.Mesh(new THREE.BoxGeometry(def.sx||2.5, def.sy||0.3, def.sz||2.5), matWater);
-    obj.position.fromArray(def.pos || [0,0.2,0]);
-    obj.userData.type = "water";
-    obj.userData.id = def.id || crypto.randomUUID();
-  }
-
-  if(t === "fire"){
-    obj = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.42, 0.6, 14), new THREE.MeshStandardMaterial({ color: 0xffaa33, emissive: 0xff6600, emissiveIntensity: 0.7, transparent: true, opacity: 0.55 }));
-    obj.position.fromArray(def.pos || [0,0.35,0]);
-    obj.userData.type = "fire";
-    obj.userData.id = def.id || crypto.randomUUID();
-  }
-
-  if(!obj) return null;
-
-  scene.add(obj);
-  worldObjects.push(obj);
-  return obj;
-}
-
-function serializeWorld(){
-  const out = [];
-  for(const obj of worldObjects){
-    if(!obj || !obj.userData || !obj.userData.type) continue;
-    const type = obj.userData.type;
-
-    if(type === "block"){
-      out.push({
-        type: "block",
-        id: obj.userData.id,
-        pos: [obj.position.x,obj.position.y,obj.position.z],
-        ry: obj.rotation.y,
-        sx: obj.scale.x, sy: obj.scale.y, sz: obj.scale.z
-      });
-    }
-
-    if(type === "light"){
-      out.push({
-        type: "light",
-        id: obj.userData.id,
-        pos: [obj.position.x,obj.position.y,obj.position.z],
-        intensity: obj.intensity,
-        range: obj.distance
-      });
-    }
-
-    if(type === "water"){
-      out.push({
-        type: "water",
-        id: obj.userData.id,
-        pos: [obj.position.x,obj.position.y,obj.position.z],
-        sx: obj.scale.x, sy: obj.scale.y, sz: obj.scale.z
-      });
-    }
-
-    if(type === "fire"){
-      out.push({
-        type: "fire",
-        id: obj.userData.id,
-        pos: [obj.position.x,obj.position.y,obj.position.z]
-      });
-    }
-  }
-  return out;
-}
-
-function loadWorldFromSave(){
-  for(const o of worldObjects){
-    scene.remove(o);
-  }
-  worldObjects.length = 0;
-
-  const list = state.world.objects || [];
-  for(const def of list){
-    addObject(def);
-  }
-
-  log("World loaded:", list.length, "objects");
-}
-
-function writePlayerToState(){
-  state.player.pos = [camera.position.x, camera.position.y, camera.position.z];
-}
-
-function writeWorldToState(){
-  state.world.objects = serializeWorld();
-}
-
-function saveTick(){
-  writePlayerToState();
-  writeWorldToState();
-  saveAll(state);
-}
-
-function getRebindOrDefault(action){
-  return state.keybinds[action] || DEFAULTS.keybinds[action];
-}
-
-function toolFromDigit(code){
-  if(code === getRebindOrDefault("toolBlock")) return "block";
-  if(code === getRebindOrDefault("toolLight")) return "light";
-  if(code === getRebindOrDefault("toolFire")) return "fire";
-  if(code === getRebindOrDefault("toolWater")) return "water";
-  if(code === getRebindOrDefault("toolDelete")) return "delete";
-  if(code === getRebindOrDefault("toolGrab")) return "grab";
-  return null;
-}
-
-function setPaused(p){
-  if(p){
-    controls.unlock();
-    showBlocker(true);
-  }else{
-    showBlocker(false);
-    ui.canvas.requestPointerLock();
-  }
-}
-
-function pointerLockEvents(){
-  document.addEventListener("pointerlockchange", ()=>{
-    const locked = document.pointerLockElement === ui.canvas || document.pointerLockElement === document.body;
-    if(locked){
-      showBlocker(false);
-    }else{
-      showBlocker(true);
-    }
-    log("PointerLock:", locked);
-  });
-}
-
-function intersectWorld(){
+function intersectScene(){
   ray.setFromCamera(pointer, camera);
-  const hits = ray.intersectObjects(worldObjects, true);
+  const meshes = objects.map(o=>o.mesh);
+  const hits = ray.intersectObjects(meshes, true);
   if(hits.length) return hits[0];
   const gHits = ray.intersectObject(ground, false);
   if(gHits.length) return gHits[0];
   return null;
 }
 
-function spawnAtLook(type){
-  const hit = intersectWorld();
+function sparksBurst(p){
+  for(let i=0;i<20;i++){
+    sparksFX.spawn(
+      new THREE.Vector3(p.x, p.y+0.12, p.z),
+      new THREE.Vector3((Math.random()*2-1)*3.2, 2+Math.random()*2.8, (Math.random()*2-1)*3.2)
+    );
+  }
+}
+function fireBurst(p){
+  for(let i=0;i<14;i++){
+    fireFX.spawn(
+      new THREE.Vector3(p.x+(Math.random()*2-1)*0.12, p.y+0.2, p.z+(Math.random()*2-1)*0.12),
+      new THREE.Vector3((Math.random()*2-1)*0.8, 1.6+Math.random()*2.2, (Math.random()*2-1)*0.8)
+    );
+  }
+}
+function waterSplash(p){
+  for(let i=0;i<22;i++){
+    waterFX.spawn(
+      new THREE.Vector3(p.x+(Math.random()*2-1)*0.28, p.y+0.22, p.z+(Math.random()*2-1)*0.28),
+      new THREE.Vector3((Math.random()*2-1)*2.6, 2.6+Math.random()*1.8, (Math.random()*2-1)*2.6)
+    );
+  }
+}
+
+function addPhysProp(def){
+  const id = def.id || crypto.randomUUID();
+  const pos = def.pos || [0,3,0];
+  const rot = def.rot || [0,0,0];
+  const size = def.size || [1,1,1];
+  const mass = def.mass != null ? def.mass : 3.5;
+
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), matProp);
+  mesh.scale.set(size[0], size[1], size[2]);
+  mesh.position.set(pos[0], pos[1], pos[2]);
+  mesh.rotation.set(rot[0], rot[1], rot[2]);
+  mesh.userData = { type: "prop", id };
+
+  scene.add(mesh);
+
+  const half = new CANNON.Vec3(size[0]*0.5, size[1]*0.5, size[2]*0.5);
+  const shape = new CANNON.Box(half);
+  const body = new CANNON.Body({ mass, material: physMat });
+  body.addShape(shape);
+  body.position.set(pos[0], pos[1], pos[2]);
+  body.quaternion.setFromEuler(rot[0], rot[1], rot[2]);
+  body.linearDamping = 0.02;
+  body.angularDamping = 0.06;
+  world.addBody(body);
+
+  const obj = { mesh, body, def: { type:"prop", id, pos, rot, size, mass } };
+  objects.push(obj);
+  return obj;
+}
+
+function addWaterPatch(def){
+  const id = def.id || crypto.randomUUID();
+  const pos = def.pos || [0,0.2,0];
+  const size = def.size || [3.0,0.35,3.0];
+
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), matWater);
+  mesh.scale.set(size[0], size[1], size[2]);
+  mesh.position.set(pos[0], pos[1], pos[2]);
+  mesh.userData = { type: "water", id };
+  scene.add(mesh);
+
+  const obj = { mesh, body: null, def: { type:"water", id, pos, size } };
+  objects.push(obj);
+  return obj;
+}
+
+function addFireMarker(def){
+  const id = def.id || crypto.randomUUID();
+  const pos = def.pos || [0,0.35,0];
+
+  const mesh = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.22, 0.42, 0.6, 14),
+    new THREE.MeshStandardMaterial({ color: 0xffaa33, emissive: 0xff6600, emissiveIntensity: 0.7, transparent: true, opacity: 0.55 })
+  );
+  mesh.position.set(pos[0], pos[1], pos[2]);
+  mesh.userData = { type: "fire", id };
+  scene.add(mesh);
+
+  const obj = { mesh, body: null, def: { type:"fire", id, pos } };
+  objects.push(obj);
+  return obj;
+}
+
+function serializeWorld(){
+  const out = [];
+  for(const o of objects){
+    const t = o.def.type;
+    if(t === "prop"){
+      out.push({
+        type:"prop",
+        id:o.mesh.userData.id,
+        pos:[o.body.position.x,o.body.position.y,o.body.position.z],
+        rot:(function(){
+          const e = new CANNON.Vec3();
+          o.body.quaternion.toEuler(e);
+          return [e.x,e.y,e.z];
+        })(),
+        size:[o.mesh.scale.x,o.mesh.scale.y,o.mesh.scale.z],
+        mass:o.body.mass
+      });
+    }
+    if(t === "water"){
+      out.push({ type:"water", id:o.mesh.userData.id, pos:[o.mesh.position.x,o.mesh.position.y,o.mesh.position.z], size:[o.mesh.scale.x,o.mesh.scale.y,o.mesh.scale.z] });
+    }
+    if(t === "fire"){
+      out.push({ type:"fire", id:o.mesh.userData.id, pos:[o.mesh.position.x,o.mesh.position.y,o.mesh.position.z] });
+    }
+  }
+  return out;
+}
+
+function clearWorld(){
+  for(const o of objects){
+    scene.remove(o.mesh);
+    if(o.body) world.removeBody(o.body);
+  }
+  objects.length = 0;
+}
+
+function loadWorldFromSave(){
+  clearWorld();
+  const list = state.world.objects || [];
+  for(const def of list){
+    if(def.type === "prop") addPhysProp(def);
+    if(def.type === "water") addWaterPatch(def);
+    if(def.type === "fire") addFireMarker(def);
+  }
+  log("World loaded:", list.length);
+}
+
+function saveTick(){
+  state.player.pos = [camera.position.x,camera.position.y,camera.position.z];
+  state.world.objects = serializeWorld();
+  saveAll(state);
+}
+
+function spawnAtLook(kind){
+  const hit = intersectScene();
   if(!hit) return;
 
   const p = hit.point.clone();
   const n = hit.face ? hit.face.normal.clone() : new THREE.Vector3(0,1,0);
   n.transformDirection(hit.object.matrixWorld);
 
-  const place = p.clone().add(n.multiplyScalar(0.6));
+  const place = p.clone().add(n.multiplyScalar(1.0));
   place.x = Math.round(place.x * 2)/2;
-  place.y = Math.max(0.15, Math.round(place.y * 2)/2);
+  place.y = Math.max(0.25, Math.round(place.y * 2)/2);
   place.z = Math.round(place.z * 2)/2;
 
-  if(type === "block"){
-    const o = addObject({ type:"block", pos:[place.x, place.y, place.z], ry:blockRot });
-    if(o) sparksBurst(place);
-  }
-
-  if(type === "light"){
-    addObject({ type:"light", pos:[place.x, place.y+1.2, place.z], intensity:1.4, range:16 });
+  if(kind === "prop"){
+    const s = 0.7 + Math.random()*0.9;
+    const size = [s, s*(0.7+Math.random()*0.8), s];
+    addPhysProp({ type:"prop", pos:[place.x, place.y, place.z], rot:[0, propRot, 0], size, mass: 2.5 + Math.random()*4.5 });
     sparksBurst(place);
   }
 
-  if(type === "water"){
-    addObject({ type:"water", pos:[place.x, 0.2, place.z], sx:2.5, sy:0.3, sz:2.5 });
+  if(kind === "water"){
+    addWaterPatch({ type:"water", pos:[place.x, 0.22, place.z], size:[3.0,0.35,3.0] });
     waterSplash(place);
-    audio.play("waterTouch",{gain:0.9});
+    audio.play("waterTouch",{gain:0.85});
   }
 
-  if(type === "fire"){
-    addObject({ type:"fire", pos:[place.x, 0.35, place.z] });
+  if(kind === "fire"){
+    addFireMarker({ type:"fire", pos:[place.x, 0.35, place.z] });
     fireBurst(place);
     audio.play("fire",{gain:0.65, tag:"fireLoop", loop:true});
   }
@@ -648,145 +591,163 @@ function spawnAtLook(type){
 }
 
 function deleteLookedAt(){
-  const hit = intersectWorld();
+  const hit = intersectScene();
   if(!hit || !hit.object) return;
-  let o = hit.object;
-  while(o && o.parent && !o.userData.type) o = o.parent;
-  if(!o || !o.userData.type || o.userData.type === "ground") return;
+  let mesh = hit.object;
+  while(mesh && mesh.parent && !mesh.userData.type) mesh = mesh.parent;
+  if(!mesh || mesh.userData.type === "ground") return;
 
-  const idx = worldObjects.indexOf(o);
-  if(idx !== -1){
-    worldObjects.splice(idx,1);
-  }
-  scene.remove(o);
+  const idx = objects.findIndex(o=>o.mesh === mesh);
+  if(idx === -1) return;
+
+  const obj = objects[idx];
+  scene.remove(obj.mesh);
+  if(obj.body) world.removeBody(obj.body);
+  objects.splice(idx,1);
+
   sparksBurst(hit.point);
   saveTick();
-  log("Deleted:", o.userData.type);
+  log("Deleted:", mesh.userData.type);
 }
 
-function grabLookedAt(){
-  const hit = intersectWorld();
+function tryGrab(){
+  const hit = intersectScene();
   if(!hit || !hit.object) return;
-  let o = hit.object;
-  while(o && o.parent && !o.userData.type) o = o.parent;
-  if(!o || !o.userData.type || o.userData.type === "ground") return;
 
-  grabbed = o;
-  const lookPoint = hit.point.clone();
-  grabbedOffset.copy(grabbed.position).sub(lookPoint);
+  let mesh = hit.object;
+  while(mesh && mesh.parent && !mesh.userData.type) mesh = mesh.parent;
+  if(!mesh || mesh.userData.type !== "prop") return;
 
-  audio.play("pickup",{gain:0.9});
-  log("Grabbed:", grabbed.userData.type);
+  const obj = objects.find(o=>o.mesh === mesh);
+  if(!obj || !obj.body) return;
+
+  const dist = camera.position.distanceTo(hit.point);
+  grabbed = { obj, dist };
+
+  // pivot body that follows camera forward
+  grabPivotBody = new CANNON.Body({ mass: 0 });
+  grabPivotBody.addShape(new CANNON.Sphere(0.1));
+  grabPivotBody.position.set(hit.point.x, hit.point.y, hit.point.z);
+  world.addBody(grabPivotBody);
+
+  // constraint: keep prop near pivot
+  grabConstraint = new CANNON.PointToPointConstraint(
+    obj.body, new CANNON.Vec3(0,0,0),
+    grabPivotBody, new CANNON.Vec3(0,0,0),
+    4e6
+  );
+  world.addConstraint(grabConstraint);
+
+  obj.body.wakeUp();
+  audio.play("pickup",{gain:0.95});
+  log("Grabbed prop");
 }
 
-function dropGrabbed(){
+function dropGrab(){
   if(!grabbed) return;
-  audio.play("drop",{gain:0.9});
+  audio.play("drop",{gain:0.95});
+  if(grabConstraint) world.removeConstraint(grabConstraint);
+  if(grabPivotBody) world.removeBody(grabPivotBody);
+  grabConstraint = null;
+  grabPivotBody = null;
   grabbed = null;
   saveTick();
-  log("Dropped");
+  log("Dropped prop");
 }
 
-function updateGrabbed(dt){
+function throwGrab(){
   if(!grabbed) return;
+  const obj = grabbed.obj;
+  const dir = new THREE.Vector3();
+  camera.getWorldDirection(dir);
+  obj.body.applyImpulse(new CANNON.Vec3(dir.x*18, dir.y*18, dir.z*18), obj.body.position);
+  sparksBurst(new THREE.Vector3(obj.body.position.x,obj.body.position.y,obj.body.position.z));
+  dropGrab();
+  log("Thrown");
+}
 
-  const hit = intersectWorld();
+function updateGrabPivot(){
+  if(!grabbed || !grabPivotBody) return;
+  const dir = new THREE.Vector3();
+  camera.getWorldDirection(dir);
+  const target = camera.position.clone().add(dir.multiplyScalar(clamp(grabbed.dist, 2.0, 8.0)));
+  grabPivotBody.position.set(target.x, target.y, target.z);
+}
+
+function explodeAtLook(){
+  const hit = intersectScene();
   if(!hit) return;
+
   const p = hit.point.clone();
-  const target = p.add(grabbedOffset);
-  grabbed.position.lerp(target, clamp(dt*10,0,1));
+  sparksBurst(p);
+  for(let i=0;i<24;i++) fireBurst(p);
 
-  if(grabbed.userData.type === "fire"){
-    fireBurst(grabbed.position);
-  }
-}
+  const blastPos = new CANNON.Vec3(p.x,p.y,p.z);
+  const radius = 7.5;
+  const force = 55;
 
-function sparksBurst(p){
-  for(let i=0;i<22;i++){
-    sparksFX.spawn(
-      new THREE.Vector3(p.x, p.y+0.1, p.z),
-      new THREE.Vector3((Math.random()*2-1)*2.6, 2+Math.random()*2.2, (Math.random()*2-1)*2.6)
-    );
+  for(const o of objects){
+    if(!o.body) continue;
+    const bp = o.body.position;
+    const dx = bp.x - blastPos.x;
+    const dy = bp.y - blastPos.y;
+    const dz = bp.z - blastPos.z;
+    const dist = Math.sqrt(dx*dx+dy*dy+dz*dz);
+    if(dist > radius || dist < 0.001) continue;
+    const k = (1 - dist/radius);
+    const nx = dx/dist, ny = dy/dist, nz = dz/dist;
+    o.body.applyImpulse(new CANNON.Vec3(nx*force*k, ny*force*k, nz*force*k), o.body.position);
+    o.body.wakeUp();
   }
-}
 
-function fireBurst(p){
-  for(let i=0;i<16;i++){
-    fireFX.spawn(
-      new THREE.Vector3(p.x+(Math.random()*2-1)*0.12, p.y+0.15, p.z+(Math.random()*2-1)*0.12),
-      new THREE.Vector3((Math.random()*2-1)*0.6, 1.2+Math.random()*1.8, (Math.random()*2-1)*0.6)
-    );
-  }
-}
-
-function waterSplash(p){
-  audio.play("waterTouch",{gain:0.8});
-  for(let i=0;i<26;i++){
-    waterFX.spawn(
-      new THREE.Vector3(p.x+(Math.random()*2-1)*0.25, p.y+0.2, p.z+(Math.random()*2-1)*0.25),
-      new THREE.Vector3((Math.random()*2-1)*2.2, 2.4+Math.random()*1.6, (Math.random()*2-1)*2.2)
-    );
-  }
-}
-
-function handleToolUse(){
-  if(currentTool === "block") spawnAtLook("block");
-  if(currentTool === "light") spawnAtLook("light");
-  if(currentTool === "fire") spawnAtLook("fire");
-  if(currentTool === "water") spawnAtLook("water");
-  if(currentTool === "delete") deleteLookedAt();
-  if(currentTool === "grab"){
-    if(grabbed) dropGrabbed();
-    else grabLookedAt();
-  }
+  saveTick();
+  log("BOOM");
 }
 
 function movement(dt){
   direction.set(0,0,0);
 
-  const forward = getRebindOrDefault("forward");
-  const backward = getRebindOrDefault("backward");
-  const left = getRebindOrDefault("left");
-  const right = getRebindOrDefault("right");
-  const sprint = getRebindOrDefault("sprint");
-  const jump = getRebindOrDefault("jump");
+  const forward = getKey("forward");
+  const backward = getKey("backward");
+  const left = getKey("left");
+  const right = getKey("right");
+  const sprint = getKey("sprint");
+  const jump = getKey("jump");
 
-  const running = isCodePressed(keys, sprint);
-  const speed = running ? 8.8 : 5.8;
+  const running = keys.has(sprint);
+  const speed = running ? 9.2 : 6.1;
 
-  if(isCodePressed(keys, forward)) direction.z -= 1;
-  if(isCodePressed(keys, backward)) direction.z += 1;
-  if(isCodePressed(keys, left)) direction.x -= 1;
-  if(isCodePressed(keys, right)) direction.x += 1;
+  if(keys.has(forward)) direction.z -= 1;
+  if(keys.has(backward)) direction.z += 1;
+  if(keys.has(left)) direction.x -= 1;
+  if(keys.has(right)) direction.x += 1;
 
   direction.normalize();
 
-  velocity.x -= velocity.x * 9.0 * dt;
-  velocity.z -= velocity.z * 9.0 * dt;
-
-  velocity.y -= 18.5 * dt;
+  velocity.x -= velocity.x * 9.5 * dt;
+  velocity.z -= velocity.z * 9.5 * dt;
+  velocity.y -= 18.8 * dt;
 
   if(direction.lengthSq() > 0){
     const accel = speed * 12.0;
     velocity.x += direction.x * accel * dt;
     velocity.z += direction.z * accel * dt;
 
-    const t = now();
-    if(t - lastFootstep > (running ? 260 : 360)){
+    const t = performance.now();
+    if(t - lastFootstep > (running ? 240 : 340)){
       audio.play("walk",{gain:0.22});
       lastFootstep = t;
     }
   }
 
-  if(canJump && isCodePressed(keys, jump)){
-    velocity.y = 7.2;
+  if(canJump && keys.has(jump)){
+    velocity.y = 7.4;
     canJump = false;
     log("Jump");
   }
 
   controls.moveRight(velocity.x * dt);
   controls.moveForward(velocity.z * dt);
-
   camera.position.y += velocity.y * dt;
 
   if(camera.position.y < 2.2){
@@ -796,9 +757,9 @@ function movement(dt){
   }
 }
 
-function animateArms(dt){
+function animateArms(){
   const moving = direction.lengthSq() > 0;
-  const t = now() * 0.001;
+  const t = performance.now() * 0.001;
   const swing = moving ? Math.sin(t * 10) * 0.05 : 0;
   arms.rotation.x = swing;
   arms.rotation.z = moving ? Math.sin(t*10+1.3)*0.03 : 0;
@@ -810,66 +771,94 @@ function tickVFX(dt){
   sparksFX.tick(dt, 7.5);
 }
 
-function applyMouseSensitivity(){
-  const s = state.settings.sensitivity;
-  controls.pointerSpeed = clamp(s, 0.05, 2.0);
+function syncMeshesFromBodies(){
+  for(const o of objects){
+    if(!o.body) continue;
+    o.mesh.position.set(o.body.position.x, o.body.position.y, o.body.position.z);
+    o.mesh.quaternion.set(o.body.quaternion.x, o.body.quaternion.y, o.body.quaternion.z, o.body.quaternion.w);
+  }
+}
+
+async function loadSFX(){
+  await audio.load("waterTouch", SFX.waterTouch);
+  await audio.load("waterFlow", SFX.waterFlow);
+  await audio.load("walk", SFX.walk);
+  await audio.load("pickup", SFX.pickup);
+  await audio.load("drop", SFX.drop);
+  await audio.load("fire", SFX.fire);
 }
 
 function bindEvents(){
   window.addEventListener("keydown",(e)=>{
     keys.add(e.code);
 
-    const tool = toolFromDigit(e.code);
-    if(tool){
-      setTool(tool);
-      return;
+    const tool = toolFromKey(e.code);
+    if(tool){ setTool(tool); return; }
+
+    if(e.code === getKey("rotate")){
+      propRot += Math.PI/2;
+      log("Rotate prop:", propRot);
     }
 
-    if(e.code === getRebindOrDefault("rotate")){
-      blockRot += Math.PI/2;
-      log("Rotate block:", blockRot);
+    if(e.code === getKey("throw")){
+      if(grabbed) throwGrab();
     }
 
-    if(e.code === getRebindOrDefault("flashlight")){
-      flashlight.visible = !flashlight.visible;
-      log("Flashlight:", flashlight.visible);
-    }
-
-    if(e.code === getRebindOrDefault("save")){
+    if(e.code === getKey("save")){
       saveTick();
     }
 
-    if(e.code === getRebindOrDefault("pause")){
+    if(e.code === getKey("pause")){
       if(document.pointerLockElement) controls.unlock();
       else ui.canvas.requestPointerLock();
     }
   });
 
-  window.addEventListener("keyup",(e)=>{
-    keys.delete(e.code);
-  });
+  window.addEventListener("keyup",(e)=> keys.delete(e.code));
 
   ui.canvas.addEventListener("mousedown",(e)=>{
     if(e.button !== 0) return;
+
     if(document.pointerLockElement !== ui.canvas && document.pointerLockElement !== document.body){
       ui.canvas.requestPointerLock();
       return;
     }
-    handleToolUse();
+
+    if(currentTool === "prop") spawnAtLook("prop");
+    if(currentTool === "water") spawnAtLook("water");
+    if(currentTool === "fire") spawnAtLook("fire");
+    if(currentTool === "delete") deleteLookedAt();
+    if(currentTool === "explode") explodeAtLook();
+
+    if(currentTool === "grav"){
+      if(grabbed) dropGrab();
+      else tryGrab();
+    }
   });
 
-  ui.blocker.addEventListener("click", ()=>{
-    ui.canvas.requestPointerLock();
+  ui.blocker.addEventListener("click", ()=> ui.canvas.requestPointerLock());
+
+  document.addEventListener("pointerlockchange", ()=>{
+    const locked = document.pointerLockElement === ui.canvas || document.pointerLockElement === document.body;
+    showBlocker(!locked);
+    log("PointerLock:", locked);
+  });
+
+  window.addEventListener("keydown",(e)=>{
+    if(!pendingRebind) return;
+    state.keybinds[pendingRebind] = e.code;
+    pendingRebind = null;
+    updateHotkeyUI();
+    saveAll(state);
+    e.preventDefault();
   });
 }
 
 function startEngine(){
   ui.intro.classList.add("hidden");
   showHUD(true);
-  ui.canvas.focus();
-
   audio.resume();
-  applyMouseSensitivity();
+  controls.pointerSpeed = clamp(state.settings.sensitivity, 0.05, 2.0);
 
   loadWorldFromSave();
   updateFogFromChunks();
@@ -880,32 +869,42 @@ function startEngine(){
 
 ui.btnStart.addEventListener("click", startEngine);
 
-bootUI();
-bindEvents();
-pointerLockEvents();
+function boot(){
+  bootUI();
+  bindEvents();
+  setTool(currentTool);
+  log("Boot UI done");
+}
 
+boot();
+
+ui.btnReset.addEventListener("click", ()=>{ clearSave(); location.reload(); });
+
+// load + run
 (async function init(){
   log("Init begin");
   await loadSFX();
   log("Init done");
 })();
 
-function renderLoop(){
+function physicsStep(dt){
+  world.step(1/60, dt, 3);
+  updateGrabPivot();
+  syncMeshesFromBodies();
+}
+
+function loop(){
   const dt = clamp(clock.getDelta(), 0, 0.05);
 
   if(document.pointerLockElement === ui.canvas || document.pointerLockElement === document.body){
     movement(dt);
-    updateGrabbed(dt);
-    animateArms(dt);
+    animateArms();
   }
 
+  physicsStep(dt);
   tickVFX(dt);
 
-  flashlight.position.set(0,0,0);
-  flashlight.target.position.set(0,0,-1);
-
   renderer.render(scene, camera);
-
-  requestAnimationFrame(renderLoop);
+  requestAnimationFrame(loop);
 }
-renderLoop();
+loop();
