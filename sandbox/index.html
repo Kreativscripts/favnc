@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>Nexus Command Engine</title>
+  <link rel="icon" href="https://favnc.pages.dev/assets/favicon.ico" />
+  <link rel="stylesheet" href="https://favnc.pages.dev/sandbox_sys__/_ui.css" />
+</head>
+<body>
+  <div id="intro" class="intro">
+    <div class="intro-inner">
+      <div class="intro-top">Fav presents:</div>
+      <div class="intro-title">Nexus Command Engine <span class="ver">1.0.0</span></div>
+      <div class="intro-sub">A 3D world all in one page</div>
+      <div class="intro-actions">
+        <button id="btnStart" class="btn primary">Enter Engine</button>
+        <button id="btnReset" class="btn">Reset Save</button>
+      </div>
+      <div class="intro-note">
+        Tip: Click <b>Enter Engine</b>, then click the screen to lock your mouse.
+      </div>
+    </div>
+  </div>
+
+  <canvas id="c"></canvas>
+
+  <div id="hud" class="hud hidden">
+    <div class="hud-top">
+      <div class="brand">
+        <div class="brand-title">Nexus Command Engine</div>
+        <div class="brand-sub">Sandbox</div>
+      </div>
+
+      <div class="hud-actions">
+        <button id="btnSave" class="btn small">Save</button>
+        <button id="btnReload" class="btn small">Reload</button>
+        <button id="btnClearWorld" class="btn small danger">Clear World</button>
+        <button id="btnSettings" class="btn small">Settings</button>
+      </div>
+    </div>
+
+    <div class="hotbar">
+      <button class="slot" data-tool="block">Block</button>
+      <button class="slot" data-tool="light">Light</button>
+      <button class="slot" data-tool="fire">Fire</button>
+      <button class="slot" data-tool="water">Water</button>
+      <button class="slot" data-tool="delete">Delete</button>
+      <button class="slot" data-tool="grab">Grab</button>
+    </div>
+
+    <div class="hint">
+      <div><b>WASD</b> move • <b>Space</b> jump • <b>Shift</b> sprint • <b>Mouse</b> look</div>
+      <div><b>LMB</b> use tool • <b>R</b> rotate block • <b>F</b> toggle flashlight</div>
+    </div>
+  </div>
+
+  <div id="settingsPanel" class="panel hidden">
+    <div class="panel-head">
+      <div class="panel-title">Engine Settings</div>
+      <button id="btnCloseSettings" class="btn small">Close</button>
+    </div>
+
+    <div class="panel-body">
+      <div class="grid2">
+        <label class="field">
+          <span>Master Volume</span>
+          <input id="setVolume" type="range" min="0" max="1" step="0.01" />
+        </label>
+
+        <label class="field">
+          <span>Mouse Sensitivity</span>
+          <input id="setSens" type="range" min="0.05" max="2.0" step="0.01" />
+        </label>
+
+        <label class="field">
+          <span>FOV</span>
+          <input id="setFov" type="range" min="60" max="110" step="1" />
+        </label>
+
+        <label class="field">
+          <span>Chunks / Draw Distance</span>
+          <input id="setChunks" type="range" min="2" max="14" step="1" />
+        </label>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Hotkeys</div>
+        <div id="hotkeys" class="hotkeys"></div>
+        <div class="small-note">Click a hotkey, then press a key to rebind.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Utility</div>
+        <div class="row">
+          <button id="btnExport" class="btn">Export Save</button>
+          <button id="btnImport" class="btn">Import Save</button>
+          <button id="btnDefaults" class="btn">Defaults</button>
+        </div>
+        <textarea id="saveBox" class="savebox" placeholder="Export appears here. Paste an export here to import."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div id="blocker" class="blocker hidden">
+    <div class="blocker-inner">
+      <div class="blocker-title">Paused</div>
+      <div class="blocker-sub">Click to resume (mouse lock)</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var ua = navigator.userAgent || "";
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      var hasTouch = "ontouchstart" in window || (navigator.maxTouchPoints || 0) > 0;
+      if (isMobile || hasTouch) {
+        location.replace("https://favnc.pages.dev/sandbox/dearmobile.html");
+      }
+    })();
+  </script>
+<script src="https://favnc.pages.dev/web_runtime/console.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/webperms.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/redirect_login.js" defer></script>
+<script type="module" src="https://favnc.pages.dev/sandbox_sys__/main.js"></script>
+</body>
+</html>
