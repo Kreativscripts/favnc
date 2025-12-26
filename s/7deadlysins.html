@@ -1,0 +1,93 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>7 Deadly Sins • Stream</title><style>
+:root{--bg:#07080b;--panel:#0d0f14;--panel2:#10131a;--text:#eef1ff;--muted:#9aa3b2;--line:#1c2130;--accent:#e50914;--good:#39d98a;--warn:#ffcc66;--shadow:0 18px 70px rgba(0,0,0,.55)}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text);background:radial-gradient(1000px 800px at 20% 0%,rgba(229,9,20,.18),transparent 60%),radial-gradient(900px 700px at 80% 10%,rgba(88,101,242,.16),transparent 60%),var(--bg);overflow:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{display:grid;grid-template-columns:360px 1fr;gap:16px;height:100%;padding:16px}
+.left{background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 40%),var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.brand{display:flex;gap:10px;align-items:center;padding:14px 14px 10px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(229,9,20,.12),transparent 55%)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 22px rgba(229,9,20,.55)}
+.brand h1{font-size:14px;margin:0;letter-spacing:.8px;text-transform:uppercase}
+.brand .sub{margin-left:auto;color:var(--muted);font-size:12px}
+.controls{padding:12px 14px;border-bottom:1px solid var(--line);display:grid;gap:10px}
+.row{display:flex;gap:10px}
+.inp{flex:1;display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--text)}
+.inp input{flex:1;background:transparent;border:0;outline:0;color:var(--text);font-size:13px}
+.pill{display:flex;gap:8px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--muted);font-size:12px}
+.pill b{color:var(--text);font-weight:600}
+.btn{cursor:pointer;user-select:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));color:var(--text);transition:.18s transform,.18s filter,.18s border-color}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08);border-color:#2a3550}
+.btn:active{transform:translateY(0)}
+.btn.red{background:linear-gradient(180deg,rgba(229,9,20,.95),rgba(229,9,20,.75));border-color:rgba(229,9,20,.7)}
+.btn.ghost{background:transparent}
+.list{flex:1;overflow:auto;padding:10px}
+.item{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;border:1px solid transparent;transition:.15s background,.15s border-color,.15s transform}
+.item:hover{background:rgba(255,255,255,.03);border-color:#232b3f;transform:translateY(-1px)}
+.item.active{background:rgba(229,9,20,.10);border-color:rgba(229,9,20,.35)}
+.badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
+.meta{min-width:0}
+.title{font-weight:650;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.small{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font-size:11px;color:var(--muted);padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.right{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 35%),var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.hero{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.hero .h{display:grid;gap:2px}
+.hero .h h2{margin:0;font-size:16px}
+.hero .h p{margin:0;color:var(--muted);font-size:12px}
+.hero .r{margin-left:auto;display:flex;gap:10px;align-items:center}
+.stat{display:flex;gap:8px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--muted);font-size:12px}
+.stat i{width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block}
+.stat.ok i{background:var(--good)}
+.player{position:relative;flex:1;background:#000}
+video{width:100%;height:100%;background:#000}
+.toast{position:absolute;left:16px;bottom:16px;display:flex;gap:10px;align-items:center;max-width:min(720px,calc(100% - 32px));padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(10,12,18,.72);backdrop-filter:blur(10px);box-shadow:0 12px 50px rgba(0,0,0,.55);opacity:0;transform:translateY(8px);transition:.22s}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast b{font-weight:700}
+.toast span{color:var(--muted)}
+.bar{height:4px;width:110px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden}
+.bar>div{height:100%;width:0;background:var(--accent)}
+@media (max-width:980px){body{overflow:auto}.wrap{grid-template-columns:1fr;height:auto}.right{min-height:70vh}}
+</style></head><body>
+<div class="wrap">
+  <aside class="left">
+    <div class="brand"><div class="dot"></div><h1>Wannabe Netflix</h1><div class="sub" id="envTxt">API</div></div>
+    <div class="controls">
+      <div class="row">
+        <div class="inp"><span>🔎</span><input id="q" placeholder="Search episodes..."></div>
+      </div>
+      <div class="row">
+        <div class="pill" style="flex:1"><span>Key</span><b id="keyTxt">favnc</b></div>
+        <button class="btn ghost" id="reloadBtn">↻ Reload</button>
+      </div>
+      <div class="row">
+        <button class="btn" id="prevBtn" style="flex:1">⟵ Prev</button>
+        <button class="btn red" id="nextBtn" style="flex:1">Next ⟶</button>
+      </div>
+    </div>
+    <div class="list" id="list"></div>
+  </aside>
+
+  <main class="right">
+    <div class="hero">
+      <div class="h">
+        <h2 id="epTitle">Pick an episode</h2>
+        <p id="epSub">Loads from <span id="baseTxt"></span></p>
+      </div>
+      <div class="r">
+        <div class="stat" id="stat"><i></i><span id="statTxt">Idle</span></div>
+        <button class="btn ghost" id="copyBtn">Copy link</button>
+      </div>
+    </div>
+    <div class="player">
+      <video id="v" controls playsinline preload="metadata"></video>
+      <div class="toast" id="toast">
+        <div><b id="t1">Ready</b> <span id="t2"></span></div>
+        <div class="bar"><div id="tbar"></div></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(()=>{const KEY="favnc",base=location.origin,api=(p)=>base+p+(p.includes("?")?"&":"?")+"key="+encodeURIComponent(KEY),qs=(s)=>document.querySelector(s),listEl=qs("#list"),qEl=qs("#q"),v=qs("#v"),epTitle=qs("#epTitle"),epSub=qs("#epSub"),baseTxt=qs("#baseTxt"),stat=qs("#stat"),statTxt=qs("#statTxt"),envTxt=qs("#envTxt"),toast=qs("#toast"),t1=qs("#t1"),t2=qs("#t2"),tbar=qs("#tbar"),copyBtn=qs("#copyBtn");qs("#keyTxt").textContent=KEY;baseTxt.textContent=base;envTxt.textContent=base.includes("trycloudflare")?"TryCloudflare":"Local";let items=[],filtered=[],idx=-1,saveTick=null,toastTick=null;const idFor=(it)=>"favnc_resume:"+it.id;const nice=(s)=>s.replace(/[_-]+/g," ").replace(/\s+/g," ").trim();const epNum=(id)=>{const m=id.match(/(?:^|[^0-9])E(\d+)(?:[^0-9]|$)/i);return m?parseInt(m[1],10):null};const showToast=(a,b,p=1)=>{t1.textContent=a;t2.textContent=b||"";toast.classList.add("show");tbar.style.width=Math.max(0,Math.min(1,p))*100+"%";clearTimeout(toastTick);toastTick=setTimeout(()=>toast.classList.remove("show"),1600)};const setStat=(ok,text)=>{stat.classList.toggle("ok",!!ok);statTxt.textContent=text};const fetchJSON=async(url)=>{const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()};const render=()=>{listEl.innerHTML="";(filtered.length?filtered:items).forEach((it,i)=>{const n=epNum(it.id);const div=document.createElement("a");div.href="javascript:void(0)";div.className="item"+(i===idx?" active":"");div.dataset.i=i;const left=document.createElement("div");left.className="badge";left.textContent=n!=null?("E"+n):(i+1);const meta=document.createElement("div");meta.className="meta";const t=document.createElement("div");t.className="title";t.textContent=nice(it.id);const s=document.createElement("div");s.className="small";s.textContent=it.video_file;meta.appendChild(t);meta.appendChild(s);const tag=document.createElement("div");tag.className="tag";tag.textContent=(it.subtitle_urls&&it.subtitle_urls.length)?"CC":"No CC";div.appendChild(left);div.appendChild(meta);div.appendChild(tag);div.onclick=()=>playIndex(i,true);listEl.appendChild(div)})};const currentArr=()=>filtered.length?filtered:items;const selectActive=()=>{[...listEl.querySelectorAll(".item")].forEach((el)=>el.classList.remove("active"));const el=listEl.querySelector('.item[data-i="'+idx+'"]');if(el)el.classList.add("active")};const addTracks=(it)=>{for(const tr of [...v.querySelectorAll("track")])tr.remove();(it.subtitle_urls||[]).forEach((u,k)=>{const tr=document.createElement("track");tr.kind="subtitles";tr.srclang="en";tr.label="English"+(k?(" "+(k+1)):"");tr.src=base+u+(u.includes("?")?"&":"?")+"key="+encodeURIComponent(KEY);if(k===0)tr.default=true;v.appendChild(tr)})};const playIndex=async(i,userAction=false)=>{const arr=currentArr();if(!arr[i])return;idx=i;selectActive();const it=arr[i];epTitle.textContent=nice(it.id);setStat(true,"Loading…");const url=api("/"+encodeURIComponent(it.video_file));v.src=url;addTracks(it);const resumeRaw=localStorage.getItem(idFor(it));let resume=resumeRaw?Number(resumeRaw):0;try{await v.play().catch(()=>{});setStat(true,"Playing");showToast("Now playing",nice(it.id),1);if(resume>2){const go=()=>{v.currentTime=resume;showToast("Resumed",""+Math.floor(resume)+"s",resume/Math.max(1,v.duration||resume));};if(v.readyState>=1)go();else v.addEventListener("loadedmetadata",go,{once:true})}}catch(e){setStat(false,"Playback error");showToast("Error",String(e&&e.message||e),0)};if(saveTick)clearInterval(saveTick);saveTick=setInterval(()=>{if(!arr[idx])return;const ct=v.currentTime||0;if(ct>1)localStorage.setItem(idFor(arr[idx]),String(ct));},1500);if(userAction)history.replaceState(null,"",location.pathname+"?ep="+encodeURIComponent(it.id));};const filter=()=>{const q=(qEl.value||"").trim().toLowerCase();if(!q){filtered=[];idx=Math.max(0,Math.min(idx,items.length-1));render();selectActive();return}filtered=items.filter(it=>(it.id+" "+it.video_file).toLowerCase().includes(q));idx=Math.max(0,Math.min(idx,filtered.length-1));render();selectActive();};const load=async()=>{setStat(true,"Fetching…");try{const j=await fetchJSON(api("/api/catalog"));items=(j.items||[]).slice();items.sort((a,b)=>{const na=epNum(a.id),nb=epNum(b.id);if(na!=null&&nb!=null)return na-nb;return (a.id||"").localeCompare(b.id||"",undefined,{numeric:true,sensitivity:"base"})});render();setStat(true,"Ready");showToast("Loaded",items.length+" episode(s)",1);const params=new URLSearchParams(location.search);const wanted=params.get("ep");if(wanted){const i=items.findIndex(x=>x.id===wanted);if(i>=0){idx=i;render();playIndex(i,false);return}}if(items.length){idx=0;render();selectActive();playIndex(0,false)} }catch(e){setStat(false,"API failed");showToast("API error",String(e&&e.message||e),0)};};qs("#reloadBtn").onclick=load;qs("#prevBtn").onclick=()=>{const arr=currentArr();if(!arr.length)return;playIndex((idx-1+arr.length)%arr.length,true)};qs("#nextBtn").onclick=()=>{const arr=currentArr();if(!arr.length)return;playIndex((idx+1)%arr.length,true)};qEl.addEventListener("input",filter);v.addEventListener("ended",()=>{const arr=currentArr();if(!arr.length)return;showToast("Ended","Auto next…",1);playIndex((idx+1)%arr.length,true)});document.addEventListener("keydown",(e)=>{if(e.target&&("INPUT"===e.target.tagName))return;const k=e.key.toLowerCase();if(k==="arrowright")qs("#nextBtn").click();if(k==="arrowleft")qs("#prevBtn").click();if(k===" ") {e.preventDefault();if(v.paused)v.play();else v.pause()}if(k==="f"){if(document.fullscreenElement)document.exitFullscreen();else v.requestFullscreen?.()}});copyBtn.onclick=async()=>{const arr=currentArr();if(!arr[idx]){showToast("Nothing to copy","",0);return}const link=api("/"+encodeURIComponent(arr[idx].video_file));try{await navigator.clipboard.writeText(link);showToast("Copied","Direct video URL",1)}catch{showToast("Copy failed","Browser blocked clipboard",0)}};load();})();
+</script>
+</body></html>
