@@ -1,0 +1,10 @@
+{
+  "cameras": [
+    {
+      "id": "CAM01",
+      "location": "Entrance",
+      "resolution": "1920x1080",
+      "fps": 30
+    }
+  ]
+}

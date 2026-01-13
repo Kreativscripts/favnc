@@ -1,0 +1,6 @@
+{
+  "knife_detection_confidence": 0.75,
+  "gun_detection_confidence": 0.80,
+  "suspicious_pattern_confidence": 0.60,
+  "ignore_metal_only": true
+}

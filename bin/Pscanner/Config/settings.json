@@ -1,0 +1,11 @@
+{
+  "system_name": "Pennywise Scanner V2",
+  "record_duration_seconds": 5,
+  "prebuffer_seconds": 2,
+  "overlay_timestamp": true,
+  "overlay_camera_id": true,
+  "draw_bounding_boxes": true,
+  "storage_root": "./PennywiseScannerV2",
+  "enable_logs": true,
+  "auto_cleanup_days": 30
+}

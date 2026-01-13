@@ -1,0 +1,3 @@
+INFO:httpx:HTTP Request: POST https://api.x.ai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+INFO:httpx:HTTP Request: POST https://api.x.ai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+INFO:httpx:HTTP Request: POST https://api.x.ai/v1/chat/completions "HTTP/1.1 403 Forbidden"
