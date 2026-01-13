@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Frutoos SBA Dashboard</title>
+
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+body {
+  margin:0;
+  background:#0f1117;
+  color:#e6e6eb;
+  font-family:system-ui,sans-serif;
+}
+h1,h2,h3 { margin:0.4rem 0; }
+small { color:#9aa0aa; }
+
+button {
+  margin:1rem;
+  padding:0.7rem 1.4rem;
+  font-weight:700;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.dashboard {
+  width:2600px;
+  padding:1rem;
+}
+
+.row {
+  display:flex;
+  gap:1rem;
+  margin-bottom:1rem;
+}
+
+.panel {
+  background:#181b23;
+  border-radius:12px;
+  padding:1rem;
+  min-width:420px;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.9rem;
+}
+th,td {
+  border-bottom:1px solid #333;
+  padding:0.35rem;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<button onclick="exportPNG()">⬇ Download FULL SBA PNG</button>
+
+<div id="capture" class="dashboard">
+<h1>🍬 Frutoos Statistical Analysis (5 Packs)</h1>
+<small>Frequency, Probability and Percentage Distribution</small>
+
+<div class="row" id="packs"></div>
+
+<div class="row">
+  <div class="panel">
+    <h2>Overall Distribution (All Packs)</h2>
+    <table>
+      <thead>
+        <tr><th>Color</th><th>Total f</th><th>P(Color)</th><th>%</th></tr>
+      </thead>
+      <tbody id="overallTable"></tbody>
+    </table>
+    <p><strong>Formula:</strong></p>
+    <pre>P(Color) = Total frequency of that color ÷ Total number of Frutoos</pre>
+  </div>
+  <div class="panel">
+    <canvas id="overallChart" width="350" height="350"></canvas>
+  </div>
+</div>
+</div>
+
+<script>
+const data = [
+ {Green:8, Blue:5, Orange:7, Red:7, Yellow:9},
+ {Green:4, Blue:8, Orange:6, Red:8, Yellow:9},
+ {Green:4, Blue:7, Orange:7, Red:10, Yellow:8},
+ {Green:5, Blue:4, Orange:9, Red:6, Yellow:10},
+ {Green:6, Blue:12, Orange:8, Red:6, Yellow:3}
+];
+
+const colors = ["Green","Blue","Orange","Red","Yellow"];
+const hex = {
+ Green:"#2ecc71",
+ Blue:"#3498db",
+ Orange:"#f39c12",
+ Red:"#e74c3c",
+ Yellow:"#f1c40f"
+};
+
+function total(p){ return colors.reduce((a,c)=>a+p[c],0); }
+
+const packsDiv = document.getElementById("packs");
+let charts = [];
+
+data.forEach((p,i)=>{
+  const t = total(p);
+  let rows = "";
+  colors.forEach(c=>{
+    let prob = p[c]/t;
+    rows += `<tr>
+      <td>${c}</td>
+      <td>${p[c]}</td>
+      <td>${prob.toFixed(3)}</td>
+      <td>${(prob*100).toFixed(1)}%</td>
+    </tr>`;
+  });
+
+  packsDiv.innerHTML += `
+  <div class="panel">
+    <h2>Pack ${i+1}</h2>
+    <table>
+      <tr><th>Color</th><th>f</th><th>P(Color)</th><th>%</th></tr>
+      ${rows}
+    </table>
+    <p><strong>Total sweets:</strong> ${t}</p>
+    <canvas id="chart${i}" width="320" height="320"></canvas>
+  </div>
+  `;
+});
+
+data.forEach((p,i)=>{
+  charts[i] = new Chart(document.getElementById("chart"+i),{
+    type:"pie",
+    data:{
+      labels:colors,
+      datasets:[{
+        data:colors.map(c=>p[c]),
+        backgroundColor:colors.map(c=>hex[c])
+      }]
+    },
+    options:{animation:{duration:700}}
+  });
+});
+
+// Overall
+let totals = {Green:0,Blue:0,Orange:0,Red:0,Yellow:0};
+data.forEach(p=>colors.forEach(c=>totals[c]+=p[c]));
+let grand = colors.reduce((a,c)=>a+totals[c],0);
+
+let overallRows="";
+colors.forEach(c=>{
+  let prob = totals[c]/grand;
+  overallRows += `<tr>
+    <td>${c}</td>
+    <td>${totals[c]}</td>
+    <td>${prob.toFixed(3)}</td>
+    <td>${(prob*100).toFixed(1)}%</td>
+  </tr>`;
+});
+document.getElementById("overallTable").innerHTML = overallRows;
+
+new Chart(document.getElementById("overallChart"),{
+  type:"pie",
+  data:{
+    labels:colors,
+    datasets:[{
+      data:colors.map(c=>totals[c]),
+      backgroundColor:colors.map(c=>hex[c])
+    }]
+  },
+  options:{animation:{duration:900}}
+});
+
+function exportPNG(){
+  html2canvas(document.getElementById("capture"),{
+    scale:2,
+    backgroundColor:"#0f1117"
+  }).then(canvas=>{
+    const a=document.createElement("a");
+    a.download="Frutoos_SBA_Full_Analysis.png";
+    a.href=canvas.toDataURL("image/png");
+    a.click();
+  });
+}
+</script>
+
+</body>
+</html>
