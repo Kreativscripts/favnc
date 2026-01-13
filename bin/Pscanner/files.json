@@ -1,0 +1,70 @@
+[
+  "App/main.py",
+
+  "Bin/models/best-wave.onnx",
+  "Bin/models/best.onnx",
+  "Bin/models/db.onnx",
+  "Bin/models/haar.onnx",
+  "Bin/models/normal.onnx",
+  "Bin/models/symlet.onnx",
+
+  "Bin/runs/detect/Db/weights/best.pt",
+  "Bin/runs/detect/Db/weights/last.pt",
+  "Bin/runs/detect/Db/args.yaml",
+  "Bin/runs/detect/Db/events.out.tfevents.1704204345.DESKTOP-F57NJFM.19316.0",
+  "Bin/runs/detect/Db/F1_curve.png",
+  "Bin/runs/detect/Db/P_curve.png",
+  "Bin/runs/detect/Db/PR_curve.png",
+  "Bin/runs/detect/Db/R_curve.png",
+  "Bin/runs/detect/Db/results.csv",
+  "Bin/runs/detect/Db/results.png",
+
+  "Bin/runs/detect/Haar/weights/best.pt",
+  "Bin/runs/detect/Haar/weights/last.pt",
+  "Bin/runs/detect/Haar/args.yaml",
+  "Bin/runs/detect/Haar/events.out.tfevents.1704195829.DESKTOP-F57NJFM.3076.0",
+  "Bin/runs/detect/Haar/F1_curve.png",
+  "Bin/runs/detect/Haar/P_curve.png",
+  "Bin/runs/detect/Haar/PR_curve.png",
+  "Bin/runs/detect/Haar/R_curve.png",
+  "Bin/runs/detect/Haar/results.csv",
+  "Bin/runs/detect/Haar/results.png",
+
+  "Bin/runs/detect/Haar_Compressed/weights/best.pt",
+  "Bin/runs/detect/Haar_Compressed/weights/last.pt",
+  "Bin/runs/detect/Haar_Compressed/args.yaml",
+  "Bin/runs/detect/Haar_Compressed/events.out.tfevents.1704252081.DESKTOP-F57NJFM.15600.0",
+  "Bin/runs/detect/Haar_Compressed/results.csv",
+  "Bin/runs/detect/Haar_Compressed/results.png",
+
+  "Bin/runs/detect/Normal/weights/best.pt",
+  "Bin/runs/detect/Normal/weights/last.pt",
+  "Bin/runs/detect/Normal/args.yaml",
+  "Bin/runs/detect/Normal/events.out.tfevents.1704158934.DESKTOP-F57NJFM.9088.0",
+
+  "Bin/runs/detect/Normal_Compressed/weights/best.pt",
+  "Bin/runs/detect/Normal_Compressed/weights/last.pt",
+  "Bin/runs/detect/Normal_Compressed/args.yaml",
+  "Bin/runs/detect/Normal_Compressed/events.out.tfevents.1704736728.DESKTOP-F57NJFM.1428.0",
+
+  "Bin/runs/detect/Symlet/weights/best.pt",
+  "Bin/runs/detect/Symlet/weights/last.pt",
+  "Bin/runs/detect/Symlet/args.yaml",
+  "Bin/runs/detect/Symlet/events.out.tfevents.1704210956.DESKTOP-F57NJFM.11664.0",
+
+  "Bin/detecting-images.py",
+  "Bin/preprocessing-images.py",
+  "Bin/graphs.ipynb",
+  "Bin/README.md",
+  "Bin/requirements.txt",
+  "Bin/Firearms_and_Knives_Detection_Using_YOLO_and_Wavelet_for_Surveillance_System.pdf",
+
+  "Config/cameras.json",
+  "Config/settings.json",
+  "Config/thresholds.json",
+
+  "Logs/events.log",
+
+  "requirements.txt",
+  "yolov8n.pt"
+]
