@@ -24,7 +24,6 @@
   "bin/ai/registry.py",
   "bin/ai/base.py",
   "bin/ai/api.py",
-  "bin/ai/__init__.py",
   "bin/ai/models/person.py",
   "bin/ai/models/movement.py",
   "bin/ai/models/knife.py",
