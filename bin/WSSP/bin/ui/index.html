@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Threat Detector</title>
+<style>
+body{margin:0;background:#0b0b0b;color:#eee;font-family:Arial}
+#hud{position:absolute;top:10px;left:10px}
+.badge{padding:4px 8px;background:#222;margin-bottom:4px}
+#log{position:absolute;bottom:0;width:100%;max-height:30%;overflow:auto;background:#111}
+canvas{display:block}
+</style>
+</head>
+<body>
+<div id="hud">
+<div class="badge" id="fps">FPS</div>
+<div class="badge" id="threats">Threats: 0</div>
+</div>
+<canvas id="c"></canvas>
+<div id="log"></div>
+
+<script>
+const ws = new WebSocket(`ws://${location.host}`)
+const c = document.getElementById("c")
+const ctx = c.getContext("2d")
+let last = performance.now(), frames = 0, threats = 0
+
+ws.onmessage = e => {
+  const data = JSON.parse(e.data)
+  const img = new Image()
+  img.src = "data:image/jpeg;base64," + data.frame
+  img.onload = () => {
+    c.width = img.width
+    c.height = img.height
+    ctx.drawImage(img,0,0)
+
+    data.events.forEach(ev=>{
+      const [x1,y1,x2,y2]=ev.box
+      ctx.strokeStyle = ev.threat ? "red" : "white"
+      ctx.lineWidth = 2
+      ctx.strokeRect(x1,y1,x2-x1,y2-y1)
+      if(ev.threat){
+        threats++
+        document.getElementById("log").innerHTML += `<div>${ev.type} FAST</div>`
+      }
+    })
+  }
+
+  frames++
+  if(performance.now()-last>1000){
+    document.getElementById("fps").innerText="FPS: "+frames
+    document.getElementById("threats").innerText="Threats: "+threats
+    frames=0; last=performance.now()
+  }
+}
+</script>
+</body>
+</html>
