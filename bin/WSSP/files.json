@@ -1,0 +1,34 @@
+[
+  "What is this.vbs",
+
+  "document/Install.rs",
+  "document/AutoCreate.rs",
+  "document/Architecture.text.rs",
+  "document/Architecture.rs",
+
+  "bin/app.py",
+  "bin/1.py",
+
+  "bin/ui/index.html",
+
+  "bin/models/yolov8n.pt",
+
+  "bin/runs/detect/predict",
+
+  "bin/engine/ui.py",
+  "bin/engine/record.py",
+  "bin/engine/detect.py",
+  "bin/engine/capture.py",
+
+  "bin/ai/utils.py",
+  "bin/ai/registry.py",
+  "bin/ai/base.py",
+  "bin/ai/api.py",
+  "bin/ai/__init__.py",
+  "bin/ai/models/person.py",
+  "bin/ai/models/movement.py",
+  "bin/ai/models/knife.py",
+  "bin/ai/models/gun.py",
+  "bin/ai/models/face.py",
+  "bin/ai/models/clothing.py"
+]
