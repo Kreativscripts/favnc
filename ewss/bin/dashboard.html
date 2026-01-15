@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSS Exam Them - Teacher Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 5px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #666;
+            font-size: 1.2em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+        
+        .events-container {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .events-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .events-header h2 {
+            color: #333;
+            font-size: 1.8em;
+        }
+        
+        .controls button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .controls button:hover {
+            background: #4338ca;
+        }
+        
+        #eventsTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        #eventsTable th {
+            background: #f8fafc;
+            padding: 15px;
+            text-align: left;
+            color: #475569;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        #eventsTable td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+        
+        #eventsTable tr:hover {
+            background: #f8fafc;
+        }
+        
+        .student-id {
+            font-weight: 600;
+            color: #4f46e5;
+        }
+        
+        .event-time {
+            color: #64748b;
+            font-size: 0.9em;
+        }
+        
+        .event-action {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .action-started {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .action-heartbeat {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .action-stopped {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .no-events {
+            text-align: center;
+            padding: 50px;
+            color: #94a3b8;
+            font-size: 1.2em;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .events-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            #eventsTable th,
+            #eventsTable td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 WSS Exam Them - Teacher Dashboard</h1>
+            <p class="subtitle">Real-time monitoring of student exam activity</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Active Students</h3>
+                <div class="value" id="activeStudents">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Events</h3>
+                <div class="value" id="totalEvents">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Server Uptime</h3>
+                <div class="value" id="serverUptime">0s</div>
+            </div>
+            <div class="stat-card">
+                <h3>Last Update</h3>
+                <div class="value" id="lastUpdate">Just now</div>
+            </div>
+        </div>
+        
+        <div class="events-container">
+            <div class="events-header">
+                <h2>📋 Student Activity Log</h2>
+                <div class="controls">
+                    <button onclick="refreshEvents()">🔄 Refresh</button>
+                    <button onclick="clearEvents()" style="background: #ef4444; margin-left: 10px;">🗑️ Clear Log</button>
+                </div>
+            </div>
+            
+            <div id="eventsList">
+                <table id="eventsTable">
+                    <thead>
+                        <tr>
+                            <th width="15%">Time</th>
+                            <th width="20%">Student</th>
+                            <th width="15%">Computer</th>
+                            <th width="20%">Action</th>
+                            <th width="30%">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTableBody">
+                        <tr>
+                            <td colspan="5" class="no-events">No events yet. Waiting for student connections...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Server started: <span id="serverStartTime"></span> | Auto-refresh: <span id="refreshStatus">ON</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Server info
+        let serverStartTime = new Date();
+        let autoRefresh = true;
+        let refreshInterval;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('serverStartTime').textContent = serverStartTime.toLocaleTimeString();
+            loadEvents();
+            
+            // Start auto-refresh every 3 seconds
+            refreshInterval = setInterval(() => {
+                if (autoRefresh) {
+                    loadEvents();
+                }
+            }, 3000);
+        });
+        
+        // Load events from server
+        async function loadEvents() {
+            try {
+                const response = await fetch('events.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load events');
+                }
+                
+                const events = await response.json();
+                updateDisplay(events);
+                
+                // Update last update time
+                document.getElementById('lastUpdate').textContent = 'Just now';
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('lastUpdate').textContent = 'Error';
+            }
+        }
+        
+        // Update the display with events
+        function updateDisplay(events) {
+            const tableBody = document.getElementById('eventsTableBody');
+            
+            if (events.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="no-events">No events yet. Waiting for student connections...</td>
+                    </tr>
+                `;
+                updateStats(events);
+                return;
+            }
+            
+            // Sort events by timestamp (newest first)
+            events.sort((a, b) => {
+                const timeA = a.timestamp || a.server_time || '';
+                const timeB = b.timestamp || b.server_time || '';
+                return timeB.localeCompare(timeA);
+            });
+            
+            // Build table rows
+            let html = '';
+            let activeStudents = new Set();
+            
+            events.forEach(event => {
+                const studentId = event.student_id || event.student_user || 'Unknown';
+                const computer = event.student_computer || 'Unknown';
+                const action = event.action || 'unknown';
+                const time = event.server_time || event.timestamp_readable || '--:--:--';
+                const details = event.message || event.exam_path || 'No details';
+                
+                // Track active students (those with recent heartbeat or started event)
+                if (action === 'heartbeat' || action === 'exam_started') {
+                    activeStudents.add(studentId);
+                }
+                
+                let actionClass = '';
+                if (action.includes('start')) actionClass = 'action-started';
+                else if (action.includes('heartbeat')) actionClass = 'action-heartbeat';
+                else if (action.includes('stop')) actionClass = 'action-stopped';
+                
+                html += `
+                    <tr>
+                        <td class="event-time">${time}</td>
+                        <td><span class="student-id">${studentId}</span></td>
+                        <td>${computer}</td>
+                        <td><span class="event-action ${actionClass}">${action}</span></td>
+                        <td>${details}</td>
+                    </tr>
+                `;
+            });
+            
+            tableBody.innerHTML = html;
+            updateStats(events, activeStudents.size);
+        }
+        
+        function updateStats(events, activeCount = 0) {
+            document.getElementById('activeStudents').textContent = activeCount;
+            document.getElementById('totalEvents').textContent = events.length;
+            
+            const uptime = Math.floor((new Date() - serverStartTime) / 1000);
+            document.getElementById('serverUptime').textContent = formatUptime(uptime);
+        }
+        
+        function formatUptime(seconds) {
+            if (seconds < 60) return `${seconds}s`;
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+            return `${Math.floor(seconds / 3600)}h`;
+        }
+        
+        function refreshEvents() {
+            loadEvents();
+            const btn = event?.target || document.querySelector('.controls button');
+            btn.textContent = '🔄 Refreshing...';
+            setTimeout(() => {
+                btn.textContent = '🔄 Refresh';
+            }, 500);
+        }
+        
+        async function clearEvents() {
+            if (!confirm('Are you sure you want to clear all events?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/clear', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    loadEvents();
+                    alert('Events cleared successfully!');
+                }
+            } catch (error) {
+                console.error('Error clearing events:', error);
+                alert('Failed to clear events');
+            }
+        }
+        
+        function toggleAutoRefresh() {
+            autoRefresh = !autoRefresh;
+            document.getElementById('refreshStatus').textContent = autoRefresh ? 'ON' : 'OFF';
+            
+            if (autoRefresh) {
+                refreshInterval = setInterval(loadEvents, 3000);
+            } else {
+                clearInterval(refreshInterval);
+            }
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+R to refresh
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                refreshEvents();
+            }
+            if (e.ctrlKey && e.key === 'a') {
+                e.preventDefault();
+                toggleAutoRefresh();
+            }
+        });
+        
+        document.querySelector('.controls').innerHTML += 
+            '<button onclick="toggleAutoRefresh()" style="background: #10b981; margin-left: 10px;">⏯️ Auto-refresh</button>';
+    </script>
+</body>
+</html>

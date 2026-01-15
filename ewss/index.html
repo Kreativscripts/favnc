@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WSS Exam Them v0.0.1</title>
+<link rel="icon" href="https://favnc.pages.dev/assets/icons/EWSS.png"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="LAN-based exam monitoring system with real-time teacher dashboard and student activity tracking">
+<style>
+:root {
+  --accent: #00c6ff;
+  --accent2: #0072ff;
+  --teacher: #4f46e5;
+  --student: #10b981;
+  --bg: #050b14;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0b1b2e, var(--bg));
+  color: #fff;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+.version-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 15px rgba(0,198,255,.4);
+  z-index: 10;
+}
+
+.hero {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.7), rgba(0,0,0,.9)),
+    url("https://favnc.pages.dev/assets/_bkgrnds_/EWSS.png") center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  position: relative;
+}
+
+.hero img {
+  width: 140px;
+  margin-bottom: 25px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  margin: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  font-size: 1.5rem;
+  opacity: 0.9;
+  margin: 10px 0 30px;
+}
+
+.hero p {
+  max-width: 800px;
+  margin: 20px auto 50px;
+  font-size: 1.2rem;
+  opacity: 0.85;
+}
+
+.buttons {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 18px 40px;
+  font-size: 1.2rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+  transition: transform .3s, box-shadow .3s, filter .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 260px;
+}
+
+.btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  filter: brightness(1.2);
+}
+
+.btn-teacher {
+  background: linear-gradient(135deg, var(--teacher), #7c3aed);
+  box-shadow: 0 0 35px rgba(79, 70, 229, .4);
+}
+
+.btn-student {
+  background: linear-gradient(135deg, var(--student), #059669);
+  box-shadow: 0 0 35px rgba(16, 185, 129, .4);
+}
+
+.btn-docs {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  box-shadow: 0 0 35px rgba(139, 92, 246, .4);
+}
+
+.btn-icon {
+  font-size: 1.4rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.feature-card {
+  background: rgba(255,255,255,.05);
+  border-radius: 20px;
+  padding: 30px;
+  border: 1px solid rgba(255,255,255,.1);
+  transition: transform .3s, background .3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255,255,255,.08);
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+
+.feature-card h3 {
+  margin-top: 0;
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+.feature-card p {
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+.section {
+  padding: 100px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 50px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.how-it-works {
+  background: rgba(0,0,0,.3);
+  border-radius: 30px;
+  padding: 40px;
+  margin-top: 40px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.step:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.step-number {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-content h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.step-content p {
+  opacity: 0.9;
+  font-size: 1.1rem;
+}
+
+.compatibility {
+  background: linear-gradient(135deg, rgba(5,11,20,.9), rgba(5,11,20,.95));
+  border-radius: 30px;
+  padding: 40px;
+  margin-top: 40px;
+}
+
+.os-icons {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.os-icon {
+  text-align: center;
+  font-size: 4rem;
+}
+
+.os-icon span {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.windows { color: #0078d7; }
+.mac { color: #999; }
+.linux { color: #f1502f; }
+
+.changelog {
+  background: rgba(255,255,255,.04);
+  border-radius: 20px;
+  padding: 30px;
+  margin-top: 40px;
+  border-left: 4px solid var(--accent);
+}
+
+.changelog h3 {
+  color: var(--accent);
+  margin-top: 0;
+}
+
+.changelog ul {
+  list-style: none;
+  padding: 0;
+}
+
+.changelog li {
+  margin-bottom: 12px;
+  padding-left: 25px;
+  position: relative;
+}
+
+.changelog li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.download-info {
+  text-align: center;
+  margin-top: 40px;
+  padding: 30px;
+  background: rgba(0,198,255,.1);
+  border-radius: 20px;
+  border: 1px solid rgba(0,198,255,.3);
+}
+
+.download-info h3 {
+  color: var(--accent);
+  margin-top: 0;
+}
+
+.file-size {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+footer {
+  padding: 60px 20px 40px;
+  text-align: center;
+  opacity: 0.7;
+  font-size: 0.95rem;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity .3s;
+}
+
+.footer-links a:hover {
+  opacity: 0.8;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2.5rem; }
+  .tagline { font-size: 1.2rem; }
+  .hero p { font-size: 1.1rem; }
+  .btn { min-width: 100%; }
+  .buttons { flex-direction: column; }
+  .section { padding: 60px 20px; }
+  .step { flex-direction: column; text-align: center; }
+  .os-icons { gap: 30px; }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+  <div class="version-badge">v0.0.1</div>
+  <div>
+    <img src="https://favnc.pages.dev/assets/icons/EWSS.png" alt="EWSS Icon">
+    <h1>WSS Exam Them</h1>
+    <div class="tagline">Real-Time Exam Monitoring System</div>
+    <p>
+      A secure LAN-based monitoring solution for educational environments. 
+      Teachers can monitor student activity in real-time while students remain 
+      focused on approved exam applications. No internet required, no invasive tracking.
+    </p>
+    
+    <div class="buttons">
+      <button class="btn btn-teacher" onclick="downloadApp('teacher')">
+        <span class="btn-icon">👨‍🏫</span>
+        Teacher App
+      </button>
+      <button class="btn btn-student" onclick="downloadApp('student')">
+        <span class="btn-icon">👨‍🎓</span>
+        Student App
+      </button>
+    </div>
+    
+    <div class="download-info">
+      <h3>📦 Ready-to-Use Applications</h3>
+      <p>Both applications are compiled as standalone EXE files. No installation required.</p>
+      <div class="file-size">Teacher: ~8MB | Student: ~7MB</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">✨ What's New in v0.0.1</h2>
+  
+  <div class="changelog">
+    <h3>Initial Release Features</h3>
+    <ul>
+      <li><strong>Real-time Teacher Dashboard</strong> - Web-based monitoring interface</li>
+      <li><strong>Student Activity Tracking</strong> - Heartbeat monitoring every 2 seconds</li>
+      <li><strong>LAN Communication</strong> - No internet required, works on local network</li>
+      <li><strong>Auto Port Detection</strong> - Student app automatically finds teacher server</li>
+      <li><strong>Interactive File Browser</strong> - Easy exam application selection</li>
+      <li><strong>Event Logging</strong> - Complete audit trail of student activity</li>
+      <li><strong>One-Click Clearing</strong> - Clear monitoring logs from dashboard</li>
+      <li><strong>Cross-Platform Ready</strong> - Compatible with Windows, macOS, Linux</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">🚀 How It Works</h2>
+  
+  <div class="how-it-works">
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3>Teacher Launches Server</h3>
+        <p>Run the Teacher application. It starts a local web server with a real-time dashboard. The app displays connection URLs for students.</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3>Students Connect</h3>
+        <p>Students run the Student app, enter the teacher's IP address, and select their exam application. The app launches the exam and begins monitoring.</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>Real-time Monitoring</h3>
+        <p>Teacher dashboard shows live student activity, including exam start/stop times and heartbeat status. All events are logged for review.</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3>Complete Session</h3>
+        <p>When exams are complete, teacher can clear logs or export data. Students can exit monitoring, sending a final "stopped" event.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">🔧 Core Features</h2>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <h3>📊 Real-time Dashboard</h3>
+      <p>Beautiful web interface showing all connected students, their status, and activity timeline.</p>
+    </div>
+    
+    <div class="feature-card">
+      <h3>🔒 Privacy Focused</h3>
+      <p>Only monitors application usage, not content. No keystroke logging or screen recording.</p>
+    </div>
+    
+    <div class="feature-card">
+      <h3>🌐 LAN Operation</h3>
+      <p>Works entirely on local network. No cloud dependencies or internet required.</p>
+    </div>
+    
+    <div class="feature-card">
+      <h3>⚡ Auto Discovery</h3>
+      <p>Student app automatically scans for teacher server on the network.</p>
+    </div>
+    
+    <div class="feature-card">
+      <h3>📁 Easy Setup</h3>
+      <p>Drag-and-drop file selection for exam applications. No complex configuration needed.</p>
+    </div>
+    
+    <div class="feature-card">
+      <h3>📈 Event Logging</h3>
+      <p>Complete audit trail of all student activity with timestamps and actions.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">💻 System Compatibility</h2>
+  
+  <div class="compatibility">
+    <p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto 40px;">
+      WSS Exam Them works across all major operating systems. Both applications are compiled
+      as standalone executables with no dependencies.
+    </p>
+    
+    <div class="os-icons">
+      <div class="os-icon windows">🪟<span>Windows 10/11</span></div>
+      <div class="os-icon mac">🍎<span>macOS 11+</span></div>
+      <div class="os-icon linux">🐧<span>Linux</span></div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px; opacity: 0.8;">
+      <p><strong>Requirements:</strong> Python 3.8+ runtime (included in EXE)</p>
+      <p><strong>Network:</strong> Local network connectivity between teacher and students</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+    <a href="#" onclick="showDocs()">Documentation</a>
+    <a href="mailto:support@example.com">Contact Support</a>
+    <a href="#" onclick="showChangelog()">Version History</a>
+  </div>
+  
+  <p>© 2024 WSS Exam Them v0.0.1 — Educational Use Only</p>
+  <p style="font-size: 0.85rem; margin-top: 10px; opacity: 0.6;">
+    This software is designed for educational exam monitoring purposes only.<br>
+    All data remains on the local network and is not transmitted externally.
+  </p>
+</footer>
+
+<script>
+function downloadApp(type) {
+  let fileName, path;
+  
+  if (type === 'teacher') {
+    fileName = 'WSS Exam Them - TEACHER.exe';
+    path = 'downloads/WSS Exam Them - TEACHER.exe';
+    showToast('Downloading Teacher Application...', 'teacher');
+  } else {
+    fileName = 'WSS Exam Them - STUDENT.exe';
+    path = 'downloads/WSS Exam Them - STUDENT.exe';
+    showToast('Downloading Student Application...', 'student');
+  }
+  
+  // Create download link
+  const a = document.createElement('a');
+  a.href = path;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  
+  // Log download
+  console.log(`${type.toUpperCase()} app download initiated`);
+}
+
+function showToast(message, type) {
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: ${type === 'teacher' ? '#4f46e5' : '#10b981'};
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(0,0,0,.3);
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+  `;
+  
+  document.body.appendChild(toast);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    toast.style.animation = 'slideOut 0.3s ease-in';
+    setTimeout(() => document.body.removeChild(toast), 300);
+  }, 3000);
+}
+
+function showPrivacy() {
+  alert('Privacy Policy:\n\nWSS Exam Them collects only minimal metadata required for exam integrity:\n• Application usage (start/stop times)\n• Student system identifier\n• Network connection status\n\nNo personal content, keystrokes, or screen data is recorded. All data remains on the local network.');
+}
+
+function showDocs() {
+  alert('Documentation:\n\n1. Teacher Setup:\n   • Run Teacher.exe\n   • Share the displayed URL with students\n   • Monitor the web dashboard\n\n2. Student Setup:\n   • Run Student.exe\n   • Enter teacher IP\n   • Select exam application\n   • Click through prompts\n\nFor detailed guide, see documentation folder.');
+}
+
+function showChangelog() {
+  alert('Version History:\n\nv0.0.1 (Current)\n• Initial release\n• Teacher dashboard\n• Student monitoring\n• Real-time updates\n• Auto port detection\n• Cross-platform support');
+}
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+`;
+document.head.appendChild(style);
+
+// Add floating particles background effect
+function addParticles() {
+  const particles = document.createElement('div');
+  particles.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  `;
+  
+  for (let i = 0; i < 30; i++) {
+    const particle = document.createElement('div');
+    particle.style.cssText = `
+      position: absolute;
+      width: ${Math.random() * 4 + 1}px;
+      height: ${Math.random() * 4 + 1}px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: ${Math.random() * 0.3 + 0.1};
+      top: ${Math.random() * 100}%;
+      left: ${Math.random() * 100}%;
+      animation: floatParticle ${Math.random() * 20 + 10}s linear infinite;
+    `;
+    particles.appendChild(particle);
+  }
+  
+  const particleStyle = document.createElement('style');
+  particleStyle.textContent = `
+    @keyframes floatParticle {
+      0% { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-100vh) translateX(${Math.random() * 100 - 50}px); }
+    }
+  `;
+  document.head.appendChild(particleStyle);
+  document.body.appendChild(particles);
+}
+
+// Initialize particles on page load
+window.addEventListener('load', addParticles);
+</script>
+
+</body>
+</html>

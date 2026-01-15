@@ -1,0 +1,379 @@
+```python
+import pandas as pd
+
+keyshaun_data = [
+    {"Green": 8, "Blue": 5, "Orange": 7, "Red": 7, "Yellow": 9},
+    {"Green": 4, "Blue": 8, "Orange": 6, "Red": 8, "Yellow": 9},
+    {"Green": 4, "Blue": 7, "Orange": 7, "Red": 10, "Yellow": 8},
+    {"Green": 5, "Blue": 4, "Orange": 9, "Red": 6, "Yellow": 10},
+    {"Green": 6, "Blue": 12, "Orange": 8, "Red": 6, "Yellow": 3}
+]
+
+demitri_data = [
+    {"Green": 6, "Blue": 6, "Orange": 8, "Red": 5, "Yellow": 11},
+    {"Green": 8, "Blue": 9, "Orange": 8, "Red": 6, "Yellow": 5},
+    {"Green": 9, "Blue": 11, "Orange": 2, "Red": 8, "Yellow": 6},
+    {"Green": 10, "Blue": 6, "Orange": 4, "Red": 6, "Yellow": 10},
+    {"Green": 6, "Blue": 7, "Orange": 13, "Red": 3, "Yellow": 5}
+]
+
+devan_data = [
+    {"Green": 5, "Blue": 6, "Orange": 8, "Red": 6, "Yellow": 4},
+    {"Green": 8, "Blue": 6, "Orange": 4, "Red": 8, "Yellow": 8},
+    {"Green": 11, "Blue": 7, "Orange": 11, "Red": 2, "Yellow": 5},
+    {"Green": 8, "Blue": 6, "Orange": 11, "Red": 5, "Yellow": 4},
+    {"Green": 11, "Blue": 9, "Orange": 6, "Red": 5, "Yellow": 5}
+]
+
+def analyze_person(name, packs):
+    print(f"--- Analysis for {name} ---")
+    all_colors = ["Green", "Blue", "Orange", "Red", "Yellow"]
+    
+    # Pack by pack analysis
+    pack_summaries = []
+    overall_counts = {color: 0 for color in all_colors}
+    total_all_sweets = 0
+    
+    for i, pack in enumerate(packs):
+        total_sweets = sum(pack.values())
+        total_all_sweets += total_sweets
+        print(f"Pack {i+1} (Total: {total_sweets})")
+        print("| Color | f | P(Color) | % |")
+        print("| :--- | :--- | :--- | :--- |")
+        for color in all_colors:
+            f = pack[color]
+            prob = f / total_sweets
+            perc = prob * 100
+            overall_counts[color] += f
+            print(f"| {color} | {f} | {prob:.3f} | {perc:.1f}% |")
+        print()
+    
+    # Overall analysis
+    print(f"Overall Distribution (Total: {total_all_sweets})")
+    print("| Color | Total f | P(Color) | % |")
+    print("| :--- | :--- | :--- | :--- |")
+    for color in all_colors:
+        f = overall_counts[color]
+        prob = f / total_all_sweets
+        perc = prob * 100
+        print(f"| {color} | {f} | {prob:.3f} | {perc:.1f}% |")
+    print("\n")
+
+analyze_person("Keyshaun Sookdar", keyshaun_data)
+analyze_person("Demitri Jaggernauth", demitri_data)
+analyze_person("Devan Beekhoo", devan_data)
+
+
+
+```
+
+```text
+--- Analysis for Keyshaun Sookdar ---
+Pack 1 (Total: 36)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 8 | 0.222 | 22.2% |
+| Blue | 5 | 0.139 | 13.9% |
+| Orange | 7 | 0.194 | 19.4% |
+| Red | 7 | 0.194 | 19.4% |
+| Yellow | 9 | 0.250 | 25.0% |
+
+Pack 2 (Total: 35)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 4 | 0.114 | 11.4% |
+| Blue | 8 | 0.229 | 22.9% |
+| Orange | 6 | 0.171 | 17.1% |
+| Red | 8 | 0.229 | 22.9% |
+| Yellow | 9 | 0.257 | 25.7% |
+
+Pack 3 (Total: 36)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 4 | 0.111 | 11.1% |
+| Blue | 7 | 0.194 | 19.4% |
+| Orange | 7 | 0.194 | 19.4% |
+| Red | 10 | 0.278 | 27.8% |
+| Yellow | 8 | 0.222 | 22.2% |
+
+Pack 4 (Total: 34)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 5 | 0.147 | 14.7% |
+| Blue | 4 | 0.118 | 11.8% |
+| Orange | 9 | 0.265 | 26.5% |
+| Red | 6 | 0.176 | 17.6% |
+| Yellow | 10 | 0.294 | 29.4% |
+
+Pack 5 (Total: 35)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 6 | 0.171 | 17.1% |
+| Blue | 12 | 0.343 | 34.3% |
+| Orange | 8 | 0.229 | 22.9% |
+| Red | 6 | 0.171 | 17.1% |
+| Yellow | 3 | 0.086 | 8.6% |
+
+Overall Distribution (Total: 176)
+| Color | Total f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 27 | 0.153 | 15.3% |
+| Blue | 36 | 0.205 | 20.5% |
+| Orange | 37 | 0.210 | 21.0% |
+| Red | 37 | 0.210 | 21.0% |
+| Yellow | 39 | 0.222 | 22.2% |
+
+
+--- Analysis for Demitri Jaggernauth ---
+Pack 1 (Total: 36)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 6 | 0.167 | 16.7% |
+| Blue | 6 | 0.167 | 16.7% |
+| Orange | 8 | 0.222 | 22.2% |
+| Red | 5 | 0.139 | 13.9% |
+| Yellow | 11 | 0.306 | 30.6% |
+
+Pack 2 (Total: 36)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 8 | 0.222 | 22.2% |
+| Blue | 9 | 0.250 | 25.0% |
+| Orange | 8 | 0.222 | 22.2% |
+| Red | 6 | 0.167 | 16.7% |
+| Yellow | 5 | 0.139 | 13.9% |
+
+Pack 3 (Total: 36)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 9 | 0.250 | 25.0% |
+| Blue | 11 | 0.306 | 30.6% |
+| Orange | 2 | 0.056 | 5.6% |
+| Red | 8 | 0.222 | 22.2% |
+| Yellow | 6 | 0.167 | 16.7% |
+
+Pack 4 (Total: 36)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 10 | 0.278 | 27.8% |
+| Blue | 6 | 0.167 | 16.7% |
+| Orange | 4 | 0.111 | 11.1% |
+| Red | 6 | 0.167 | 16.7% |
+| Yellow | 10 | 0.278 | 27.8% |
+
+Pack 5 (Total: 34)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 6 | 0.176 | 17.6% |
+| Blue | 7 | 0.206 | 20.6% |
+| Orange | 13 | 0.382 | 38.2% |
+| Red | 3 | 0.088 | 8.8% |
+| Yellow | 5 | 0.147 | 14.7% |
+
+Overall Distribution (Total: 178)
+| Color | Total f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 39 | 0.219 | 21.9% |
+| Blue | 39 | 0.219 | 21.9% |
+| Orange | 35 | 0.197 | 19.7% |
+| Red | 28 | 0.157 | 15.7% |
+| Yellow | 37 | 0.208 | 20.8% |
+
+
+--- Analysis for Devan Beekhoo ---
+Pack 1 (Total: 29)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 5 | 0.172 | 17.2% |
+| Blue | 6 | 0.207 | 20.7% |
+| Orange | 8 | 0.276 | 27.6% |
+| Red | 6 | 0.207 | 20.7% |
+| Yellow | 4 | 0.138 | 13.8% |
+
+Pack 2 (Total: 34)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 8 | 0.235 | 23.5% |
+| Blue | 6 | 0.176 | 17.6% |
+| Orange | 4 | 0.118 | 11.8% |
+| Red | 8 | 0.235 | 23.5% |
+| Yellow | 8 | 0.235 | 23.5% |
+
+Pack 3 (Total: 36)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 11 | 0.306 | 30.6% |
+| Blue | 7 | 0.194 | 19.4% |
+| Orange | 11 | 0.306 | 30.6% |
+| Red | 2 | 0.056 | 5.6% |
+| Yellow | 5 | 0.139 | 13.9% |
+
+Pack 4 (Total: 34)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 8 | 0.235 | 23.5% |
+| Blue | 6 | 0.176 | 17.6% |
+| Orange | 11 | 0.324 | 32.4% |
+| Red | 5 | 0.147 | 14.7% |
+| Yellow | 4 | 0.118 | 11.8% |
+
+Pack 5 (Total: 36)
+| Color | f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 11 | 0.306 | 30.6% |
+| Blue | 9 | 0.250 | 25.0% |
+| Orange | 6 | 0.167 | 16.7% |
+| Red | 5 | 0.139 | 13.9% |
+| Yellow | 5 | 0.139 | 13.9% |
+
+Overall Distribution (Total: 169)
+| Color | Total f | P(Color) | % |
+| :--- | :--- | :--- | :--- |
+| Green | 43 | 0.254 | 25.4% |
+| Blue | 34 | 0.201 | 20.1% |
+| Orange | 40 | 0.237 | 23.7% |
+| Red | 26 | 0.154 | 15.4% |
+| Yellow | 26 | 0.154 | 15.4% |
+
+
+
+
+```
+
+Here is the statistical analysis formatted for each person, based on the data you provided and modeled after the structure in your image.
+
+---
+
+# **1. Statistical Analysis: Keyshaun Sookdar**
+
+### **Individual Pack Breakdown**
+
+| **Pack 1** |  |  | % | **Pack 2** |  |  | % |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Green** | 8 | 0.222 | 22.2% | **Green** | 4 | 0.114 | 11.4% |
+| **Blue** | 5 | 0.139 | 13.9% | **Blue** | 8 | 0.229 | 22.9% |
+| **Orange** | 7 | 0.194 | 19.4% | **Orange** | 6 | 0.171 | 17.1% |
+| **Red** | 7 | 0.194 | 19.4% | **Red** | 8 | 0.229 | 22.9% |
+| **Yellow** | 9 | 0.250 | 25.0% | **Yellow** | 9 | 0.257 | 25.7% |
+| **Total** | **36** |  |  | **Total** | **35** |  |  |
+
+| **Pack 3** |  |  | % | **Pack 4** |  |  | % |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Green** | 4 | 0.111 | 11.1% | **Green** | 5 | 0.147 | 14.7% |
+| **Blue** | 7 | 0.194 | 19.4% | **Blue** | 4 | 0.118 | 11.8% |
+| **Orange** | 7 | 0.194 | 19.4% | **Orange** | 9 | 0.265 | 26.5% |
+| **Red** | 10 | 0.278 | 27.8% | **Red** | 6 | 0.176 | 17.6% |
+| **Yellow** | 8 | 0.222 | 22.2% | **Yellow** | 10 | 0.294 | 29.4% |
+| **Total** | **36** |  |  | **Total** | **34** |  |  |
+
+| **Pack 5** |  |  | % |
+| --- | --- | --- | --- |
+| **Green** | 6 | 0.171 | 17.1% |
+| **Blue** | 12 | 0.343 | 34.3% |
+| **Orange** | 8 | 0.229 | 22.9% |
+| **Red** | 6 | 0.171 | 17.1% |
+| **Yellow** | 3 | 0.086 | 8.6% |
+| **Total** | **35** |  |  |
+
+### **Overall Distribution (All Packs)**
+
+| Color | Total  |  | % |
+| --- | --- | --- | --- |
+| **Green** | 27 | 0.153 | 15.3% |
+| **Blue** | 36 | 0.205 | 20.5% |
+| **Orange** | 37 | 0.210 | 21.0% |
+| **Red** | 37 | 0.210 | 21.0% |
+| **Yellow** | 39 | 0.222 | 22.2% |
+| **Total** | **176** |  |  |
+
+---
+
+# **2. Statistical Analysis: Demitri Jaggernauth**
+
+### **Individual Pack Breakdown**
+
+| **Pack 1** |  |  | % | **Pack 2** |  |  | % |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Green** | 6 | 0.167 | 16.7% | **Green** | 8 | 0.222 | 22.2% |
+| **Blue** | 6 | 0.167 | 16.7% | **Blue** | 9 | 0.250 | 25.0% |
+| **Orange** | 8 | 0.222 | 22.2% | **Orange** | 8 | 0.222 | 22.2% |
+| **Red** | 5 | 0.139 | 13.9% | **Red** | 6 | 0.167 | 16.7% |
+| **Yellow** | 11 | 0.306 | 30.6% | **Yellow** | 5 | 0.139 | 13.9% |
+| **Total** | **36** |  |  | **Total** | **36** |  |  |
+
+| **Pack 3** |  |  | % | **Pack 4** |  |  | % |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Green** | 9 | 0.250 | 25.0% | **Green** | 10 | 0.278 | 27.8% |
+| **Blue** | 11 | 0.306 | 30.6% | **Blue** | 6 | 0.167 | 16.7% |
+| **Orange** | 2 | 0.056 | 5.6% | **Orange** | 4 | 0.111 | 11.1% |
+| **Red** | 8 | 0.222 | 22.2% | **Red** | 6 | 0.167 | 16.7% |
+| **Yellow** | 6 | 0.167 | 16.7% | **Yellow** | 10 | 0.278 | 27.8% |
+| **Total** | **36** |  |  | **Total** | **36** |  |  |
+
+| **Pack 5** |  |  | % |
+| --- | --- | --- | --- |
+| **Green** | 6 | 0.176 | 17.6% |
+| **Blue** | 7 | 0.206 | 20.6% |
+| **Orange** | 13 | 0.382 | 38.2% |
+| **Red** | 3 | 0.088 | 8.8% |
+| **Yellow** | 5 | 0.147 | 14.7% |
+| **Total** | **34** |  |  |
+
+### **Overall Distribution (All Packs)**
+
+| Color | Total  |  | % |
+| --- | --- | --- | --- |
+| **Green** | 39 | 0.219 | 21.9% |
+| **Blue** | 39 | 0.219 | 21.9% |
+| **Orange** | 35 | 0.197 | 19.7% |
+| **Red** | 28 | 0.157 | 15.7% |
+| **Yellow** | 37 | 0.208 | 20.8% |
+| **Total** | **178** |  |  |
+
+---
+
+# **3. Statistical Analysis: Devan Beekhoo**
+
+### **Individual Pack Breakdown**
+
+| **Pack 1** |  |  | % | **Pack 2** |  |  | % |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Green** | 5 | 0.172 | 17.2% | **Green** | 8 | 0.235 | 23.5% |
+| **Blue** | 6 | 0.207 | 20.7% | **Blue** | 6 | 0.176 | 17.6% |
+| **Orange** | 8 | 0.276 | 27.6% | **Orange** | 4 | 0.118 | 11.8% |
+| **Red** | 6 | 0.207 | 20.7% | **Red** | 8 | 0.235 | 23.5% |
+| **Yellow** | 4 | 0.138 | 13.8% | **Yellow** | 8 | 0.235 | 23.5% |
+| **Total** | **29** |  |  | **Total** | **34** |  |  |
+
+| **Pack 3** |  |  | % | **Pack 4** |  |  | % |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Green** | 11 | 0.306 | 30.6% | **Green** | 8 | 0.235 | 23.5% |
+| **Blue** | 7 | 0.194 | 19.4% | **Blue** | 6 | 0.176 | 17.6% |
+| **Orange** | 11 | 0.306 | 30.6% | **Orange** | 11 | 0.324 | 32.4% |
+| **Red** | 2 | 0.056 | 5.6% | **Red** | 5 | 0.147 | 14.7% |
+| **Yellow** | 5 | 0.139 | 13.9% | **Yellow** | 4 | 0.118 | 11.8% |
+| **Total** | **36** |  |  | **Total** | **34** |  |  |
+
+| **Pack 5** |  |  | % |
+| --- | --- | --- | --- |
+| **Green** | 11 | 0.306 | 30.6% |
+| **Blue** | 9 | 0.250 | 25.0% |
+| **Orange** | 6 | 0.167 | 16.7% |
+| **Red** | 5 | 0.139 | 13.9% |
+| **Yellow** | 5 | 0.139 | 13.9% |
+| **Total** | **36** |  |  |
+
+### **Overall Distribution (All Packs)**
+
+| Color | Total  |  | % |
+| --- | --- | --- | --- |
+| **Green** | 43 | 0.254 | 25.4% |
+| **Blue** | 34 | 0.201 | 20.1% |
+| **Orange** | 40 | 0.237 | 23.7% |
+| **Red** | 26 | 0.154 | 15.4% |
+| **Yellow** | 26 | 0.154 | 15.4% |
+| **Total** | **169** |  |  |
+
+---
+
+### **Formula:**

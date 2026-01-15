@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSS Exam Them - Build Directory</title>
+    <link rel="icon" href="https://favnc.pages.dev/assets/icons/EWSS.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/build.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --border-color: #30363d;
+            --accent-color: #58a6ff;
+            --file-bg: #161b22;
+            --dir-bg: #0d1117;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            padding: 20px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .repo-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .repo-title h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .repo-title .icon {
+            font-size: 32px;
+        }
+        
+        .repo-description {
+            color: #8b949e;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .repo-meta {
+            display: flex;
+            gap: 20px;
+            color: #8b949e;
+            font-size: 14px;
+        }
+        
+        .repo-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .breadcrumb {
+            font-size: 14px;
+            color: #8b949e;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .breadcrumb a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .directory-header {
+            background-color: var(--dir-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px 6px 0 0;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .directory-header .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .directory-header .right {
+            font-size: 14px;
+            color: #8b949e;
+        }
+        
+        .directory-contents {
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            background-color: var(--file-bg);
+        }
+        
+        .file-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+        
+        .file-row:hover {
+            background-color: rgba(177, 186, 196, 0.12);
+        }
+        
+        .file-row:last-child {
+            border-bottom: none;
+        }
+        
+        .file-icon {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #8b949e;
+        }
+        
+        .file-name {
+            flex: 1;
+            font-weight: 600;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .file-name:hover {
+            text-decoration: underline;
+        }
+        
+        .file-size {
+            font-size: 12px;
+            color: #8b949e;
+            min-width: 100px;
+            text-align: right;
+        }
+        
+        .file-date {
+            font-size: 12px;
+            color: #8b949e;
+            min-width: 200px;
+            text-align: right;
+        }
+        
+        .commit-msg {
+            font-size: 12px;
+            color: #8b949e;
+            min-width: 300px;
+            text-align: left;
+            padding-left: 20px;
+        }
+        
+        .directory {
+            background-color: var(--dir-bg);
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .directory-title {
+            padding: 12px 16px;
+            background-color: rgba(177, 186, 196, 0.08);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .directory-contents {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        
+        .download-section {
+            background-color: var(--dir-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .download-section h3 {
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .download-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .download-card {
+            background-color: var(--file-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .download-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+        
+        .download-card h4 {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+        
+        .download-card p {
+            color: #8b949e;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background-color: #238636;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .download-btn:hover {
+            background-color: #2ea043;
+            text-decoration: none;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: #8b949e;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .file-details {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-left: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .file-row {
+                flex-wrap: wrap;
+            }
+            
+            .file-details {
+                width: 100%;
+                margin-top: 5px;
+                margin-left: 30px;
+                justify-content: space-between;
+            }
+            
+            .file-size, .file-date, .commit-msg {
+                min-width: auto;
+            }
+            
+            .commit-msg {
+                display: none;
+            }
+        }
+        
+        /* Colors for different file types */
+        .icon-file-directory { color: #54aeff; }
+        .icon-file-media { color: #a371f7; }
+        .icon-file-binary { color: #db6d28; }
+        .icon-file-text { color: #8b949e; }
+        .icon-file-code { color: #3fb950; }
+        .icon-file-zip { color: #f0883e; }
+        
+        .size-badge {
+            background-color: rgba(177, 186, 196, 0.12);
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #8b949e;
+        }
+        
+        .readme-box {
+            background-color: var(--dir-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .readme-box h2 {
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .code-block {
+            background-color: rgba(177, 186, 196, 0.08);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            margin: 10px 0;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+        
+        .warning-box {
+            background-color: rgba(187, 128, 9, 0.15);
+            border: 1px solid #bb8009;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 20px 0;
+            color: #f0b72f;
+        }
+        
+        .warning-box strong {
+            color: #f0b72f;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="repo-title">
+            <span class="icon">📦</span>
+            <h1>WSS Exam Them / bin</h1>
+        </div>
+        <div class="repo-description">
+            Build directory containing compiled applications and build artifacts for WSS Exam Them v0.0.1
+        </div>
+        <div class="repo-meta">
+            <span><span class="octicon octicon-history"></span> Updated 2 minutes ago</span>
+            <span><span class="octicon octicon-tag"></span> v0.0.1</span>
+            <span><span class="octicon octicon-package"></span> 2 releases</span>
+            <span><span class="octicon octicon-law"></span> MIT License</span>
+        </div>
+    </div>
+    
+    <div class="breadcrumb">
+        <a href="../">WSS Exam Them</a> / <strong>bin</strong>
+    </div>
+    
+    <div class="readme-box">
+        <h2>📋 Build Directory Overview</h2>
+        <p>This directory contains the compiled executables and build artifacts for WSS Exam Them v0.0.1. The main applications are located in the <code>dist/</code> folder.</p>
+        
+        <div class="warning-box">
+            <strong>⚠️ Important:</strong> The <code>build/</code> folder contains intermediate build files and should not be distributed. Only the files in <code>dist/</code> are needed for end users.
+        </div>
+        
+        <h3>Build Commands Used:</h3>
+        <div class="code-block">
+            # Teacher Application<br>
+            pyinstaller --onefile --noconsole --icon="EWSS.png" --name="WSS Exam Them - TEACHER" --add-data "dashboard.html;." teacher_app.py<br><br>
+            
+            # Student Application<br>
+            pyinstaller --onefile --icon="EWSS.png" --name="WSS Exam Them - STUDENT" student_app.py
+        </div>
+    </div>
+    
+    <div class="download-section">
+        <h3>🚀 Download Ready Applications</h3>
+        <div class="download-links">
+            <div class="download-card">
+                <h4>Teacher Application</h4>
+                <p>Real-time monitoring dashboard for teachers. Includes web interface and event logging.</p>
+                <div class="file-details">
+                    <span class="size-badge">~8.2 MB</span>
+                    <a href="dist/WSS Exam Them - TEACHER.exe" class="download-btn">Download EXE</a>
+                </div>
+            </div>
+            <div class="download-card">
+                <h4>Student Application</h4>
+                <p>Client application for students to connect to teacher and run approved exam software.</p>
+                <div class="file-details">
+                    <span class="size-badge">~7.8 MB</span>
+                    <a href="dist/WSS Exam Them - STUDENT.exe" class="download-btn">Download EXE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="directory">
+        <div class="directory-title">
+            <span class="octicon octicon-file-directory"></span>
+            dist/
+        </div>
+        <div class="directory-contents">
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-binary icon-file-binary"></span>
+                </span>
+                <a href="dist/WSS Exam Them - TEACHER.exe" class="file-name">WSS Exam Them - TEACHER.exe</a>
+                <div class="file-details">
+                    <span class="file-size">8.2 MB</span>
+                    <span class="file-date">Just now</span>
+                    <span class="commit-msg">Teacher application executable</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-binary icon-file-binary"></span>
+                </span>
+                <a href="dist/WSS Exam Them - STUDENT.exe" class="file-name">WSS Exam Them - STUDENT.exe</a>
+                <div class="file-details">
+                    <span class="file-size">7.8 MB</span>
+                    <span class="file-date">Just now</span>
+                    <span class="commit-msg">Student application executable</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="directory">
+        <div class="directory-title">
+            <span class="octicon octicon-file-directory"></span>
+            build/
+        </div>
+        <div class="directory-contents">
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-directory icon-file-directory"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/" class="file-name">WSS Exam Them - TEACHER/</a>
+                <div class="file-details">
+                    <span class="file-size">—</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Teacher build artifacts</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-directory icon-file-directory"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/" class="file-name">WSS Exam Them - STUDENT/</a>
+                <div class="file-details">
+                    <span class="file-size">—</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Student build artifacts</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="directory">
+        <div class="directory-title">
+            <span class="octicon octicon-file-directory"></span>
+            build/WSS Exam Them - TEACHER/
+        </div>
+        <div class="directory-contents">
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-zip icon-file-zip"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/base_library.zip" class="file-name">base_library.zip</a>
+                <div class="file-details">
+                    <span class="file-size">5.1 MB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Python base library</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-zip icon-file-zip"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/PYZ-00.pyz" class="file-name">PYZ-00.pyz</a>
+                <div class="file-details">
+                    <span class="file-size">2.3 MB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Python bytecode archive</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/warn-WSS Exam Them - TEACHER.txt" class="file-name">warn-WSS Exam Them - TEACHER.txt</a>
+                <div class="file-details">
+                    <span class="file-size">1.2 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Build warnings</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-code icon-file-code"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/xref-WSS Exam Them - TEACHER.html" class="file-name">xref-WSS Exam Them - TEACHER.html</a>
+                <div class="file-details">
+                    <span class="file-size">12 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Cross-reference report</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/Analysis-00.toc" class="file-name">Analysis-00.toc</a>
+                <div class="file-details">
+                    <span class="file-size">4 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Analysis table of contents</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/EXE-00.toc" class="file-name">EXE-00.toc</a>
+                <div class="file-details">
+                    <span class="file-size">1 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Executable TOC</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/PKG-00.toc" class="file-name">PKG-00.toc</a>
+                <div class="file-details">
+                    <span class="file-size">2 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Package TOC</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/PYZ-00.toc" class="file-name">PYZ-00.toc</a>
+                <div class="file-details">
+                    <span class="file-size">8 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">PYZ TOC</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-directory icon-file-directory"></span>
+                </span>
+                <a href="build/WSS Exam Them - TEACHER/localpycs/" class="file-name">localpycs/</a>
+                <div class="file-details">
+                    <span class="file-size">—</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Python bytecode cache</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="directory">
+        <div class="directory-title">
+            <span class="octicon octicon-file-directory"></span>
+            build/WSS Exam Them - STUDENT/
+        </div>
+        <div class="directory-contents">
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-zip icon-file-zip"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/base_library.zip" class="file-name">base_library.zip</a>
+                <div class="file-details">
+                    <span class="file-size">5.1 MB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Python base library</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-zip icon-file-zip"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/PYZ-00.pyz" class="file-name">PYZ-00.pyz</a>
+                <div class="file-details">
+                    <span class="file-size">2.1 MB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Python bytecode archive</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/warn-WSS Exam Them - STUDENT.txt" class="file-name">warn-WSS Exam Them - STUDENT.txt</a>
+                <div class="file-details">
+                    <span class="file-size">1.0 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Build warnings</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-code icon-file-code"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/xref-WSS Exam Them - STUDENT.html" class="file-name">xref-WSS Exam Them - STUDENT.html</a>
+                <div class="file-details">
+                    <span class="file-size">10 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Cross-reference report</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/Analysis-00.toc" class="file-name">Analysis-00.toc</a>
+                <div class="file-details">
+                    <span class="file-size">3 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Analysis table of contents</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/EXE-00.toc" class="file-name">EXE-00.toc</a>
+                <div class="file-details">
+                    <span class="file-size">1 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Executable TOC</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/PKG-00.toc" class="file-name">PKG-00.toc</a>
+                <div class="file-details">
+                    <span class="file-size">2 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Package TOC</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-text icon-file-text"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/PYZ-00.toc" class="file-name">PYZ-00.toc</a>
+                <div class="file-details">
+                    <span class="file-size">7 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">PYZ TOC</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-directory icon-file-directory"></span>
+                </span>
+                <a href="build/WSS Exam Them - STUDENT/localpycs/" class="file-name">localpycs/</a>
+                <div class="file-details">
+                    <span class="file-size">—</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Python bytecode cache</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="directory">
+        <div class="directory-title">
+            <span class="octicon octicon-file-code"></span>
+            Source Files
+        </div>
+        <div class="directory-contents">
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-code icon-file-code"></span>
+                </span>
+                <a href="teacher_app.py" class="file-name">teacher_app.py</a>
+                <div class="file-details">
+                    <span class="file-size">12.5 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Teacher server application source</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-code icon-file-code"></span>
+                </span>
+                <a href="student_app.py" class="file-name">student_app.py</a>
+                <div class="file-details">
+                    <span class="file-size">15.2 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Student client application source</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-code icon-file-code"></span>
+                </span>
+                <a href="dashboard.html" class="file-name">dashboard.html</a>
+                <div class="file-details">
+                    <span class="file-size">8.7 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Teacher dashboard HTML</span>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-icon">
+                    <span class="octicon octicon-file-media icon-file-media"></span>
+                </span>
+                <a href="EWSS.png" class="file-name">EWSS.png</a>
+                <div class="file-details">
+                    <span class="file-size">32 KB</span>
+                    <span class="file-date">Today</span>
+                    <span class="commit-msg">Application icon</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>WSS Exam Them v0.0.1 • Built with PyInstaller • Built by Keyshaun Sookdat • Last updated: <span id="current-date"></span></p>
+        <p style="margin-top: 10px; font-size: 12px; color: #6e7681;">
+            This directory is automatically generated during the build process. 
+            Only files in the <code>dist/</code> folder are required for distribution.
+        </p>
+    </div>
+
+    <script>
+        // Set current date
+        const now = new Date();
+        document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // File size formatting
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+        
+        // Update file sizes dynamically (this would need server-side implementation)
+        // For now, we'll just show the static sizes
+        
+        // Add click handlers for directory navigation
+        document.querySelectorAll('.file-row a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && href.endsWith('/')) {
+                    e.preventDefault();
+                    alert('Directory navigation would be implemented in a full file browser.');
+                }
+            });
+        });
+        
+        // Add download tracking
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const app = this.closest('.download-card').querySelector('h4').textContent;
+                console.log(`Download started: ${app}`);
+            });
+        });
+    </script>
+</body>
+</html>
