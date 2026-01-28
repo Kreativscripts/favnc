@@ -305,7 +305,6 @@
 
     if(!name) greet();
 
-    // ✅ FIX: end when video actually ends (no forced 31s)
     v.addEventListener("ended", function(){
       if(!started || ended) return;
       endSeq();
