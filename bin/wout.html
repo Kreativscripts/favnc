@@ -1,0 +1,1557 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Workout</title>
+  <meta name="theme-color" content="#ffffff" />
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#ffffff;
+      --text:#0b1220;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --line2:#f3f4f6;
+
+      --red:#ef4444;
+      --redDark:#b91c1c;
+
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+
+      --radius:18px;
+      --shadow: 0 10px 30px rgba(15, 23, 42, .10);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+
+      --safeT: env(safe-area-inset-top);
+      --safeB: env(safe-area-inset-bottom);
+      --safeL: env(safe-area-inset-left);
+      --safeR: env(safe-area-inset-right);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Mobile app shell */
+    .app{
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+      padding: calc(10px + var(--safeT)) calc(12px + var(--safeR)) calc(10px + var(--safeB)) calc(12px + var(--safeL));
+      gap:10px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 8px 4px 4px;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .brand .title{
+      font-weight:800;
+      font-size:16px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brand .sub{
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .iconBtn{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:10px 12px;
+      border-radius:14px;
+      box-shadow: 0 6px 18px rgba(15,23,42,.06);
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .iconBtn:active{transform: translateY(1px)}
+    .iconBtn svg{width:18px; height:18px}
+
+    .tabs{
+      display:flex;
+      border:1px solid var(--line);
+      background: #fff;
+      border-radius: 16px;
+      padding:4px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: calc(8px + var(--safeT));
+      z-index: 3;
+    }
+    .tab{
+      flex:1;
+      border:0;
+      background:transparent;
+      padding:10px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:13px;
+      color: var(--muted);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    .tab svg{width:18px; height:18px}
+    .tab.active{
+      background: var(--line2);
+      color: var(--text);
+    }
+
+    .screen{display:none; gap:10px; flex:1}
+    .screen.active{display:flex; flex-direction:column}
+
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card .hd .hgroup{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .card .hd .h1{
+      font-size:14px;
+      font-weight:800;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .card .hd .h2{
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .card .bd{padding:14px}
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
+    .kpi{
+      background: var(--line2);
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding:12px;
+      min-height:62px;
+    }
+    .kpi .lab{font-size:11px; color:var(--muted)}
+    .kpi .val{margin-top:6px; font-family:var(--mono); font-weight:800; font-size:18px}
+
+    .barWrap{
+      margin-top:12px;
+    }
+    .barTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:8px;
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      overflow:hidden;
+    }
+    .bar > div{
+      height:100%;
+      width:0%;
+      background: var(--red);
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .btn{
+      flex:1;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius: 16px;
+      padding:12px 12px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow: 0 8px 22px rgba(15,23,42,.06);
+      user-select:none;
+      min-width: 120px;
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn.primary{
+      background: var(--red);
+      border-color: var(--red);
+      color:#fff;
+    }
+    .btn.primary:hover{background: var(--redDark); border-color: var(--redDark)}
+    .btn.ghost{
+      background: #fff;
+      color: var(--text);
+    }
+    .btn:disabled{opacity:.55; cursor:not-allowed; box-shadow:none}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--muted);
+      font-size:12px;
+      font-family: var(--mono);
+      white-space:nowrap;
+    }
+
+    .exList{display:flex; flex-direction:column; gap:10px}
+
+    .ex{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      background:#fff;
+      box-shadow: 0 8px 24px rgba(15,23,42,.06);
+      padding:12px;
+    }
+    .exHeader{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .exName{
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:14px;
+      line-height:1.15;
+    }
+    .exMeta{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      font-family: var(--mono);
+    }
+    .exHeaderRight{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:6px;
+    }
+    .badge{
+      font-family: var(--mono);
+      font-size:12px;
+      color: var(--muted);
+      border:1px solid var(--line);
+      background: var(--line2);
+      padding:6px 8px;
+      border-radius: 999px;
+    }
+    .focusTag{
+      font-family: var(--mono);
+      font-size:11px;
+      padding:5px 8px;
+      border-radius: 999px;
+      border:1px solid var(--red);
+      color: var(--red);
+      background: #fff;
+      display:none;
+    }
+    .ex.focus .focusTag{display:inline-flex}
+
+    .exBtns{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:8px;
+      margin-top:10px;
+    }
+    .mini{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:12px 10px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+    }
+    .mini:active{transform: translateY(1px)}
+    .mini.red{border-color: #fecaca; background: #fff5f5; color: var(--redDark)}
+    .mini.gray{background: var(--line2)}
+    .mini:disabled{opacity:.55; cursor:not-allowed}
+
+    .targetRow{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      margin-top:10px;
+    }
+    .targetRow label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+      flex:1;
+    }
+    .targetRow input{
+      width:110px;
+      padding:10px 10px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      font-family: var(--mono);
+      font-weight:800;
+      font-size:14px;
+      background:#fff;
+    }
+
+    /* Calendar */
+    .calHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .calTitle{
+      font-weight:900;
+      font-size:14px;
+    }
+    .calSub{color:var(--muted); font-size:12px; font-family:var(--mono)}
+    .calBtns{display:flex; gap:8px}
+    .calBtn{
+      border:1px solid var(--line);
+      background:#fff;
+      padding:10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .calBtn:active{transform: translateY(1px)}
+    .dow, .days{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap:8px;
+      margin-top:10px;
+    }
+    .dow div{
+      color:var(--muted);
+      font-size:11px;
+      text-align:center;
+      padding:6px 0;
+    }
+    .day{
+      aspect-ratio: 1 / 1;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background:#fff;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:10px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .day.off{opacity:.35; cursor:default; background:#fff}
+    .day:active{transform: translateY(1px)}
+    .dNum{font-family:var(--mono); font-size:12px; color:var(--muted)}
+    .dots{display:flex; justify-content:flex-end; gap:5px}
+    .dot{width:7px; height:7px; border-radius:99px; background:#e5e7eb}
+    .dot.good{background:var(--good)}
+    .dot.warn{background:var(--warn)}
+    .dot.bad{background:var(--bad)}
+
+    .list{display:flex; flex-direction:column; gap:10px}
+    .log{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(15,23,42,.06);
+      padding:12px;
+    }
+    .logTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .logDate{font-family:var(--mono); font-size:12px; color:var(--muted)}
+    .logTitle{font-weight:900; font-size:13px; margin-top:2px}
+    .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .chip{
+      border:1px solid var(--line);
+      border-radius: 999px;
+      padding:6px 8px;
+      font-family:var(--mono);
+      font-size:12px;
+      background: var(--line2);
+      color: var(--text);
+    }
+    .chip.good{border-color:#86efac}
+    .chip.warn{border-color:#fcd34d}
+    .chip.bad{border-color:#fca5a5}
+
+    /* Bottom action sheet (modal) */
+    .modal{
+      position:fixed;
+      inset:0;
+      background: rgba(15,23,42,.35);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding: 0;
+      z-index: 10;
+    }
+    .modal.on{display:flex}
+    .sheet{
+      width: 100%;
+      max-width: 520px;
+      background:#fff;
+      border-radius: 22px 22px 0 0;
+      border:1px solid var(--line);
+      box-shadow: 0 -16px 60px rgba(15,23,42,.18);
+      padding-bottom: calc(12px + var(--safeB));
+      max-height: 88vh;
+      overflow:auto;
+    }
+    .sheetHd{
+      padding: 14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      position: sticky;
+      top:0;
+      background:#fff;
+      z-index: 2;
+    }
+    .sheetHd .hgroup{min-width:0}
+    .sheetHd .h1{font-weight:900; font-size:14px}
+    .sheetHd .h2{color:var(--muted); font-size:12px; margin-top:2px; font-family:var(--mono)}
+    .sheetBd{padding:14px}
+    .sheetClose{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius: 14px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:900;
+    }
+
+    textarea{
+      width:100%;
+      min-height: 280px;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding:12px;
+      font-family: var(--mono);
+      font-size:12px;
+      background:#fff;
+      color: var(--text);
+      outline:none;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom: calc(18px + var(--safeB));
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 999px;
+      padding:10px 12px;
+      font-family: var(--mono);
+      font-size:12px;
+      color: var(--muted);
+      display:none;
+      z-index: 20;
+    }
+    .toast.on{display:block}
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{transition:none !important}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="top">
+      <div class="brand">
+        <div class="title" id="appTitle">Workout</div>
+        <div class="sub" id="appSub">28-day plan • mobile tracker</div>
+      </div>
+      <button class="iconBtn" id="btnMenu" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        Menu
+      </button>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Workout tabs">
+      <button class="tab active" id="tabWorkout" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 19V5m12 14V5M10 9h4M10 15h4"/></svg>
+        Workout
+      </button>
+      <button class="tab" id="tabCalendar" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v2m8-2v2M4 7h16M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
+        Calendar
+      </button>
+      <button class="tab" id="tabLogs" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        Logs
+      </button>
+    </div>
+
+    <!-- WORKOUT SCREEN -->
+    <section class="screen active" id="screenWorkout" role="tabpanel" aria-labelledby="tabWorkout">
+      <div class="card">
+        <div class="hd">
+          <div class="hgroup">
+            <div class="h1" id="todayTitle">Day 1 • Base</div>
+            <div class="h2" id="todaySub">Tap an exercise • Start • Track reps</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
+            <span class="pill" id="pillDay">Day 1/28</span>
+            <span class="pill" id="pillStreak">Streak 0</span>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="kpis">
+            <div class="kpi"><div class="lab">Session</div><div class="val" id="kSession">00:00</div></div>
+            <div class="kpi"><div class="lab">Current</div><div class="val" id="kCurrent">—</div></div>
+            <div class="kpi"><div class="lab">Reps</div><div class="val" id="kReps">0/100</div></div>
+            <div class="kpi"><div class="lab">Burnout</div><div class="val" id="kBurn">0%</div></div>
+          </div>
+
+          <div class="barWrap">
+            <div class="barTop"><span>Progress</span><span id="progressText" style="font-family:var(--mono)">0%</span></div>
+            <div class="bar"><div id="progressBar"></div></div>
+          </div>
+
+          <div class="controls">
+            <button class="btn primary" id="btnStart">Start</button>
+            <button class="btn ghost" id="btnRest">Rest 60s</button>
+            <button class="btn ghost" id="btnFinish">Finish</button>
+          </div>
+
+          <div style="margin-top:10px; display:flex; justify-content:space-between; gap:10px; align-items:center;">
+            <span class="pill" id="pillRest">Rest —</span>
+            <span class="pill" id="pillSaved">Saved</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exList" id="exList"></div>
+
+      <div class="hint" style="padding: 0 4px;">
+        Quick keys (if you use a keyboard): <b>Space</b> start/pause, <b>R</b> rest, <b>+</b>/<b>-</b> reps on focused exercise.
+      </div>
+    </section>
+
+    <!-- CALENDAR SCREEN -->
+    <section class="screen" id="screenCalendar" role="tabpanel" aria-labelledby="tabCalendar">
+      <div class="card">
+        <div class="hd">
+          <div class="hgroup">
+            <div class="h1">Calendar</div>
+            <div class="h2">Tap a day to view or load</div>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="calHeader">
+            <div>
+              <div class="calTitle" id="calMonth">—</div>
+              <div class="calSub" id="calMeta">—</div>
+            </div>
+            <div class="calBtns">
+              <button class="calBtn" id="calPrev">‹</button>
+              <button class="calBtn" id="calToday">Today</button>
+              <button class="calBtn" id="calNext">›</button>
+            </div>
+          </div>
+
+          <div class="dow">
+            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+          </div>
+          <div class="days" id="calDays"></div>
+
+          <div class="hint" style="margin-top:10px;">
+            Dot color = burnout: green (low), amber (mid), red (high).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGS SCREEN -->
+    <section class="screen" id="screenLogs" role="tabpanel" aria-labelledby="tabLogs">
+      <div class="card">
+        <div class="hd">
+          <div class="hgroup">
+            <div class="h1">Recent logs</div>
+            <div class="h2">Last 10 sessions</div>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="list" id="logList"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Bottom sheet modal -->
+  <div class="modal" id="modal">
+    <div class="sheet" role="dialog" aria-modal="true">
+      <div class="sheetHd">
+        <div class="hgroup">
+          <div class="h1" id="mTitle">Menu</div>
+          <div class="h2" id="mSub">—</div>
+        </div>
+        <button class="sheetClose" id="mClose">Close</button>
+      </div>
+      <div class="sheetBd" id="mBody"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+<script>
+(() => {
+  // ===== Storage =====
+  const SS_KEY = "fav_wout_session_v2";
+  const LS_KEY = "fav_wout_history_v2";
+
+  // ===== Default plan =====
+  const DEFAULT_PLAN = (() => {
+    const plan = [];
+    for(let d=1; d<=7; d++)  plan.push({ day:d,  label:"Base",     targets:{pushups:40, squats:40, pullups:10, cardio:10} });
+    for(let d=8; d<=14; d++) plan.push({ day:d,  label:"Volume",   targets:{pushups:45, squats:45, pullups:10, cardio:0} });
+    for(let d=15; d<=21; d++)plan.push({ day:d,  label:"Strength", targets:{pushups:40, squats:40, pullups:20, cardio:0} });
+    for(let d=22; d<=26; d++)plan.push({ day:d,  label:"Peak",     targets:{pushups:50, squats:40, pullups:10, cardio:0} });
+    plan.push({ day:27, label:"Challenge", targets:{pushups:40, squats:40, pullups:20, cardio:0}, timed:true });
+    plan.push({ day:28, label:"Test", targets:{pushups:0, squats:0, pullups:0, cardio:0}, test:true });
+    return plan;
+  })();
+
+  const BASE_EX = [
+    { id:"pushups", name:"Push-ups" },
+    { id:"squats",  name:"Squats" },
+    { id:"pullups", name:"Pull-ups" }
+  ];
+
+  // ===== Helpers =====
+  const $ = (q) => document.querySelector(q);
+  const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+  const safeJSON = (s,f)=>{ try{return JSON.parse(s)}catch{return f} };
+  const isoToday = ()=> new Date().toISOString().slice(0,10);
+  const fmt2 = (n)=> String(n).padStart(2,"0");
+  const msToMMSS = (ms)=>{
+    const s = Math.floor(ms/1000);
+    const m = Math.floor(s/60);
+    const r = s%60;
+    return `${fmt2(m)}:${fmt2(r)}`;
+  };
+  const msToHMMSS = (ms)=>{
+    const s = Math.floor(ms/1000);
+    const h = Math.floor(s/3600);
+    const m = Math.floor((s%3600)/60);
+    const r = s%60;
+    return h>0 ? `${h}:${fmt2(m)}:${fmt2(r)}` : `${fmt2(m)}:${fmt2(r)}`;
+  };
+
+  // Burnout model (simple + stable)
+  function computeBurnout({done, target, timeMs, restMs}){
+    const completion = target>0 ? clamp(done/target,0,1) : 0;
+    const minutes = Math.max(timeMs/60000, 0.1);
+    const rpm = done / minutes;
+
+    const paceScore = clamp((rpm - 6)/10, 0, 1);
+    const completionScore = completion;
+
+    const restMin = (restMs||0)/60000;
+    const expectedRest = minutes * 0.25; // ~25% rest
+    const restDebt = expectedRest>0 ? clamp((expectedRest - restMin)/expectedRest, 0, 1) : 0;
+
+    return Math.round(clamp((0.50*completionScore + 0.30*paceScore + 0.20*restDebt)*100, 0, 100));
+  }
+
+  function toast(msg="Saved"){
+    const t = $("#toast");
+    t.textContent = msg;
+    t.classList.add("on");
+    clearTimeout(toast._h);
+    toast._h = setTimeout(()=>t.classList.remove("on"), 1200);
+  }
+
+  // ===== Load data =====
+  const stored = safeJSON(localStorage.getItem(LS_KEY), null) || {
+    profile: { name: null },
+    plan: DEFAULT_PLAN,
+    logs: [] // {date, dayIndex, repsById, targetsById, timeMs, burnout, note, exerciseTimesMsById, createdAt}
+  };
+
+  let session = safeJSON(sessionStorage.getItem(SS_KEY), null) || {
+    active:false,
+    paused:false,
+    date: isoToday(),
+    dayIndex: 1,
+    startedAt: null,
+    pausedAt: null,
+    pauseAccumMs: 0,
+    restUntil: null,
+
+    currentExerciseId: null,
+    exStartedAt: null,
+    exPausedAt: null,
+    exPauseAccumMs: 0,
+    exTimesMs: {},
+
+    reps:{},
+    targets:{},
+    lastSavedAt: Date.now()
+  };
+
+  // ===== Name =====
+  function ensureName(){
+    if(!stored.profile.name){
+      const name = (prompt("Name for the app?", "Fav") || "Fav").slice(0,24);
+      stored.profile.name = name;
+      persistLS();
+    }
+    $("#appTitle").textContent = `${stored.profile.name} • Workout`;
+  }
+
+  // ===== Plan to exercises =====
+  function getPlanEntry(){
+    const idx = clamp(session.dayIndex||1, 1, 28);
+    return stored.plan.find(p => p.day === idx) || stored.plan[0];
+  }
+
+  function buildExercises(){
+    const p = getPlanEntry();
+    const list = BASE_EX.map(e => ({
+      ...e,
+      target: (p.targets && typeof p.targets[e.id]==="number") ? p.targets[e.id] : 0
+    }));
+    const cardioT = p.targets?.cardio ?? 0;
+    if(cardioT>0){
+      list.push({ id:"cardio", name:"Cardio (Jacks/Climbers)", target: cardioT });
+    }
+    return list;
+  }
+
+  let exercises = buildExercises();
+
+  function applyTargets(){
+    session.targets = session.targets || {};
+    session.reps = session.reps || {};
+    session.exTimesMs = session.exTimesMs || {};
+
+    exercises.forEach(ex => {
+      session.targets[ex.id] = (typeof session.targets[ex.id]==="number") ? session.targets[ex.id] : ex.target;
+      session.reps[ex.id] = (typeof session.reps[ex.id]==="number") ? session.reps[ex.id] : 0;
+      session.exTimesMs[ex.id] = (typeof session.exTimesMs[ex.id]==="number") ? session.exTimesMs[ex.id] : 0;
+    });
+  }
+
+  // ===== Persistence =====
+  function persistLS(){ localStorage.setItem(LS_KEY, JSON.stringify(stored)); }
+  function persistSS(){
+    session.lastSavedAt = Date.now();
+    sessionStorage.setItem(SS_KEY, JSON.stringify(session));
+    $("#pillSaved").textContent = "Saved";
+  }
+
+  // ===== Timers =====
+  function sessionElapsedMs(){
+    if(!session.startedAt) return 0;
+    const now = Date.now();
+    const end = session.active && !session.paused ? now : (session.pausedAt || now);
+    return (end - session.startedAt) - (session.pauseAccumMs||0);
+  }
+
+  function exerciseElapsedMs(){
+    if(!session.currentExerciseId || !session.exStartedAt) return 0;
+    const now = Date.now();
+    const end = session.active && !session.paused ? now : (session.exPausedAt || now);
+    return (end - session.exStartedAt) - (session.exPauseAccumMs||0);
+  }
+
+  function finalizeExerciseTime(){
+    if(!session.currentExerciseId || !session.exStartedAt) return;
+    const id = session.currentExerciseId;
+    const elapsed = exerciseElapsedMs();
+    session.exTimesMs[id] = (session.exTimesMs[id]||0) + elapsed;
+
+    session.exStartedAt = null;
+    session.exPausedAt = null;
+    session.exPauseAccumMs = 0;
+  }
+
+  // ===== UI: Tabs =====
+  const screens = {
+    workout: $("#screenWorkout"),
+    calendar: $("#screenCalendar"),
+    logs: $("#screenLogs")
+  };
+  function setTab(which){
+    $("#tabWorkout").classList.toggle("active", which==="workout");
+    $("#tabCalendar").classList.toggle("active", which==="calendar");
+    $("#tabLogs").classList.toggle("active", which==="logs");
+
+    $("#tabWorkout").setAttribute("aria-selected", which==="workout");
+    $("#tabCalendar").setAttribute("aria-selected", which==="calendar");
+    $("#tabLogs").setAttribute("aria-selected", which==="logs");
+
+    screens.workout.classList.toggle("active", which==="workout");
+    screens.calendar.classList.toggle("active", which==="calendar");
+    screens.logs.classList.toggle("active", which==="logs");
+  }
+
+  $("#tabWorkout").addEventListener("click", ()=>setTab("workout"));
+  $("#tabCalendar").addEventListener("click", ()=>setTab("calendar"));
+  $("#tabLogs").addEventListener("click", ()=>setTab("logs"));
+
+  // ===== UI: Exercises =====
+  function renderExercises(){
+    const list = $("#exList");
+    list.innerHTML = "";
+
+    exercises.forEach(ex => {
+      const done = session.reps[ex.id] || 0;
+      const target = session.targets[ex.id] ?? ex.target;
+      const pct = target>0 ? Math.round(clamp(done/target,0,1)*100) : 0;
+
+      const live = (session.active && !session.paused && session.currentExerciseId===ex.id) ? exerciseElapsedMs() : 0;
+      const timeMs = (session.exTimesMs[ex.id]||0) + live;
+
+      const el = document.createElement("div");
+      el.className = "ex" + (session.currentExerciseId===ex.id ? " focus" : "");
+      el.dataset.id = ex.id;
+
+      el.innerHTML = `
+        <div class="exHeader">
+          <div>
+            <div class="exName">${ex.name}</div>
+            <div class="exMeta">done ${done} / ${target} • ${pct}% • time ${msToMMSS(timeMs)}</div>
+          </div>
+          <div class="exHeaderRight">
+            <span class="focusTag">FOCUS</span>
+            <span class="badge">${ex.id}</span>
+          </div>
+        </div>
+
+        <div class="exBtns">
+          <button class="mini gray" data-act="focus">Focus</button>
+          <button class="mini red" data-act="plus">+1</button>
+          <button class="mini red" data-act="plus5">+5</button>
+          <button class="mini gray" data-act="minus">-1</button>
+        </div>
+
+        <div class="targetRow">
+          <label>Target</label>
+          <input type="number" min="0" step="1" value="${target}" data-act="target" />
+          <button class="mini gray" data-act="reset">Reset</button>
+        </div>
+      `;
+
+      list.appendChild(el);
+    });
+
+    // delegate handlers
+    list.querySelectorAll(".ex").forEach(card => {
+      const id = card.dataset.id;
+
+      card.querySelectorAll("button.mini").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const act = btn.dataset.act;
+          if(act==="focus") setCurrent(id);
+          if(act==="plus") addReps(id, 1);
+          if(act==="plus5") addReps(id, 5);
+          if(act==="minus") addReps(id, -1);
+          if(act==="reset") setReps(id, 0);
+        });
+      });
+
+      const inp = card.querySelector("input[data-act='target']");
+      inp.addEventListener("change", () => {
+        const v = clamp(parseInt(inp.value||"0",10), 0, 9999);
+        inp.value = v;
+        session.targets[id] = v;
+        persistSS();
+        toast("Target saved");
+        render();
+      });
+    });
+  }
+
+  function setCurrent(id){
+    if(session.currentExerciseId === id) return;
+    finalizeExerciseTime();
+    session.currentExerciseId = id;
+    if(session.active && !session.paused){
+      session.exStartedAt = Date.now();
+      session.exPausedAt = null;
+      session.exPauseAccumMs = 0;
+    } else {
+      session.exStartedAt = null;
+    }
+    persistSS();
+    render();
+  }
+
+  function addReps(id, delta){
+    session.reps[id] = clamp((session.reps[id]||0) + delta, 0, 9999);
+    persistSS();
+    $("#pillSaved").textContent = "Saved";
+    render();
+  }
+  function setReps(id, v){
+    session.reps[id] = clamp(v, 0, 9999);
+    persistSS();
+    toast("Reps reset");
+    render();
+  }
+
+  // ===== Controls =====
+  function startSession(){
+    if(session.active && !session.paused) return;
+
+    if(!session.startedAt){
+      session.startedAt = Date.now();
+      session.pauseAccumMs = 0;
+    }
+
+    session.active = true;
+    session.paused = false;
+    session.pausedAt = null;
+
+    if(!session.currentExerciseId){
+      session.currentExerciseId = exercises[0]?.id || null;
+    }
+    session.exStartedAt = Date.now();
+    session.exPausedAt = null;
+    session.exPauseAccumMs = 0;
+
+    persistSS();
+    toast("Started");
+    render();
+    tickOn();
+  }
+
+  function pauseSession(){
+    if(!session.active || session.paused) return;
+
+    session.paused = true;
+    session.pausedAt = Date.now();
+
+    if(session.exStartedAt){
+      session.exPausedAt = Date.now();
+    }
+    persistSS();
+    toast("Paused");
+    render();
+  }
+
+  function resumeSession(){
+    if(!session.active || !session.paused) return;
+    const now = Date.now();
+
+    session.pauseAccumMs = (session.pauseAccumMs||0) + (now - (session.pausedAt||now));
+    session.paused = false;
+    session.pausedAt = null;
+
+    if(session.exPausedAt){
+      session.exPauseAccumMs = (session.exPauseAccumMs||0) + (now - session.exPausedAt);
+      session.exPausedAt = null;
+    } else if(session.currentExerciseId){
+      session.exStartedAt = now;
+    }
+
+    persistSS();
+    toast("Resumed");
+    render();
+  }
+
+  function rest(seconds=60){
+    if(!session.active || session.paused) return;
+    session.restUntil = Date.now() + seconds*1000;
+    persistSS();
+    toast("Rest started");
+    render();
+  }
+
+  function finishSession(){
+    if(!session.active) return;
+    finalizeExerciseTime();
+
+    const p = getPlanEntry();
+    const timeMs = sessionElapsedMs();
+    const repsById = JSON.parse(JSON.stringify(session.reps));
+    const targetsById = JSON.parse(JSON.stringify(session.targets));
+    const done = Object.values(repsById).reduce((a,b)=>a+b,0);
+    const target = Object.values(targetsById).reduce((a,b)=>a+b,0);
+
+    const restMs = session.pauseAccumMs || 0;
+    const burnout = computeBurnout({done, target: (target||100), timeMs, restMs});
+
+    let note = "";
+    if(p.timed) note = prompt("Challenge note (optional):", "") || "";
+    if(p.test) note = prompt("Test day note (optional):", "") || "";
+
+    const log = {
+      date: session.date || isoToday(),
+      dayIndex: session.dayIndex,
+      repsById,
+      targetsById,
+      timeMs,
+      burnout,
+      note,
+      exerciseTimesMsById: JSON.parse(JSON.stringify(session.exTimesMs)),
+      createdAt: Date.now()
+    };
+
+    stored.logs = stored.logs.filter(x => x.date !== log.date);
+    stored.logs.push(log);
+    persistLS();
+
+    // next day
+    const next = clamp((session.dayIndex||1) + 1, 1, 28);
+    sessionStorage.removeItem(SS_KEY);
+    session = {
+      active:false, paused:false,
+      date: isoToday(),
+      dayIndex: next,
+      startedAt:null, pausedAt:null, pauseAccumMs:0,
+      restUntil:null,
+      currentExerciseId:null, exStartedAt:null, exPausedAt:null, exPauseAccumMs:0, exTimesMs:{},
+      reps:{}, targets:{},
+      lastSavedAt: Date.now()
+    };
+
+    exercises = buildExercises();
+    applyTargets();
+
+    buildCalendar();
+    buildLogs();
+    render();
+    tickOff();
+    toast("Logged ✔");
+  }
+
+  // Button bindings
+  $("#btnStart").addEventListener("click", () => {
+    if(!session.active) startSession();
+    else if(session.paused) resumeSession();
+    else pauseSession();
+  });
+  $("#btnRest").addEventListener("click", ()=>rest(60));
+  $("#btnFinish").addEventListener("click", ()=>{
+    if(confirm("Finish and log this session?")) finishSession();
+  });
+
+  // Keyboard shortcuts
+  window.addEventListener("keydown", (e) => {
+    if(e.target && (e.target.tagName==="INPUT" || e.target.tagName==="TEXTAREA")) return;
+    if(e.key === " "){
+      e.preventDefault();
+      if(!session.active) startSession();
+      else if(session.paused) resumeSession();
+      else pauseSession();
+    }
+    if(e.key.toLowerCase() === "r") rest(60);
+    if(e.key === "+" || e.key === "="){
+      const id = session.currentExerciseId || exercises[0]?.id;
+      if(id) addReps(id, 1);
+    }
+    if(e.key === "-" || e.key === "_"){
+      const id = session.currentExerciseId || exercises[0]?.id;
+      if(id) addReps(id, -1);
+    }
+  });
+
+  // ===== Calendar =====
+  let calYear, calMonth;
+  function calInitToday(){
+    const d = new Date();
+    calYear = d.getFullYear();
+    calMonth = d.getMonth();
+  }
+
+  function dayDotClass(log){
+    if(!log) return "";
+    if(log.burnout <= 45) return "good";
+    if(log.burnout <= 75) return "warn";
+    return "bad";
+  }
+
+  function buildCalendar(){
+    const monthName = new Date(calYear, calMonth, 1).toLocaleString(undefined, {month:"long", year:"numeric"});
+    $("#calMonth").textContent = monthName;
+    const ym = `${calYear}-${String(calMonth+1).padStart(2,"0")}`;
+    const count = stored.logs.filter(l => l.date.startsWith(ym)).length;
+    $("#calMeta").textContent = `${ym} • logs ${count}`;
+
+    const daysEl = $("#calDays");
+    daysEl.innerHTML = "";
+
+    const first = new Date(calYear, calMonth, 1);
+    const startDow = first.getDay();
+    const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+
+    const prevDays = startDow;
+    const prevMonthDays = new Date(calYear, calMonth, 0).getDate();
+    for(let i=prevDays; i>0; i--){
+      const d = prevMonthDays - i + 1;
+      daysEl.appendChild(makeDayCell(calYear, calMonth-1, d, true));
+    }
+    for(let d=1; d<=daysInMonth; d++){
+      daysEl.appendChild(makeDayCell(calYear, calMonth, d, false));
+    }
+    const totalCells = prevDays + daysInMonth;
+    const pad = (7 - (totalCells % 7)) % 7;
+    for(let i=1; i<=pad; i++){
+      daysEl.appendChild(makeDayCell(calYear, calMonth+1, i, true));
+    }
+  }
+
+  function makeDayCell(y, m, d, off){
+    const cell = document.createElement("div");
+    cell.className = "day" + (off ? " off" : "");
+    const dateObj = new Date(y, m, d);
+    const iso = dateObj.toISOString().slice(0,10);
+    const log = stored.logs.find(l => l.date === iso);
+
+    cell.innerHTML = `
+      <div class="dNum">${d}</div>
+      <div class="dots"><div class="dot ${dayDotClass(log)}"></div></div>
+    `;
+
+    if(!off){
+      cell.addEventListener("click", ()=>openDaySheet(iso));
+      cell.title = log ? `burnout ${log.burnout}% • ${msToHMMSS(log.timeMs)}` : iso;
+    }
+    return cell;
+  }
+
+  $("#calPrev").addEventListener("click", () => {
+    calMonth--;
+    if(calMonth<0){calMonth=11; calYear--;}
+    buildCalendar();
+  });
+  $("#calNext").addEventListener("click", () => {
+    calMonth++;
+    if(calMonth>11){calMonth=0; calYear++;}
+    buildCalendar();
+  });
+  $("#calToday").addEventListener("click", () => {
+    calInitToday();
+    buildCalendar();
+  });
+
+  // ===== Logs =====
+  function buildLogs(){
+    const el = $("#logList");
+    const last = [...stored.logs].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,10);
+    if(!last.length){
+      el.innerHTML = `<div class="hint">No sessions logged yet. Start a workout and finish it to save.</div>`;
+      return;
+    }
+    el.innerHTML = "";
+    last.forEach(l => {
+      const done = Object.values(l.repsById||{}).reduce((a,b)=>a+b,0);
+      const burnoutCls = l.burnout<=45 ? "good" : l.burnout<=75 ? "warn" : "bad";
+
+      const card = document.createElement("div");
+      card.className = "log";
+      card.innerHTML = `
+        <div class="logTop">
+          <div>
+            <div class="logDate">${l.date}</div>
+            <div class="logTitle">Day ${l.dayIndex}/28</div>
+          </div>
+          <div class="chip ${burnoutCls}">burnout ${l.burnout}%</div>
+        </div>
+        <div class="chips">
+          <div class="chip">time ${msToHMMSS(l.timeMs)}</div>
+          <div class="chip">reps ${done}</div>
+        </div>
+      `;
+      card.addEventListener("click", ()=>openDaySheet(l.date));
+      el.appendChild(card);
+    });
+  }
+
+  // ===== Streak =====
+  function computeStreak(){
+    const set = new Set(stored.logs.map(l=>l.date));
+    let s = 0;
+    let d = new Date();
+    while(true){
+      const iso = d.toISOString().slice(0,10);
+      if(set.has(iso)){ s++; d.setDate(d.getDate()-1); }
+      else break;
+    }
+    return s;
+  }
+
+  // ===== Menu / sheets =====
+  const modal = $("#modal");
+  const mTitle = $("#mTitle");
+  const mSub = $("#mSub");
+  const mBody = $("#mBody");
+  function openSheet(title, sub, html){
+    mTitle.textContent = title;
+    mSub.textContent = sub || "";
+    mBody.innerHTML = html;
+    modal.classList.add("on");
+  }
+  function closeSheet(){ modal.classList.remove("on"); }
+  $("#mClose").addEventListener("click", closeSheet);
+  modal.addEventListener("click", (e)=>{ if(e.target.id==="modal") closeSheet(); });
+
+  $("#btnMenu").addEventListener("click", () => {
+    openSheet("Menu", "Plan, export, import, reset", `
+      <div class="hint" style="margin-bottom:12px;">
+        Your live workout state is stored in <b>sessionStorage</b> (survives refresh). Logs and plan are stored in <b>localStorage</b>.
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <button class="btn" id="mEditPlan">Edit 28-day plan</button>
+        <button class="btn" id="mExport">Export JSON</button>
+        <button class="btn" id="mImport">Import JSON</button>
+        <button class="btn" id="mSetName">Change name</button>
+        <button class="btn" id="mWipe" style="border-color:#fecaca; color:var(--redDark)">Wipe all data</button>
+      </div>
+    `);
+
+    $("#mEditPlan").addEventListener("click", openPlanEditor);
+    $("#mExport").addEventListener("click", exportData);
+    $("#mImport").addEventListener("click", importData);
+    $("#mSetName").addEventListener("click", changeName);
+    $("#mWipe").addEventListener("click", wipeAll);
+  });
+
+  function changeName(){
+    const name = (prompt("New name:", stored.profile.name||"Fav") || stored.profile.name || "Fav").slice(0,24);
+    stored.profile.name = name;
+    persistLS();
+    ensureName();
+    toast("Name saved");
+    closeSheet();
+  }
+
+  function openPlanEditor(){
+    const json = JSON.stringify(stored.plan, null, 2);
+    openSheet("Edit plan", "JSON • save applies immediately", `
+      <div class="hint" style="margin-bottom:10px;">
+        Each entry has: <span style="font-family:var(--mono)">day, label, targets</span>. Targets: pushups/squats/pullups + optional cardio.
+      </div>
+      <textarea id="planText">${json.replace(/</g,"&lt;")}</textarea>
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button class="btn primary" id="planSave">Save</button>
+        <button class="btn" id="planReset">Reset default</button>
+      </div>
+      <div class="hint" style="margin-top:10px;">If JSON is invalid, it won't save.</div>
+    `);
+
+    $("#planSave").addEventListener("click", () => {
+      const txt = $("#planText").value;
+      const parsed = safeJSON(txt, null);
+      if(!parsed || !Array.isArray(parsed) || parsed.length < 28){
+        alert("Invalid plan JSON.");
+        return;
+      }
+      stored.plan = parsed;
+      persistLS();
+      exercises = buildExercises();
+      applyTargets();
+      render();
+      buildCalendar();
+      toast("Plan saved");
+      closeSheet();
+    });
+
+    $("#planReset").addEventListener("click", () => {
+      stored.plan = DEFAULT_PLAN;
+      persistLS();
+      exercises = buildExercises();
+      applyTargets();
+      render();
+      buildCalendar();
+      toast("Plan reset");
+      closeSheet();
+    });
+  }
+
+  function exportData(){
+    const payload = { ...stored, exportedAt: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "workout_export.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast("Exported");
+    closeSheet();
+  }
+
+  function importData(){
+    const inp = document.createElement("input");
+    inp.type = "file";
+    inp.accept = "application/json";
+    inp.onchange = () => {
+      const file = inp.files?.[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const parsed = safeJSON(reader.result, null);
+        if(!parsed || !parsed.plan || !parsed.logs){
+          alert("Invalid import.");
+          return;
+        }
+        stored.profile = parsed.profile || stored.profile;
+        stored.plan = parsed.plan || stored.plan;
+        stored.logs = parsed.logs || stored.logs;
+        persistLS();
+
+        ensureName();
+        exercises = buildExercises();
+        applyTargets();
+        buildCalendar();
+        buildLogs();
+        render();
+        toast("Imported");
+        closeSheet();
+      };
+      reader.readAsText(file);
+    };
+    inp.click();
+  }
+
+  function wipeAll(){
+    if(!confirm("Wipe ALL workout data (name, plan, logs)?")) return;
+    localStorage.removeItem(LS_KEY);
+    sessionStorage.removeItem(SS_KEY);
+    location.reload();
+  }
+
+  function openDaySheet(iso){
+    const log = stored.logs.find(l => l.date === iso);
+    if(!log){
+      openSheet(`No log • ${iso}`, "Options", `
+        <div class="hint">No session logged for this day.</div>
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <button class="btn primary" id="loadDate">Set session date</button>
+          <button class="btn" id="closeMe">Close</button>
+        </div>
+      `);
+      $("#loadDate").addEventListener("click", () => {
+        session.date = iso;
+        persistSS();
+        toast("Date set");
+        closeSheet();
+        render();
+      });
+      $("#closeMe").addEventListener("click", closeSheet);
+      return;
+    }
+
+    const repsChips = Object.entries(log.repsById||{}).map(([k,v])=>{
+      const t = log.targetsById?.[k] ?? 0;
+      const ok = t>0 ? v>=t : true;
+      const cls = ok ? "good" : "warn";
+      return `<span class="chip ${cls}">${k}:${v}</span>`;
+    }).join(" ");
+
+    const timeChips = Object.entries(log.exerciseTimesMsById||{}).map(([k,ms])=>{
+      return `<span class="chip">${k}:${msToMMSS(ms)}</span>`;
+    }).join(" ");
+
+    const burnoutCls = log.burnout<=45 ? "good" : log.burnout<=75 ? "warn" : "bad";
+
+    openSheet(`Log • ${iso}`, `day ${log.dayIndex}/28 • burnout ${log.burnout}%`, `
+      <div class="chips" style="margin-bottom:10px;">
+        <span class="chip ${burnoutCls}">burnout ${log.burnout}%</span>
+        <span class="chip">time ${msToHMMSS(log.timeMs)}</span>
+      </div>
+
+      <div class="hint">Reps</div>
+      <div class="chips" style="margin-top:8px;">${repsChips || '<span class="hint">—</span>'}</div>
+
+      <div class="hint" style="margin-top:14px;">Exercise time</div>
+      <div class="chips" style="margin-top:8px;">${timeChips || '<span class="hint">—</span>'}</div>
+
+      ${log.note ? `<div class="hint" style="margin-top:14px;">Note</div><div style="margin-top:6px;">${String(log.note).replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]))}</div>` : ""}
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:14px;">
+        <button class="btn" id="loadTargets">Load this day’s targets</button>
+        <button class="btn" id="deleteLog" style="border-color:#fecaca; color:var(--redDark)">Delete log</button>
+      </div>
+    `);
+
+    $("#loadTargets").addEventListener("click", () => {
+      session.dayIndex = log.dayIndex || 1;
+      exercises = buildExercises();
+      applyTargets();
+      persistSS();
+      render();
+      toast("Loaded day");
+      closeSheet();
+    });
+
+    $("#deleteLog").addEventListener("click", () => {
+      if(!confirm("Delete this log?")) return;
+      stored.logs = stored.logs.filter(x => x.date !== iso);
+      persistLS();
+      buildCalendar();
+      buildLogs();
+      toast("Deleted");
+      closeSheet();
+    });
+  }
+
+  // ===== Rendering =====
+  function renderHeader(){
+    // Keep date stable during active session; otherwise sync to today
+    if(!session.active) session.date = isoToday();
+
+    const p = getPlanEntry();
+    $("#todayTitle").textContent = `Day ${p.day} • ${p.label}${p.timed ? " • Timed" : ""}${p.test ? " • Test" : ""}`;
+    $("#todaySub").textContent = p.test ? "Test day: set your own reps and log." : "Tap an exercise to focus. Track reps.";
+
+    $("#pillDay").textContent = `Day ${session.dayIndex}/28`;
+    $("#pillStreak").textContent = `Streak ${computeStreak()}`;
+
+    const sMs = sessionElapsedMs();
+    $("#kSession").textContent = msToHMMSS(sMs);
+
+    if(session.currentExerciseId){
+      const live = (session.active && !session.paused) ? exerciseElapsedMs() : 0;
+      const total = (session.exTimesMs[session.currentExerciseId]||0) + live;
+      $("#kCurrent").textContent = `${session.currentExerciseId} ${msToMMSS(total)}`;
+    } else {
+      $("#kCurrent").textContent = "—";
+    }
+
+    const done = Object.values(session.reps||{}).reduce((a,b)=>a+b,0);
+    const target = Object.values(session.targets||{}).reduce((a,b)=>a+b,0) || 100;
+    $("#kReps").textContent = `${done}/${target}`;
+
+    const burnout = computeBurnout({done, target, timeMs:sMs, restMs:(session.pauseAccumMs||0)});
+    $("#kBurn").textContent = `${burnout}%`;
+
+    const pct = Math.round(clamp(done/target, 0, 1)*100);
+    $("#progressText").textContent = `${pct}%`;
+    $("#progressBar").style.width = `${pct}%`;
+
+    const restActive = session.restUntil && Date.now() < session.restUntil;
+    const restLeft = restActive ? Math.ceil((session.restUntil - Date.now())/1000) : 0;
+    $("#pillRest").textContent = restActive ? `Rest ${restLeft}s` : "Rest —";
+
+    // Start button label
+    if(!session.active) $("#btnStart").textContent = "Start";
+    else if(session.paused) $("#btnStart").textContent = "Resume";
+    else $("#btnStart").textContent = "Pause";
+
+    $("#btnRest").disabled = !session.active || session.paused;
+    $("#btnFinish").disabled = !session.active;
+  }
+
+  function render(){
+    renderHeader();
+    renderExercises();
+
+    // autosave occasionally
+    if(Date.now() - (session.lastSavedAt||0) > 2000){
+      persistSS();
+    }
+  }
+
+  // ===== Tick loop =====
+  let tick = null;
+  function tickOn(){
+    if(tick) return;
+    tick = setInterval(render, 250);
+  }
+  function tickOff(){
+    if(!tick) return;
+    clearInterval(tick);
+    tick = null;
+  }
+
+  // ===== Boot =====
+  ensureName();
+  session.dayIndex = clamp(session.dayIndex||1, 1, 28);
+
+  exercises = buildExercises();
+  applyTargets();
+
+  calInitToday();
+  buildCalendar();
+  buildLogs();
+
+  if(session.active) tickOn();
+  render();
+
+})();
+</script>
+</body>
+</html>
