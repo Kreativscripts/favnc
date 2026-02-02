@@ -1,0 +1,31 @@
+config:
+    defaultPreset: Default
+    activeAccount: Default
+macros:
+    - accountName: Default
+      boostedfield: ""
+      blackBearQuestCooldown: 0
+      brownBearQuestCooldown: 0
+      gather:
+        fieldIndex: 0
+        lastConvert: 0
+      networking:
+        savedRelays: []
+      hotbar: {}
+      stickerStack: {}
+      dispensers: []
+      consumables: []
+      bugs: []
+vicHop:
+    lifetimeServers: 0
+    lifetimeNights: 0
+    lifetimeVics: 0
+mondoHop:
+    lifetimeServers: 0
+    lifetimeMondos: 0
+debug:
+    fieldPosition: ""
+    location: ""
+positionX: 0
+positionY: 0
+tab: status
