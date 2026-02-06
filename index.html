@@ -139,7 +139,6 @@
     var name=(localStorage.getItem(KEY)||"").trim();
     var ctryName="";
     var started=false, ended=false, lock=false;
-
     function dn(code){
       try{
         var d=new Intl.DisplayNames([navigator.language||"en"],{type:"region"});
