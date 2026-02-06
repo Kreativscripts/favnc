@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Nexus Command – Main</title>
+
+  <link rel="icon" href="assets/favicon.ico" />
+  <meta name="theme-color" content="#02030a" />
+  <link rel="canonical" href="https://favnc.pages.dev/main" />
+  <meta name="description" content="Nexus Command - Main" />
+
+  <meta property="og:title" content="Nexus Command – Main" />
+  <meta property="og:description" content="Step into the Nexus Command Main Page" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://favnc.pages.dev/main" />
+  <meta property="og:site_name" content="Nexus Command" />
+  <meta property="og:image" content="https://favnc.pages.dev/assets/embed.gif" />
+
+  <!-- Tailwind (CDN). For max performance later: build Tailwind locally and purge. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Ultra-light custom CSS for the “folder tab” illusion + subtle motion. */
+    :root { color-scheme: dark; }
+
+    .bg-nexus {
+      background-image:
+        radial-gradient(1200px 700px at 10% 20%, rgba(99,102,241,.22), transparent 60%),
+        radial-gradient(900px 600px at 85% 75%, rgba(236,72,153,.14), transparent 60%),
+        linear-gradient(to bottom, rgba(2,3,10,.62), rgba(2,3,10,.86)),
+        url("https://favnc.pages.dev/assets/_bkgrnds_/dn.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .glass {
+      background: rgba(6, 8, 24, 0.62);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* Folder tabs */
+    .tab-btn {
+      position: relative;
+      isolation: isolate;
+    }
+    .tab-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px 16px 12px 12px;
+      background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 16px 36px rgba(0,0,0,.55);
+      transform: translateZ(0);
+      z-index: -1;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .tab-btn[aria-selected="true"]::before {
+      background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      border-color: rgba(255,255,255,.22);
+      box-shadow: 0 22px 52px rgba(0,0,0,.70);
+      transform: translateY(-2px);
+    }
+    .tab-btn:focus-visible {
+      outline: none;
+    }
+    .tab-btn:focus-visible::before {
+      border-color: rgba(255,255,255,.32);
+      box-shadow: 0 0 0 2px rgba(255,255,255,.10), 0 22px 52px rgba(0,0,0,.70);
+    }
+
+    /* Reduce motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .tab-btn::before { transition: none; }
+      .motion-safe\\:animate-none { animation: none !important; }
+    }
+  </style>
+</head>
+
+<body class="min-h-dvh bg-nexus text-slate-100 selection:bg-indigo-500/30 selection:text-white">
+  <!-- Top subtle overlay vignette -->
+  <div class="pointer-events-none fixed inset-0">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/35 to-black/70"></div>
+  </div>
+
+  <main class="relative mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-4 px-4 py-5 md:flex-row md:items-stretch md:gap-5 md:px-6 md:py-7">
+    <!-- LEFT COLUMN -->
+    <section class="glass relative overflow-hidden rounded-3xl p-5 md:w-[380px] md:p-6">
+      <!-- Accent -->
+      <div class="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl"></div>
+      <div class="pointer-events-none absolute -right-28 -bottom-28 h-80 w-80 rounded-full bg-fuchsia-500/10 blur-3xl"></div>
+
+      <!-- Page Info -->
+      <div class="relative">
+        <div class="text-xs font-semibold tracking-[0.28em] text-indigo-200/80">NEXUS COMMAND</div>
+        <h1 class="mt-2 text-2xl font-extrabold tracking-tight md:text-3xl">Nexus Command</h1>
+
+        <div class="mt-4 space-y-2 text-sm text-slate-200/90">
+          <div class="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+            <span class="opacity-85">Partnerships</span>
+            <span class="font-semibold">19,293+</span>
+          </div>
+          <div class="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+            <span class="opacity-85">Audited sales</span>
+            <span class="font-semibold">6,203,277</span>
+          </div>
+          <div class="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+            <span class="opacity-85">Team</span>
+            <span class="font-semibold">1 Owner • 5 Staff</span>
+          </div>
+        </div>
+
+        <div class="mt-4 text-sm text-slate-200/80">
+          <span class="opacity-80">By</span> <span class="font-semibold">Fav.</span>
+        </div>
+      </div>
+
+      <!-- Profile Card (click -> Discord user) -->
+      <a
+        href="https://discord.com/users/1372363569559113778"
+        target="_blank"
+        rel="noreferrer"
+        class="group relative mt-6 block overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_24px_70px_rgba(0,0,0,.55)] transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0"
+        aria-label="Open Discord profile"
+      >
+        <!-- Banner -->
+        <div class="relative h-24 w-full overflow-hidden">
+          <img
+            src="https://favnc.pages.dev/assets/icons/a_3ce24509633cbbceab6dbbd4502d1ef8.gif"
+            alt="Banner"
+            class="h-full w-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-[1.03]"
+            loading="eager"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+        </div>
+
+        <!-- Avatar + body -->
+        <div class="relative px-4 pb-4 pt-0">
+          <div class="-mt-9 flex items-end justify-between gap-3">
+            <div class="relative">
+              <div class="absolute -inset-1 rounded-2xl bg-indigo-500/30 blur-xl"></div>
+              <img
+                src="https://favnc.pages.dev/assets/icons/a_f16d0660c14eea41e7f667c58e570e23.gif"
+                alt="Profile picture"
+                class="relative h-16 w-16 rounded-2xl border border-white/15 object-cover shadow-[0_18px_40px_rgba(0,0,0,.6)]"
+                loading="eager"
+              />
+            </div>
+
+            <div class="flex items-center gap-2 pb-1 text-xs text-slate-200/80">
+              <span class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400/90"></span>
+                Active
+              </span>
+              <span class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                Click → Profile
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-base font-bold tracking-tight">Fav</div>
+                <div class="text-xs text-slate-200/70">Nexus Command • Operator</div>
+              </div>
+              <div class="text-xs text-indigo-200/80">↗</div>
+            </div>
+
+            <div class="mt-3 grid grid-cols-3 gap-2 text-xs">
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-2">
+                <div class="text-slate-200/70">Role</div>
+                <div class="mt-0.5 font-semibold">Owner</div>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-2">
+                <div class="text-slate-200/70">Staff</div>
+                <div class="mt-0.5 font-semibold">5</div>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-2">
+                <div class="text-slate-200/70">Scope</div>
+                <div class="mt-0.5 font-semibold">Global</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Quick actions -->
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <a
+          href="https://favnc.pages.dev/donate"
+          class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-100/90 shadow-[0_16px_40px_rgba(0,0,0,.45)] transition hover:bg-white/10"
+        >Donate</a>
+
+        <a
+          href="https://docs.favnc.pages.dev/"
+          class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-100/90 shadow-[0_16px_40px_rgba(0,0,0,.45)] transition hover:bg-white/10"
+        >Legal Docs</a>
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN -->
+    <section class="glass relative flex-1 overflow-hidden rounded-3xl p-4 md:p-6">
+      <!-- Header -->
+      <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div>
+          <div class="text-xs font-semibold tracking-[0.28em] text-indigo-200/80">SYSTEM</div>
+          <div class="mt-1 text-xl font-extrabold tracking-tight md:text-2xl">Nexus Folder Hub</div>
+          <div class="mt-1 text-sm text-slate-200/70">Switch folders to access your routes. Keyboard: <b>1–6</b>.</div>
+        </div>
+
+        <a
+          href="https://favnc.pages.dev/me/profile"
+          class="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100/90 shadow-[0_16px_40px_rgba(0,0,0,.45)] transition hover:bg-white/10"
+        >Edit Profile ✎</a>
+      </div>
+
+      <!-- Folder Tabs -->
+      <div class="mt-4 grid grid-cols-2 gap-3 md:grid-cols-6 md:gap-3" role="tablist" aria-label="Folders">
+        <button class="tab-btn px-3 py-3 text-left text-sm font-semibold text-slate-100/90"
+          role="tab" aria-selected="true" aria-controls="panel-tools" id="tab-tools" data-tab="tools" data-k="1">
+          Tools
+          <div class="mt-1 text-[11px] font-medium text-slate-200/70">Utilities suite</div>
+        </button>
+
+        <button class="tab-btn px-3 py-3 text-left text-sm font-semibold text-slate-100/90"
+          role="tab" aria-selected="false" aria-controls="panel-user" id="tab-user" data-tab="user" data-k="2">
+          User Lookup
+          <div class="mt-1 text-[11px] font-medium text-slate-200/70">Roblox viewer</div>
+        </button>
+
+        <button class="tab-btn px-3 py-3 text-left text-sm font-semibold text-slate-100/90"
+          role="tab" aria-selected="false" aria-controls="panel-services" id="tab-services" data-tab="services" data-k="3">
+          Services
+          <div class="mt-1 text-[11px] font-medium text-slate-200/70">What Nexus offers</div>
+        </button>
+
+        <button class="tab-btn px-3 py-3 text-left text-sm font-semibold text-slate-100/90"
+          role="tab" aria-selected="false" aria-controls="panel-contact" id="tab-contact" data-tab="contact" data-k="4">
+          Contact
+          <div class="mt-1 text-[11px] font-medium text-slate-200/70">Reach you</div>
+        </button>
+
+        <button class="tab-btn px-3 py-3 text-left text-sm font-semibold text-slate-100/90"
+          role="tab" aria-selected="false" aria-controls="panel-legal" id="tab-legal" data-tab="legal" data-k="5">
+          Legal Docs
+          <div class="mt-1 text-[11px] font-medium text-slate-200/70">Terms/policies</div>
+        </button>
+
+        <button class="tab-btn px-3 py-3 text-left text-sm font-semibold text-slate-100/90"
+          role="tab" aria-selected="false" aria-controls="panel-edit" id="tab-edit" data-tab="edit" data-k="6">
+          Edit Profile
+          <div class="mt-1 text-[11px] font-medium text-slate-200/70">Customize</div>
+        </button>
+      </div>
+
+      <!-- Panels -->
+      <div class="mt-4">
+        <!-- Tools -->
+        <section id="panel-tools" role="tabpanel" aria-labelledby="tab-tools" class="panel space-y-3">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_22px_60px_rgba(0,0,0,.55)]">
+            <div class="text-sm font-semibold text-slate-100/90">Tools</div>
+            <div class="mt-1 text-sm text-slate-200/70">All utilities & tool suite.</div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
+                 href="https://favnc.pages.dev/tools/">Open Tools</a>
+              <a class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
+                 href="https://favnc.pages.dev/tools/" target="_blank" rel="noreferrer">Open in new tab ↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- User -->
+        <section id="panel-user" role="tabpanel" aria-labelledby="tab-user" class="panel hidden space-y-3">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_22px_60px_rgba(0,0,0,.55)]">
+            <div class="text-sm font-semibold text-slate-100/90">User Lookup</div>
+            <div class="mt-1 text-sm text-slate-200/70">Roblox profile viewer.</div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
+                 href="https://favnc.pages.dev/roblox/user?roblox">Open User Lookup</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Services -->
+        <section id="panel-services" role="tabpanel" aria-labelledby="tab-services" class="panel hidden space-y-3">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_22px_60px_rgba(0,0,0,.55)]">
+            <div class="text-sm font-semibold text-slate-100/90">Services</div>
+            <div class="mt-1 text-sm text-slate-200/70">Everything Nexus provides.</div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
+                 href="https://favnc.pages.dev/service">Open Services</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="panel-contact" role="tabpanel" aria-labelledby="tab-contact" class="panel hidden space-y-3">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_22px_60px_rgba(0,0,0,.55)]">
+            <div class="text-sm font-semibold text-slate-100/90">Contact</div>
+            <div class="mt-1 text-sm text-slate-200/70">Reach Fav_Nonchalant.</div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
+                 href="https://favnc.pages.dev/contact">Open Contact</a>
+              <a class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
+                 href="https://discord.com/users/1372363569559113778" target="_blank" rel="noreferrer">Discord ↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Legal -->
+        <section id="panel-legal" role="tabpanel" aria-labelledby="tab-legal" class="panel hidden space-y-3">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_22px_60px_rgba(0,0,0,.55)]">
+            <div class="text-sm font-semibold text-slate-100/90">Legal Docs</div>
+            <div class="mt-1 text-sm text-slate-200/70">Policies, terms, notices.</div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
+                 href="https://docs.favnc.pages.dev/" target="_blank" rel="noreferrer">Open Legal Docs ↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Edit -->
+        <section id="panel-edit" role="tabpanel" aria-labelledby="tab-edit" class="panel hidden space-y-3">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_22px_60px_rgba(0,0,0,.55)]">
+            <div class="text-sm font-semibold text-slate-100/90">Edit Profile</div>
+            <div class="mt-1 text-sm text-slate-200/70">Update your profile settings and saved fields.</div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <a class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
+                 href="https://favnc.pages.dev/me/profile">Open Editor</a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="mt-5 flex flex-col gap-2 border-t border-white/10 pt-4 text-xs text-slate-200/60 md:flex-row md:items-center md:justify-between">
+        <div>© <span id="year"></span> Nexus Command</div>
+        <div class="opacity-80">Tip: Press <b>Esc</b> to clear selection (keeps last open panel).</div>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // Tiny, fast tab system (keyboard: 1-6). Esc: no-op (keeps last state, but you can add behavior).
+    (function () {
+      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+      const panels = {
+        tools: document.getElementById('panel-tools'),
+        user: document.getElementById('panel-user'),
+        services: document.getElementById('panel-services'),
+        contact: document.getElementById('panel-contact'),
+        legal: document.getElementById('panel-legal'),
+        edit: document.getElementById('panel-edit'),
+      };
+
+      function setActive(key) {
+        tabs.forEach(t => {
+          const isOn = t.dataset.tab === key;
+          t.setAttribute('aria-selected', isOn ? 'true' : 'false');
+        });
+        Object.entries(panels).forEach(([k, el]) => {
+          if (!el) return;
+          el.classList.toggle('hidden', k !== key);
+        });
+        try { localStorage.setItem('nexus_active_tab', key); } catch {}
+      }
+
+      tabs.forEach(t => {
+        t.addEventListener('click', () => setActive(t.dataset.tab));
+      });
+
+      // Restore last tab
+      try {
+        const saved = localStorage.getItem('nexus_active_tab');
+        if (saved && panels[saved]) setActive(saved);
+      } catch {}
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        const k = e.key;
+        if (k >= '1' && k <= '6') {
+          const tab = tabs.find(x => x.dataset.k === k);
+          if (tab) setActive(tab.dataset.tab);
+        }
+        if (k === 'Escape') {
+          // Optional: do something on Esc. Leaving it minimal for performance.
+        }
+      });
+
+      // Year
+      const y = document.getElementById('year');
+      if (y) y.textContent = String(new Date().getFullYear());
+    })();
+  </script>
+</body>
+</html>
